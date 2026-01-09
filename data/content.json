@@ -1,0 +1,70 @@
+{
+    "hero": {
+        "catchphrase": "あなたに福のお裾分け！",
+        "subtext": "歌とゲームで福を届けるVtuber",
+        "ctaText": "YouTubeチャンネルを見る",
+        "ctaLink": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ"
+    },
+    "about": {
+        "title": "About Me",
+        "description": "ゲームと絵を描くことが大好きで、演技が得意なたぬきのVtuber「分福ありさ」。\nセルフ受肉の個人勢として、パパもママもすべて自身で担当！\nみんなと一緒に楽しい時間を作り上げることを目標に活動中。",
+        "tags": [
+            "ゲーム配信",
+            "歌ってみた",
+            "雑談",
+            "お絵かき"
+        ]
+    },
+    "live": {
+        "title": "Recommend Live",
+        "subtitle": "おすすめライブ配信",
+        "items": [
+            {
+                "videoId": "VIDEO_ID_1",
+                "title": "【雑談】2026年初配信だ～～！あけおめー！！！",
+                "description": "新年のご挨拶！今年の抱負を語ります。"
+            },
+            {
+                "videoId": "VIDEO_ID_2",
+                "title": "【ゲーム】ホラーゲームに挑戦！",
+                "description": "絶叫注意！？クリアするまで寝れません！"
+            },
+            {
+                "videoId": "VIDEO_ID_3",
+                "title": "【晩酌】まったり飲み雑談",
+                "description": "お酒を片手にのんびりお話ししましょう。"
+            }
+        ]
+    },
+    "songs": {
+        "title": "Recommend Songs",
+        "subtitle": "おすすめ歌ってみた",
+        "items": [
+            {
+                "videoId": "VIDEO_ID_4",
+                "title": "Booo! / Covered by 分福ありさ",
+                "description": "誕生日記念歌ってみた！可愛く歌いました。"
+            },
+            {
+                "videoId": "VIDEO_ID_5",
+                "title": "ファンサ / Covered by 分福ありさ",
+                "description": "いつも応援ありがとう！感謝を込めて。",
+                "note": "（仮：人気曲のため採用）"
+            },
+            {
+                "videoId": "VIDEO_ID_6",
+                "title": "アイドル / Covered by 分福ありさ",
+                "description": "最強のアイドルを目指して歌いました！",
+                "note": "（仮：人気曲のため採用）"
+            }
+        ]
+    },
+    "links": {
+        "youtube": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ",
+        "twitter": "https://x.com/Bunbuku_Arisa"
+    },
+    "footer": {
+        "notice": "本サイトは非公式のファンサイトです",
+        "rights": "掲載されている動画・画像の権利は各権利者に帰属します"
+    }
+}
