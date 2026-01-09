@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Noto_Sans_JP, Poppins } from "next/font/google";
 import "./globals.css";
 
+import BackgroundDecoration from "@/components/BackgroundDecoration";
+
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
   subsets: ["latin"],
@@ -9,13 +11,13 @@ const notoSansJP = Noto_Sans_JP({
 
 const poppins = Poppins({
   variable: "--font-poppins",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "分福ありさ 非公式ファンサイト",
-  description: "Vtuber 分福ありさの非公式ファンサイトです。あなたに福のお裾分け！",
+  title: "分福ありさ Unofficial Fan Site",
+  description: "Vtuber分福ありさの非公式ファンサイトです。",
 };
 
 export default function RootLayout({
@@ -28,6 +30,7 @@ export default function RootLayout({
       <body
         className={`${notoSansJP.variable} ${poppins.variable} antialiased`}
       >
+        <BackgroundDecoration />
         {children}
       </body>
     </html>

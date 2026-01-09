@@ -3,7 +3,19 @@
         "catchphrase": "あなたに福のお裾分け！",
         "subtext": "歌とゲームで福を届けるVtuber",
         "ctaText": "YouTubeチャンネルを見る",
-        "ctaLink": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ"
+        "ctaLink": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ",
+        "backgrounds": [
+            "/images/hero/bg1.png",
+            "/images/hero/bg2.png",
+            "/images/hero/bg3.png"
+        ]
+    },
+    "global": {
+        "decorations": [
+            "/images/decorations/icon1.png",
+            "/images/decorations/icon2.png",
+            "/images/decorations/icon3.png"
+        ]
     },
     "about": {
         "title": "About Me",
@@ -41,27 +53,25 @@
         "subtitle": "おすすめ歌ってみた",
         "items": [
             {
-                "videoId": "VIDEO_ID_4",
-                "title": "Booo! / Covered by 分福ありさ",
-                "description": "誕生日記念歌ってみた！可愛く歌いました。"
+                "videoId": "KU8eUHnd9os",
+                "title": "にっこり^^調査隊のテーマ / Covered by 分福ありさ",
+                "description": "4人コラボ楽曲！"
             },
             {
-                "videoId": "VIDEO_ID_5",
-                "title": "ファンサ / Covered by 分福ありさ",
-                "description": "いつも応援ありがとう！感謝を込めて。",
-                "note": "（仮：人気曲のため採用）"
+                "videoId": "YUnQ1wbciOM",
+                "title": "愛言葉Ⅳ / Covered by 分福ありさ",
+                "description": "デビュー1周年の感謝と、これまでの出会いへの気持ちを込めて"
             },
             {
-                "videoId": "VIDEO_ID_6",
-                "title": "アイドル / Covered by 分福ありさ",
-                "description": "最強のアイドルを目指して歌いました！",
-                "note": "（仮：人気曲のため採用）"
+                "videoId": "tTa93KcnLbc",
+                "title": "Booo！ / Covered by 分福ありさ",
+                "description": "誕生日記念に歌ってみた！"
             }
         ]
     },
     "links": {
         "youtube": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ",
-        "twitter": "https://x.com/Bunbuku_Arisa"
+        "twitter": "https://x.com/bunbukuarisa"
     },
     "footer": {
         "notice": "本サイトは非公式のファンサイトです",

@@ -4,19 +4,24 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import content from "@/data/content.json";
+import MosaicBackground from "./MosaicBackground";
 
 export default function Hero() {
     const { hero } = content;
+    // Fallback to empty array if no backgrounds defined
+    const backgrounds = hero.backgrounds || [];
 
     return (
-        <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-secondary via-primary to-accent">
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px]" />
+        <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-pink-50">
+
+            {/* Dynamic Mosaic Background */}
+            <MosaicBackground images={backgrounds} />
 
             {/* Decorative Elements */}
-            <div className="absolute top-20 left-10 text-white/30 animate-pulse">
+            <div className="absolute top-20 left-10 text-pink-300 animate-pulse z-10">
                 <Sparkles size={48} />
             </div>
-            <div className="absolute bottom-20 right-10 text-white/30 animate-pulse delay-700">
+            <div className="absolute bottom-20 right-10 text-pink-300 animate-pulse delay-700 z-10">
                 <Sparkles size={64} />
             </div>
 
@@ -25,12 +30,12 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="mb-6"
+                    className="mb-6 p-8 rounded-2xl bg-white/30 backdrop-blur-sm shadow-sm inline-block"
                 >
-                    <h2 className="text-2xl md:text-3xl font-bold text-white/90 tracking-wide mb-2 drop-shadow-md">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800 tracking-wide mb-2 drop-shadow-sm">
                         {hero.subtext}
                     </h2>
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white drop-shadow-lg tracking-tight leading-tight">
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-primary drop-shadow-md tracking-tight leading-tight">
                         {hero.catchphrase}
                     </h1>
                 </motion.div>
@@ -45,7 +50,7 @@ export default function Hero() {
                         href={hero.ctaLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-primary rounded-full text-xl font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                        className="group inline-flex items-center gap-3 px-8 py-4 bg-primary text-white rounded-full text-xl font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 border-2 border-white/50"
                     >
                         {hero.ctaText}
                         <ArrowRight className="group-hover:translate-x-1 transition-transform" />
