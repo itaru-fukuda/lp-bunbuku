@@ -4,21 +4,39 @@
         "subtext": "歌とゲームで福を届けるVtuber",
         "ctaText": "YouTubeチャンネルを見る",
         "ctaLink": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ",
-        "backgrounds": [
-            "/images/hero/bg1.png",
-            "/images/hero/bg2.png",
-            "/images/hero/bg3.png"
+        "greetingSequence": [
+            {
+                "text": "ぶんぶくぶーん！",
+                "image": "/images/hero/IMG_7669.JPG"
+            },
+            {
+                "text": "はじめまして！\nゲーム大好き！お絵描き大好き！",
+                "image": "/images/hero/IMG_7673.JPG"
+            },
+            {
+                "text": "演技が得意なたぬきVTuberの",
+                "image": "/images/hero/IMG_7674.JPG"
+            },
+            {
+                "text": "分福ありさです！",
+                "image": "/images/hero/IMG_7691.JPG"
+            }
         ]
     },
     "global": {
         "decorations": [
-            "/images/decorations/icon1.png",
-            "/images/decorations/icon2.png",
-            "/images/decorations/icon3.png"
-        ]
+            "/images/decorations/icon1_v6.png",
+            "/images/decorations/icon2_v2.png",
+            "/images/decorations/icon3_v2.png"
+        ],
+        "schedule": {
+            "videoId": "mUdmycXYyzY",
+            "title": "今週のスケジュール"
+        }
     },
     "about": {
         "title": "About Me",
+        "image": "/images/profile/icon_profile.jpg",
         "description": "ゲームと絵を描くことが大好きで、演技が得意なたぬきのVtuber「分福ありさ」。\nセルフ受肉の個人勢として、パパもママもすべて自身で担当！\nみんなと一緒に楽しい時間を作り上げることを目標に活動中。",
         "tags": [
             "ゲーム配信",
@@ -26,6 +44,12 @@
             "雑談",
             "お絵かき"
         ]
+    },
+    "qna": {
+        "title": "まずはここから！",
+        "subtitle": "一問一答自己紹介！",
+        "videoId": "HwNAHC0RI3c",
+        "description": "もっと知りたくなったら以下のオススメを見てね！"
     },
     "live": {
         "title": "Recommend Live",
@@ -54,7 +78,7 @@
         "items": [
             {
                 "videoId": "KU8eUHnd9os",
-                "title": "にっこり^^調査隊のテーマ / Covered by 分福ありさ",
+                "title": "にっこり^^調査隊のテーマ / Covered by 稀禾まれ 柊木萩雨 分福ありさ 大口ちび",
                 "description": "4人コラボ楽曲！"
             },
             {

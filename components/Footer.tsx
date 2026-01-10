@@ -4,8 +4,8 @@ export default function Footer() {
     const { footer } = content;
 
     return (
-        <footer className="bg-text-main text-white py-10">
-            <div className="container mx-auto px-4 text-center">
+        <footer className="bg-text-main text-white py-10 relative z-50">
+            <div className="container mx-auto px-4 text-center relative z-20">
                 <p className="text-sm md:text-base opacity-80 mb-2">
                     {footer.notice}
                 </p>

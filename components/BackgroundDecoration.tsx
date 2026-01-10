@@ -49,11 +49,11 @@ export default function BackgroundDecoration() {
     if (items.length === 0) return null;
 
     return (
-        <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+        <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
             {items.map((item) => (
                 <motion.div
                     key={item.id}
-                    className="absolute opacity-20"
+                    className="absolute opacity-30 mix-blend-multiply"
                     style={{
                         top: `${item.top}%`,
                         left: `${item.left}%`,

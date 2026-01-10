@@ -22,7 +22,7 @@ interface VideoSectionProps {
 export default function VideoSection({ title, subtitle, items, color = "primary", bgColor = "bg-white" }: VideoSectionProps) {
     return (
         <section className={`py-20 ${bgColor}`}>
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 relative z-20">
                 <SectionTitle title={title} subtitle={subtitle} color={color} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

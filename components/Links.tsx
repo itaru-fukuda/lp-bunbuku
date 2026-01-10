@@ -10,7 +10,7 @@ export default function Links() {
 
     return (
         <section className="py-20 bg-gradient-to-t from-secondary/10 to-white">
-            <div className="container mx-auto px-4 max-w-4xl text-center">
+            <div className="container mx-auto px-4 max-w-4xl text-center relative z-20">
                 <SectionTitle title="Links" subtitle="リンク" color="primary" />
 
                 <div className="flex flex-col md:flex-row justify-center gap-6 mt-10">

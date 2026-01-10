@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Noto_Sans_JP, Poppins } from "next/font/google";
+import { Noto_Sans_JP, Poppins, Mochiy_Pop_P_One } from "next/font/google";
 import "./globals.css";
 
 import BackgroundDecoration from "@/components/BackgroundDecoration";
+import ScheduleWidget from "@/components/ScheduleWidget";
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
@@ -12,6 +13,12 @@ const notoSansJP = Noto_Sans_JP({
 const poppins = Poppins({
   variable: "--font-poppins",
   weight: ["400", "500", "700"],
+  subsets: ["latin"],
+});
+
+const mochiy = Mochiy_Pop_P_One({
+  variable: "--font-mochiy",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -28,9 +35,10 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${notoSansJP.variable} ${poppins.variable} antialiased`}
+        className={`${notoSansJP.variable} ${poppins.variable} ${mochiy.variable} antialiased`}
       >
         <BackgroundDecoration />
+        <ScheduleWidget />
         {children}
       </body>
     </html>

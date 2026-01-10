@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import QnASection from "@/components/QnASection";
 import VideoSection from "@/components/VideoSection";
 import Links from "@/components/Links";
 import Footer from "@/components/Footer";
@@ -12,13 +13,14 @@ export default function Home() {
     <main className="min-h-screen font-sans selection:bg-primary/30">
       <Hero />
       <About />
+      <QnASection />
 
       {/* Recommended Live Stream Section */}
       <VideoSection
         title={live.title}
         subtitle={live.subtitle}
         items={live.items}
-        bgColor="bg-gray-50/50"
+        bgColor="bg-gray-50"
         color="accent"
       />
 
