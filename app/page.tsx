@@ -2,7 +2,7 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import QnASection from "@/components/QnASection";
 import VideoSection from "@/components/VideoSection";
-import TwitterTimeline from "@/components/TwitterTimeline";
+
 import Links from "@/components/Links";
 import Footer from "@/components/Footer";
 import content from "@/data/content.json";
@@ -34,7 +34,7 @@ export default function Home() {
         color="primary"
       />
 
-      <TwitterTimeline />
+
       <Links />
       <Footer />
     </main>
