@@ -26,16 +26,28 @@ export default function ScheduleWidget() {
     return (
         <>
             {/* Toggle Button (Collapsed State) */}
+            {/* Toggle Button (Collapsed State) */}
             <motion.button
                 onClick={() => setIsOpen(true)}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                whileHover={{ scale: 1.05 }}
+                animate={{
+                    opacity: 1,
+                    y: 0,
+                    scale: [1, 1.05, 1]
+                }}
+                transition={{
+                    scale: {
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }
+                }}
+                whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="fixed bottom-6 left-6 z-[1000] bg-white text-primary px-4 py-3 rounded-full shadow-lg border-2 border-pink-100 flex items-center gap-2 font-bold hover:bg-pink-50 hover:shadow-xl transition-colors"
+                className="fixed bottom-6 left-6 z-[1000] bg-primary text-white px-4 py-4 md:px-6 md:py-3 rounded-full shadow-[0_0_15px_rgba(255,105,180,0.6)] border-4 border-white flex items-center gap-2 font-bold hover:bg-rose-500 transition-colors"
             >
-                <CalendarDays size={20} />
-                <span className="hidden md:inline">{schedule.title}</span>
+                <CalendarDays size={28} />
+                <span className="hidden md:inline text-lg">{schedule.title}</span>
             </motion.button>
 
             {/* Expanded Modal Overlay */}

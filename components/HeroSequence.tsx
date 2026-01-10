@@ -42,17 +42,26 @@ export default function HeroSequence({ items }: Props) {
                 {/* Background Image (Crossfade) */}
                 <motion.div
                     key={`bg-${currentIndex}`}
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 1.5, ease: "easeInOut" }}
                     className="absolute inset-0 z-0"
                 >
+                    {/* Layer 1: Blurred Fill (for mobile letterboxing) */}
+                    <div className="absolute inset-0 overflow-hidden">
+                        <img
+                            src={currentItem.image}
+                            alt=""
+                            className="w-full h-full object-cover opacity-70 blur-sm scale-110"
+                        />
+                    </div>
+
+                    {/* Layer 2: Main Image (Contain on mobile, Cover on desktop) */}
                     <img
                         src={currentItem.image}
                         alt=""
-                        className="w-full h-full object-cover opacity-60"
-                        style={{ filter: "blur(2px)" }}
+                        className="absolute inset-0 w-full h-full object-contain md:object-cover opacity-80"
                     />
                 </motion.div>
 
