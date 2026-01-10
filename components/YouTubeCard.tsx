@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 interface YouTubeCardProps {
     videoId: string;
-    title: string;
+    title?: string;
     description: string;
     note?: string;
 }
@@ -21,7 +21,7 @@ export default function YouTubeCard({ videoId, title, description, note }: YouTu
                     <>
                         <img
                             src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
-                            alt={title}
+                            alt={title || "Video"}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
@@ -33,7 +33,7 @@ export default function YouTubeCard({ videoId, title, description, note }: YouTu
                 ) : (
                     <iframe
                         src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                        title={title}
+                        title={title || "Video"}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                         className="absolute inset-0 w-full h-full"
@@ -41,9 +41,11 @@ export default function YouTubeCard({ videoId, title, description, note }: YouTu
                 )}
             </div>
             <div className="p-5 flex flex-col flex-grow">
-                <h3 className="font-bold text-lg text-text-main line-clamp-2 mb-2 leading-tight">
-                    {title}
-                </h3>
+                {title && (
+                    <h3 className="font-bold text-lg text-text-main line-clamp-2 mb-2 leading-tight">
+                        {title}
+                    </h3>
+                )}
                 <p className="text-sm text-text-sub line-clamp-2 mb-2 flex-grow">
                     {description}
                 </p>
@@ -52,3 +54,4 @@ export default function YouTubeCard({ videoId, title, description, note }: YouTu
         </div>
     );
 }
+
