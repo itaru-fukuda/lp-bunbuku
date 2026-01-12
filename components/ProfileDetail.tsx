@@ -12,7 +12,7 @@ export default function ProfileDetail() {
 
     if (!profileDetail) return null;
 
-    const images = profileDetail.images || [{ src: profileDetail.image, label: "通常衣装" }];
+    const images = profileDetail.images;
 
     return (
         <section className="py-20 bg-gradient-to-b from-white to-pink-50 overflow-hidden">
