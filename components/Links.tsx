@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Youtube, Twitter } from "lucide-react";
+import { Youtube, Twitter, ShoppingBag } from "lucide-react";
 import content from "@/data/content.json";
 import SectionTitle from "./SectionTitle";
 
@@ -41,6 +41,22 @@ export default function Links() {
                         >
                             <Twitter size={32} />
                             <span className="text-xl font-bold">X (Twitter)</span>
+                        </motion.a>
+                    )}
+
+                    {links.booth && (
+                        <motion.a
+                            href={links.booth}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center justify-center gap-3 px-8 py-5 bg-[#fc4d50] text-white rounded-2xl shadow-lg hover:shadow-red-200/50 hover:shadow-xl transition-all"
+                        >
+                            <ShoppingBag size={32} />
+                            <span className="text-xl font-bold">BOOTH</span>
                         </motion.a>
                     )}
                 </div>

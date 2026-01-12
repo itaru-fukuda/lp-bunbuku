@@ -45,6 +45,63 @@
             "お絵かき"
         ]
     },
+    "profileDetail": {
+        "name": "分福 ありさ",
+        "enName": "Bunbuku Arisa",
+        "images": [
+            {
+                "src": "/images/profile/full_body_002.png",
+                "label": "通常衣装"
+            },
+            {
+                "src": "/images/profile/full_body_summer.png",
+                "label": "夏衣装"
+            }
+        ],
+        "description": "",
+        "stats": [
+            {
+                "label": "誕生日",
+                "value": "3月27日"
+            },
+            {
+                "label": "初配信",
+                "value": "2023年6月17日"
+            },
+            {
+                "label": "血液型",
+                "value": "AB"
+            },
+            {
+                "label": "出身地",
+                "value": "佐賀"
+            },
+            {
+                "label": "身長",
+                "value": "たぬき2匹くらい"
+            },
+            {
+                "label": "体重",
+                "value": "たぬき10匹くらい"
+            },
+            {
+                "label": "好きな食べ物",
+                "value": "えいひれ、オムライス"
+            },
+            {
+                "label": "嫌いな食べ物",
+                "value": "辛いやつ"
+            },
+            {
+                "label": "趣味",
+                "value": "ゲーム、ロードバイク、お絵かき、歌"
+            },
+            {
+                "label": "ハッシュタグ",
+                "value": "総合：#分福ありさ\n配信：#ぶんぶくらいぶ\nマイクラ：#ブンブクラフト\nFA：#すけっちぶんぶく"
+            }
+        ]
+    },
     "qna": {
         "title": "まずはここから！",
         "subtitle": "一問一答自己紹介！",
@@ -96,7 +153,8 @@
     "links": {
         "youtube": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ",
         "twitter": "https://x.com/bunbukuarisa",
-        "twitterId": "bunbukuarisa"
+        "twitterId": "bunbukuarisa",
+        "booth": "https://bunbukuarisa.booth.pm/"
     },
     "footer": {
         "notice": "本サイトは非公式のファンサイトです",

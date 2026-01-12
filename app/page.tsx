@@ -1,8 +1,8 @@
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import ProfileDetail from "@/components/ProfileDetail";
 import QnASection from "@/components/QnASection";
 import VideoSection from "@/components/VideoSection";
-
 import Links from "@/components/Links";
 import Footer from "@/components/Footer";
 import content from "@/data/content.json";
@@ -14,6 +14,7 @@ export default function Home() {
     <main className="min-h-screen font-sans selection:bg-primary/30">
       <Hero />
       <About />
+      <ProfileDetail />
       <QnASection />
 
       {/* Recommended Live Stream Section */}
