@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import content from "@/data/content.json";
 import Image from "next/image";
 import { useState } from "react";
-import { Shirt, Sun } from "lucide-react";
 
 export default function ProfileDetail() {
     const { profileDetail } = content;
@@ -64,8 +63,15 @@ export default function ProfileDetail() {
                                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
                                         className="flex items-center whitespace-nowrap h-full"
                                     >
-                                        <div className="w-[48px] h-full flex items-center justify-center flex-shrink-0">
-                                            {index === 0 ? <Shirt size={20} /> : <Sun size={20} />}
+                                        <div className="w-[48px] h-full flex items-center justify-center flex-shrink-0 p-1">
+                                            <div className="relative w-full h-full rounded-full overflow-hidden border border-gray-100">
+                                                <Image
+                                                    src={img.icon || img.src} // Fallback to src if icon missing (though it shouldn't be)
+                                                    alt={img.label}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                            </div>
                                         </div>
 
                                         <motion.span

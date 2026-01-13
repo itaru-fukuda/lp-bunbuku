@@ -51,11 +51,18 @@
         "images": [
             {
                 "src": "/images/profile/full_body_002.png",
-                "label": "通常衣装"
+                "label": "通常衣装",
+                "icon": "/images/profile/icon_default_001.png"
             },
             {
                 "src": "/images/profile/full_body_summer.png",
-                "label": "夏衣装"
+                "label": "夏衣装",
+                "icon": "/images/profile/icon_summer_001.png"
+            },
+            {
+                "src": "/images/profile/full_body_winter_001.png",
+                "label": "冬衣装",
+                "icon": "/images/profile/icon_winter_001.png"
             }
         ],
         "description": "",
