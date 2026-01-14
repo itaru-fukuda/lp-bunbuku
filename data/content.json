@@ -57,12 +57,12 @@
             {
                 "src": "/images/profile/full_body_summer.png",
                 "label": "夏衣装",
-                "icon": "/images/profile/icon_summer_001.png"
+                "icon": "/images/profile/icon_summer_002.png"
             },
             {
                 "src": "/images/profile/full_body_winter_001.png",
                 "label": "冬衣装",
-                "icon": "/images/profile/icon_winter_001.png"
+                "icon": "/images/profile/icon_winter_002.png"
             }
         ],
         "description": "",

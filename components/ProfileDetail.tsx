@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import content from "@/data/content.json";
 import Image from "next/image";
 import { useState } from "react";
+import { ZoomIn } from "lucide-react";
 
 export default function ProfileDetail() {
     const { profileDetail } = content;
@@ -40,8 +41,8 @@ export default function ProfileDetail() {
                             </motion.div>
                         </AnimatePresence>
 
-                        {/* Outfit Switcher - Icon Buttons with Hover Reveal (Top-Left) */}
-                        <div className="absolute top-4 left-4 z-20 flex flex-col gap-3 items-start">
+                        {/* Outfit Switcher - Icon Buttons with Hover Reveal (Top-Right) */}
+                        <div className="absolute top-4 right-4 z-20 flex flex-col gap-4 items-end">
                             {images.map((img: any, index: number) => (
                                 <motion.button
                                     key={index}
@@ -49,39 +50,50 @@ export default function ProfileDetail() {
                                     initial="collapsed"
                                     animate="collapsed"
                                     whileHover="expanded"
-                                    className={`relative flex items-center overflow-hidden rounded-full backdrop-blur-md shadow-lg transition-colors ${currentIndex === index
-                                        ? "bg-white/90 text-primary border-2 border-primary/20"
-                                        : "bg-white/40 text-gray-600 border border-white/50 hover:bg-white/80"
+                                    className={`relative flex items-center rounded-full shadow-lg transition-all flex-row-reverse group ${currentIndex === index
+                                            ? "bg-white/90"
+                                            : "bg-white/40 hover:bg-white/80"
                                         }`}
-                                    style={{ height: "48px" }}
+                                    style={{ height: "64px" }}
                                 >
                                     <motion.div
                                         variants={{
-                                            collapsed: { width: "48px" },
+                                            collapsed: { width: "64px" },
                                             expanded: { width: "auto" }
                                         }}
                                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                        className="flex items-center whitespace-nowrap h-full"
+                                        className="flex items-center whitespace-nowrap h-full flex-row-reverse rounded-full"
                                     >
-                                        <div className="w-[48px] h-full flex items-center justify-center flex-shrink-0 p-1">
-                                            <div className="relative w-full h-full rounded-full overflow-hidden border border-gray-100">
+                                        {/* Icon Container - No overflow hidden here to allow badge to stick out */}
+                                        <div className="w-[64px] h-[64px] flex items-center justify-center flex-shrink-0 relative">
+                                            {/* Image Circle - Has overflow hidden */}
+                                            <div className={`relative w-[56px] h-[56px] rounded-full overflow-hidden border-4 ${currentIndex === index ? "border-primary" : "border-white"
+                                                } box-border shadow-sm`}>
                                                 <Image
-                                                    src={img.icon || img.src} // Fallback to src if icon missing (though it shouldn't be)
+                                                    src={img.icon || img.src}
                                                     alt={img.label}
                                                     fill
                                                     className="object-cover"
                                                 />
                                             </div>
+
+                                            {/* Zoom Badge - Sticking out */}
+                                            <div className="absolute -bottom-1 -right-1 z-10 flex items-center justify-center drop-shadow-[0_0_2px_rgba(255,255,255,0.8)]">
+                                                <ZoomIn size={22} strokeWidth={3} className="text-gray-900" />
+                                            </div>
                                         </div>
 
+                                        {/* Text with overflow hidden for reveal animation */}
                                         <motion.span
                                             variants={{
-                                                collapsed: { opacity: 0, width: 0, display: "none" },
-                                                expanded: { opacity: 1, width: "auto", display: "block" }
+                                                collapsed: { opacity: 0, width: 0, marginLeft: 0 },
+                                                expanded: { opacity: 1, width: "auto", marginLeft: 0 }
                                             }}
-                                            className="font-bold text-sm pr-5"
+                                            className="font-bold text-gray-700 text-sm overflow-hidden"
                                         >
-                                            {img.label}
+                                            <span className="block px-4 whitespace-nowrap">
+                                                {img.label}
+                                            </span>
                                         </motion.span>
                                     </motion.div>
                                 </motion.button>
