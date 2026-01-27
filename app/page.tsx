@@ -7,8 +7,29 @@ import Links from "@/components/Links";
 import Footer from "@/components/Footer";
 import content from "@/data/content.json";
 
-export default function Home() {
-  const { live, songs } = content;
+import { getLatestVideos, getPopularVideos } from "@/lib/youtube";
+
+export default async function Home() {
+  // Fetch data concurrently
+  const [latestVideos, popularVideos] = await Promise.all([
+    getLatestVideos(),
+    getPopularVideos(),
+  ]);
+
+  const { latest, popular, songs } = content;
+
+  // Transform YouTube data to UI format
+  const latestItems = latestVideos.map((v) => ({
+    videoId: v.id,
+    title: v.title,
+    description: new Date(v.publishedAt).toLocaleDateString("ja-JP"),
+  }));
+
+  const popularItems = popularVideos.slice(0, 3).map((v) => ({
+    videoId: v.id,
+    title: v.title,
+    description: new Date(v.publishedAt).toLocaleDateString("ja-JP"),
+  }));
 
   return (
     <main className="min-h-screen font-sans selection:bg-primary/30">
@@ -17,22 +38,31 @@ export default function Home() {
       <ProfileDetail />
       <QnASection />
 
-      {/* Recommended Live Stream Section */}
+      {/* Latest Archives Section */}
       <VideoSection
-        title={live.title}
-        subtitle={live.subtitle}
-        items={live.items}
+        title={latest.title}
+        subtitle={latest.subtitle}
+        items={latestItems}
         bgColor="bg-gray-50"
         color="accent"
       />
 
-      {/* Recommended Songs Section */}
+      {/* Recommended (Popular) Videos Section */}
+      <VideoSection
+        title={popular.title}
+        subtitle={popular.subtitle}
+        items={popularItems}
+        bgColor="bg-white"
+        color="primary"
+      />
+
+      {/* Recommended Songs Section (Manual) */}
       <VideoSection
         title={songs.title}
         subtitle={songs.subtitle}
         items={songs.items}
-        bgColor="bg-white"
-        color="primary"
+        bgColor="bg-pink-50"
+        color="tertiary"
       />
 
 

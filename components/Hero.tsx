@@ -12,6 +12,8 @@ export default function Hero() {
 
     return (
         <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-pink-50 z-20">
+            {/* SEO: Hidden H1 for semantic structure */}
+            <h1 className="sr-only">分福ありさ 非公式ファンサイト - Bunbuku Arisa Unofficial Fan Site</h1>
 
             {/* Dynamic Sequence Background & Text */}
             <HeroSequence items={sequence} />

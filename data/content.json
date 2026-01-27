@@ -63,6 +63,16 @@
                 "src": "/images/profile/full_body_winter_001.png",
                 "label": "冬衣装",
                 "icon": "/images/profile/icon_winter_002.png"
+            },
+            {
+                "src": "/images/profile/full_body_anniversary01_001.png",
+                "label": "1周年",
+                "icon": "/images/profile/icon_anniversary01_001.png"
+            },
+            {
+                "src": "/images/profile/bunbuku-arisa_2ndAniv_proto_sharp.png",
+                "label": "2周年",
+                "icon": "/images/profile/icon_anniversary02.png"
             }
         ],
         "description": "",
@@ -115,26 +125,15 @@
         "videoId": "HwNAHC0RI3c",
         "description": "もっと知りたくなったら以下のオススメを見てね！"
     },
-    "live": {
-        "title": "Recommend Live",
-        "subtitle": "おすすめライブ配信",
-        "items": [
-            {
-                "videoId": "zH0qdBPhDL4",
-                "title": "【雑談】2026年初配信だ～～！あけおめー！！！",
-                "description": "新年のご挨拶！今年の抱負を語ります。"
-            },
-            {
-                "videoId": "Le12wPBDgII",
-                "title": "【原神#92】新年初原神！！まったり伝説任務とか",
-                "description": "まったり原神配信。伝説任務を進めます！"
-            },
-            {
-                "videoId": "4hb202_w6ng",
-                "title": "【Alice mare #7】動画でやったAlice mareの別ルート探し！",
-                "description": "不思議な世界に挑む！ハッピーエンドはあるのかな…"
-            }
-        ]
+    "latest": {
+        "title": "Latest Archives",
+        "subtitle": "最新アーカイブ",
+        "description": "YouTubeチャンネルの最新動画です。"
+    },
+    "popular": {
+        "title": "Recommended Videos",
+        "subtitle": "おすすめ動画",
+        "description": "直近90日間で人気の動画です。"
     },
     "songs": {
         "title": "Recommend Songs",
