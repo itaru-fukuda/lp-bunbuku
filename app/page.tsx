@@ -8,6 +8,9 @@ import Footer from "@/components/Footer";
 import content from "@/data/content.json";
 
 import { getLatestVideos, getPopularVideos } from "@/lib/youtube";
+import fs from "fs";
+import path from "path";
+import ExpressionMarquee from "@/components/ExpressionMarquee";
 
 export default async function Home() {
   // Fetch data concurrently
@@ -15,6 +18,21 @@ export default async function Home() {
     getLatestVideos(),
     getPopularVideos(),
   ]);
+
+  // Read expression images dynamically
+  const expressionsDir = path.join(process.cwd(), "public/images/expressions");
+  let expressionImages: string[] = [];
+
+  try {
+    if (fs.existsSync(expressionsDir)) {
+      const files = fs.readdirSync(expressionsDir);
+      expressionImages = files
+        .filter((file) => /\.(png|jpg|jpeg|webp)$/i.test(file))
+        .map((file) => `/images/expressions/${file}`);
+    }
+  } catch (error) {
+    console.error("Failed to read expression images:", error);
+  }
 
   const { latest, popular, songs } = content;
 
@@ -36,6 +54,12 @@ export default async function Home() {
       <Hero />
       <About />
       <ProfileDetail />
+
+      {/* Expression Gallery Marquee */}
+      {expressionImages.length > 0 && (
+        <ExpressionMarquee images={expressionImages} />
+      )}
+
       <QnASection />
 
       {/* Latest Archives Section */}
