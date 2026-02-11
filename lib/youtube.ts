@@ -56,7 +56,7 @@ export async function getPopularVideos(): Promise<YouTubeVideo[]> {
 
     try {
         const res = await fetch(
-            `${BASE_URL}/search?part=snippet&channelId=${CHANNEL_ID}&order=viewCount&publishedAfter=${publishedAfter}&maxResults=3&type=video&key=${API_KEY}`,
+            `${BASE_URL}/search?part=snippet&channelId=${CHANNEL_ID}&order=viewCount&publishedAfter=${publishedAfter}&maxResults=50&type=video&key=${API_KEY}`,
             { next: { revalidate: 86400 } } // Cache for 24 hours (updates daily to save quota)
         );
 

@@ -11,11 +11,11 @@
             },
             {
                 "text": "はじめまして！\nゲーム大好き！お絵描き大好き！",
-                "image": "/images/hero/IMG_7673.JPG"
+                "image": "/images/hero/GCMV8X5bQAAIC_C.JPG"
             },
             {
                 "text": "演技が得意なたぬきVTuberの",
-                "image": "/images/hero/IMG_7674.JPG"
+                "image": "/images/hero/GDPQDldaAAAHfSN.JPG"
             },
             {
                 "text": "分福ありさです！",
@@ -70,9 +70,14 @@
                 "icon": "/images/profile/icon_anniversary01_001.png"
             },
             {
-                "src": "/images/profile/bunbuku-arisa_2ndAniv_proto_sharp.png",
+                "src": "/images/profile/full_body_anniversary02_001.png",
                 "label": "2周年",
-                "icon": "/images/profile/icon_anniversary02.png"
+                "icon": "/images/profile/icon_anniversary02_001.png"
+            },
+            {
+                "src": "/images/profile/animal_tanuki.png",
+                "label": "本当の姿",
+                "icon": "SECRET"
             }
         ],
         "description": "",
@@ -131,8 +136,8 @@
         "description": "YouTubeチャンネルの最新動画です。"
     },
     "popular": {
-        "title": "Recommended Videos",
-        "subtitle": "おすすめ動画",
+        "title": "Daily Recommended Videos",
+        "subtitle": "日替わりおすすめ動画",
         "description": "直近90日間で人気の動画です。"
     },
     "songs": {

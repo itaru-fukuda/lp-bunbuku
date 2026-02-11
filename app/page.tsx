@@ -43,7 +43,17 @@ export default async function Home() {
     description: new Date(v.publishedAt).toLocaleDateString("ja-JP"),
   }));
 
-  const popularItems = popularVideos.slice(0, 3).map((v) => ({
+  // Filter out videos that are already in "Latest", then shuffle and pick 3
+  const latestVideoIds = new Set(latestVideos.map((v) => v.id));
+  const availablePopularVideos = popularVideos.filter(
+    (v) => !latestVideoIds.has(v.id)
+  );
+
+  // Simple shuffle
+  const shuffledPopular = [...availablePopularVideos].sort(() => 0.5 - Math.random());
+  const selectedPopular = shuffledPopular.slice(0, 3);
+
+  const popularItems = selectedPopular.map((v) => ({
     videoId: v.id,
     title: v.title,
     description: new Date(v.publishedAt).toLocaleDateString("ja-JP"),
@@ -57,7 +67,11 @@ export default async function Home() {
 
       {/* Expression Gallery Marquee */}
       {expressionImages.length > 0 && (
-        <ExpressionMarquee images={expressionImages} />
+        <ExpressionMarquee
+          images={expressionImages}
+          title="表情ギャラリー"
+          subtitle="Visual Gallery"
+        />
       )}
 
       <QnASection />

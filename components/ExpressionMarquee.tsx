@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
+import SectionTitle from "./SectionTitle";
 
 interface ExpressionMarqueeProps {
     images: string[];
@@ -15,9 +16,11 @@ interface ExpressionMarqueeProps {
      * Default: 1
      */
     speed?: number;
+    title?: string;
+    subtitle?: string;
 }
 
-export default function ExpressionMarquee({ images, speed = 1 }: ExpressionMarqueeProps) {
+export default function ExpressionMarquee({ images, speed = 1, title, subtitle }: ExpressionMarqueeProps) {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     // Ensure enough images for seamless looping
@@ -41,6 +44,11 @@ export default function ExpressionMarquee({ images, speed = 1 }: ExpressionMarqu
     return (
         <>
             <section className="py-12 bg-pink-50 overflow-hidden relative border-y border-pink-100 z-20">
+                {title && (
+                    <div className="container mx-auto px-4 relative z-30">
+                        <SectionTitle title={title} subtitle={subtitle} color="tertiary" />
+                    </div>
+                )}
                 {/* Gradient masks for smooth fade edges */}
                 <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-pink-50 to-transparent z-10 pointer-events-none" />
                 <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-pink-50 to-transparent z-10 pointer-events-none" />
