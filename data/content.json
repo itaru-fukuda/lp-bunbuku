@@ -11,11 +11,11 @@
             },
             {
                 "text": "はじめまして！\nゲーム大好き！お絵描き大好き！",
-                "image": "/images/hero/GCMV8X5bQAAIC_C.jpg"
+                "image": "/images/hero/GCMV8X5bQAAIC_C.JPG"
             },
             {
                 "text": "演技が得意なたぬきVTuberの",
-                "image": "/images/hero/GDPQDldaAAAHfSN.jpg"
+                "image": "/images/hero/GDPQDldaAAAHfSN.JPG"
             },
             {
                 "text": "分福ありさです！",
@@ -70,14 +70,14 @@
                 "icon": "/images/profile/icon_anniversary01_001.png"
             },
             {
-                "src": "/images/profile/full_body_anniversary02_001.png",
+                "src": "/images/profile/full_body_anniversary02_002.png",
                 "label": "2周年",
                 "icon": "/images/profile/icon_anniversary02_001.png"
             },
             {
                 "src": "/images/profile/animal_tanuki.png",
                 "label": "本当の姿",
-                "icon": "SECRET"
+                "icon": "/images/profile/icon_question.svg"
             }
         ],
         "description": "",

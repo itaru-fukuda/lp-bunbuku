@@ -68,17 +68,13 @@ export default function ProfileDetail() {
                                         <div className="w-[64px] h-[64px] flex items-center justify-center flex-shrink-0 relative">
                                             {/* Image Circle - Has overflow hidden */}
                                             <div className={`relative w-[56px] h-[56px] rounded-full overflow-hidden border-4 ${currentIndex === index ? "border-primary" : "border-white"
-                                                } box-border shadow-sm flex items-center justify-center bg-gray-100`}>
-                                                {img.icon === "SECRET" ? (
-                                                    <span className="text-2xl font-bold text-gray-400">?</span>
-                                                ) : (
-                                                    <Image
-                                                        src={img.icon || img.src}
-                                                        alt={img.label}
-                                                        fill
-                                                        className="object-cover"
-                                                    />
-                                                )}
+                                                } box-border shadow-sm`}>
+                                                <Image
+                                                    src={img.icon || img.src}
+                                                    alt={img.label}
+                                                    fill
+                                                    className="object-cover"
+                                                />
                                             </div>
 
                                             {/* Zoom Badge - Sticking out */}
