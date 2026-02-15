@@ -106,7 +106,6 @@ export default async function Home() {
 
 
       <Links />
-      <Links />
       <Footer />
       <ScrollToTop />
     </main>
