@@ -24,6 +24,7 @@ const mochiy = Mochiy_Pop_P_One({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bunbuku-arisa.creative-garden.com/"),
+  manifest: "/manifest.json",
   title: {
     default: "分福ありさ Unofficial Fan Site | 歌とゲームで福を届けるVtuber",
     template: "%s | 分福ありさ Fan Site",
