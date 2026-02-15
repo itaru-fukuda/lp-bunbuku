@@ -11,6 +11,7 @@ import { getLatestVideos, getPopularVideos } from "@/lib/youtube";
 import fs from "fs";
 import path from "path";
 import ExpressionMarquee from "@/components/ExpressionMarquee";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export default async function Home() {
   // Fetch data concurrently
@@ -105,7 +106,9 @@ export default async function Home() {
 
 
       <Links />
+      <Links />
       <Footer />
+      <ScrollToTop />
     </main>
   );
 }
