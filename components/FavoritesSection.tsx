@@ -12,7 +12,17 @@ export default function FavoritesSection() {
     return (
         <section className="py-20 bg-yellow-50 overflow-hidden relative">
             <div className="container mx-auto px-4 relative z-10">
-                <SectionTitle title={favorites.title} subtitle={favorites.subtitle} color="accent" />
+                <SectionTitle
+                    title={
+                        <>
+                            ありさちゃんの
+                            <br className="md:hidden" />
+                            「ここ好き」
+                        </>
+                    }
+                    subtitle={favorites.subtitle}
+                    color="accent"
+                />
 
                 <div className="mt-8 grid grid-cols-2 gap-3 md:flex md:flex-wrap md:justify-center md:gap-6">
                     {favorites.items.map((item, index) => (

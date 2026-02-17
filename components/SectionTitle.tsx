@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 interface SectionTitleProps {
-    title: string;
+    title: string | React.ReactNode;
     subtitle?: string;
     className?: string;
     color?: "primary" | "accent" | "tertiary";
