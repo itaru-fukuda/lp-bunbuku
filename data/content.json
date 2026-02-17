@@ -124,6 +124,48 @@
             }
         ]
     },
+    "favorites": {
+        "title": "ありさちゃんの「ここが好き発表」",
+        "subtitle": "Arisa's Favorites",
+        "items": [
+            {
+                "text": "ゲーム",
+                "icon": "🎮",
+                "color": "bg-blue-100",
+                "rotate": "-2deg"
+            },
+            {
+                "text": "うた",
+                "icon": "🎤",
+                "color": "bg-pink-100",
+                "rotate": "1deg"
+            },
+            {
+                "text": "お絵かき",
+                "icon": "🎨",
+                "color": "bg-purple-100",
+                "rotate": "-1deg"
+            },
+            {
+                "text": "演劇",
+                "icon": "🎭",
+                "color": "bg-yellow-100",
+                "rotate": "2deg"
+            },
+            {
+                "text": "エイヒレ",
+                "icon": "🐟",
+                "color": "bg-orange-100",
+                "rotate": "-3deg"
+            },
+            {
+                "text": "オムライス",
+                "icon": "🍳",
+                "color": "bg-red-100",
+                "rotate": "3deg"
+            }
+        ]
+    },
     "qna": {
         "title": "まずはここから！",
         "subtitle": "一問一答自己紹介！",

@@ -11,6 +11,7 @@ import { getLatestVideos, getPopularVideos } from "@/lib/youtube";
 import fs from "fs";
 import path from "path";
 import ExpressionMarquee from "@/components/ExpressionMarquee";
+import FavoritesSection from "@/components/FavoritesSection";
 import ScrollToTop from "@/components/ScrollToTop";
 
 export default async function Home() {
@@ -74,6 +75,9 @@ export default async function Home() {
           subtitle="Visual Gallery"
         />
       )}
+
+      {/* Favorites Section */}
+      <FavoritesSection />
 
       <QnASection />
 
