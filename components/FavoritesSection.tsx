@@ -14,7 +14,7 @@ export default function FavoritesSection() {
             <div className="container mx-auto px-4 relative z-10">
                 <SectionTitle title={favorites.title} subtitle={favorites.subtitle} color="accent" />
 
-                <div className="mt-12 flex flex-wrap justify-center gap-6">
+                <div className="mt-8 grid grid-cols-2 gap-3 md:flex md:flex-wrap md:justify-center md:gap-6">
                     {favorites.items.map((item, index) => (
                         <motion.div
                             key={index}
@@ -28,16 +28,16 @@ export default function FavoritesSection() {
                                 zIndex: 10,
                                 transition: { type: "spring", stiffness: 300 }
                             }}
-                            className={`relative w-40 md:w-48 aspect-square flex flex-col items-center justify-center p-4 rounded-xl shadow-lg border-2 border-white/50 cursor-pointer ${item.color}`}
+                            className={`relative w-full md:w-48 aspect-square flex flex-col items-center justify-center p-2 md:p-4 rounded-xl shadow-lg border-2 border-white/50 cursor-pointer ${item.color}`}
                             style={{ rotate: item.rotate }}
                         >
                             {/* Pin / Tape graphic could go here */}
-                            <h3 className="font-mochiy font-bold text-gray-800 text-2xl md:text-3xl text-center whitespace-pre-wrap mb-2 leading-relaxed drop-shadow-sm">
+                            <h3 className="font-mochiy font-bold text-gray-800 text-base md:text-3xl text-center whitespace-pre-wrap mb-1 md:mb-2 leading-relaxed drop-shadow-sm">
                                 {item.text}
                             </h3>
                             {/* Decorative line or element could replace icon */}
                             {item.comment && (
-                                <p className="text-sm md:text-base text-gray-700 text-center font-bold bg-white/80 px-3 py-2 rounded-lg w-full shadow-sm transform -rotate-1 border border-gray-100">
+                                <p className="text-[10px] md:text-base text-gray-700 text-center font-bold bg-white/80 px-2 md:px-3 py-1 md:py-2 rounded-lg w-full shadow-sm transform -rotate-1 border border-gray-100 leading-tight">
                                     {item.comment}
                                 </p>
                             )}
