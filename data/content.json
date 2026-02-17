@@ -129,46 +129,46 @@
         "subtitle": "Arisa's Favorites",
         "items": [
             {
-                "text": "元気で明るい！",
-                "icon": "🔆",
-                "comment": "見てるだけで元気もらえる！",
+                "text": "底抜けの明るさ",
+                "comment": "落ち込んでても元気になれる！",
                 "color": "bg-blue-100",
                 "rotate": "-2deg"
             },
             {
-                "text": "声がいい！",
-                "icon": "🎤",
-                "comment": "ずっと聴いていたい癒やしボイス",
+                "text": "唯一無二の声質",
+                "comment": "ハキハキボイスが聞き心地最高",
                 "color": "bg-pink-100",
                 "rotate": "1deg"
             },
             {
-                "text": "演技が上手！",
-                "icon": "�️",
-                "comment": "憑依型の演技力がすごい",
+                "text": "憑依レベルの演技力",
+                "comment": "セリフ読みのギャップに惚れる",
                 "color": "bg-purple-100",
                 "rotate": "-1deg"
             },
             {
-                "text": "ビジュがいい！",
-                "icon": "💞",
-                "comment": "とにかく顔が良い。",
+                "text": "多才すぎる",
+                "comment": "絵もLive2Dも全部自作の超人",
                 "color": "bg-yellow-100",
                 "rotate": "2deg"
             },
             {
-                "text": "努力家",
-                "icon": "�",
-                "comment": "見えないところでの頑張り屋さん",
+                "text": "不屈の根性",
+                "comment": "難しいゲームも諦めない姿が尊い",
                 "color": "bg-orange-100",
                 "rotate": "-3deg"
             },
             {
-                "text": "ファン想い",
-                "icon": "🫶",
-                "comment": "いつもみんなのことを考えてる",
+                "text": "愛溢れる性格",
+                "comment": "ファンを大切にしてくれるのが伝わる",
                 "color": "bg-red-100",
                 "rotate": "3deg"
+            },
+            {
+                "text": "豪快な笑い声",
+                "comment": "つられて笑っちゃう最高の笑顔",
+                "color": "bg-green-100",
+                "rotate": "2deg"
             }
         ]
     },

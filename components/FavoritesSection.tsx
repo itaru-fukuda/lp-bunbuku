@@ -14,7 +14,7 @@ export default function FavoritesSection() {
             <div className="container mx-auto px-4 relative z-10">
                 <SectionTitle title={favorites.title} subtitle={favorites.subtitle} color="accent" />
 
-                <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 justify-center">
+                <div className="mt-12 flex flex-wrap justify-center gap-6">
                     {favorites.items.map((item, index) => (
                         <motion.div
                             key={index}
@@ -28,18 +28,16 @@ export default function FavoritesSection() {
                                 zIndex: 10,
                                 transition: { type: "spring", stiffness: 300 }
                             }}
-                            className={`relative aspect-square flex flex-col items-center justify-center p-4 rounded-xl shadow-lg border-2 border-white/50 cursor-pointer ${item.color}`}
+                            className={`relative w-40 md:w-48 aspect-square flex flex-col items-center justify-center p-4 rounded-xl shadow-lg border-2 border-white/50 cursor-pointer ${item.color}`}
                             style={{ rotate: item.rotate }}
                         >
                             {/* Pin / Tape graphic could go here */}
-                            <div className="text-4xl md:text-5xl mb-2 drop-shadow-md">
-                                {item.icon}
-                            </div>
-                            <h3 className="font-bold text-gray-800 text-lg md:text-xl text-center whitespace-pre-wrap mb-1">
+                            <h3 className="font-mochiy font-bold text-gray-800 text-2xl md:text-3xl text-center whitespace-pre-wrap mb-2 leading-relaxed drop-shadow-sm">
                                 {item.text}
                             </h3>
+                            {/* Decorative line or element could replace icon */}
                             {item.comment && (
-                                <p className="text-xs md:text-sm text-gray-600 text-center font-medium bg-white/60 px-2 py-1 rounded-md w-full">
+                                <p className="text-sm md:text-base text-gray-700 text-center font-bold bg-white/80 px-3 py-2 rounded-lg w-full shadow-sm transform -rotate-1 border border-gray-100">
                                     {item.comment}
                                 </p>
                             )}
