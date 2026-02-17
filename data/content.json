@@ -125,42 +125,48 @@
         ]
     },
     "favorites": {
-        "title": "ありさちゃんの「ここが好き発表」",
+        "title": "ありさちゃんの「ここ好き」",
         "subtitle": "Arisa's Favorites",
         "items": [
             {
-                "text": "ゲーム",
-                "icon": "🎮",
+                "text": "元気で明るい！",
+                "icon": "🔆",
+                "comment": "見てるだけで元気もらえる！",
                 "color": "bg-blue-100",
                 "rotate": "-2deg"
             },
             {
-                "text": "うた",
+                "text": "声がいい！",
                 "icon": "🎤",
+                "comment": "ずっと聴いていたい癒やしボイス",
                 "color": "bg-pink-100",
                 "rotate": "1deg"
             },
             {
-                "text": "お絵かき",
-                "icon": "🎨",
+                "text": "演技が上手！",
+                "icon": "�️",
+                "comment": "憑依型の演技力がすごい",
                 "color": "bg-purple-100",
                 "rotate": "-1deg"
             },
             {
-                "text": "演劇",
-                "icon": "🎭",
+                "text": "ビジュがいい！",
+                "icon": "💞",
+                "comment": "とにかく顔が良い。",
                 "color": "bg-yellow-100",
                 "rotate": "2deg"
             },
             {
-                "text": "エイヒレ",
-                "icon": "🐟",
+                "text": "努力家",
+                "icon": "�",
+                "comment": "見えないところでの頑張り屋さん",
                 "color": "bg-orange-100",
                 "rotate": "-3deg"
             },
             {
-                "text": "オムライス",
-                "icon": "🍳",
+                "text": "ファン想い",
+                "icon": "🫶",
+                "comment": "いつもみんなのことを考えてる",
                 "color": "bg-red-100",
                 "rotate": "3deg"
             }

@@ -35,9 +35,14 @@ export default function FavoritesSection() {
                             <div className="text-4xl md:text-5xl mb-2 drop-shadow-md">
                                 {item.icon}
                             </div>
-                            <h3 className="font-bold text-gray-800 text-lg md:text-xl text-center whitespace-pre-wrap">
+                            <h3 className="font-bold text-gray-800 text-lg md:text-xl text-center whitespace-pre-wrap mb-1">
                                 {item.text}
                             </h3>
+                            {item.comment && (
+                                <p className="text-xs md:text-sm text-gray-600 text-center font-medium bg-white/60 px-2 py-1 rounded-md w-full">
+                                    {item.comment}
+                                </p>
+                            )}
                         </motion.div>
                     ))}
                 </div>
