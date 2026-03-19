@@ -60,7 +60,7 @@ export default function HeroSequence({ items }: Props) {
                     {/* Layer 2: Main Image (Contain on mobile, Cover on desktop) */}
                     <img
                         src={currentItem.image}
-                        alt=""
+                        alt={`分福ありさ: ${currentItem.text.replace(/\n/g, ' ')}`}
                         className="absolute inset-0 w-full h-full object-contain md:object-cover opacity-80"
                     />
                 </motion.div>

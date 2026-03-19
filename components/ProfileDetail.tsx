@@ -71,7 +71,7 @@ export default function ProfileDetail() {
                                                 } box-border shadow-sm`}>
                                                 <Image
                                                     src={img.icon || img.src}
-                                                    alt={img.label}
+                                                    alt={`${profileDetail.name} - ${img.label}`}
                                                     fill
                                                     className="object-cover"
                                                 />
