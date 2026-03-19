@@ -29,17 +29,17 @@ export const metadata: Metadata = {
     google: "MUR79J14k5KGd39ygRnGJXeaSEOmyfwighc3fBQzp7A",
   },
   title: {
-    default: "分福ありさ Unofficial Fan Site | 歌とゲームで福を届けるVtuber",
+    default: "分福ありさ Fan Site | 歌とゲームで福を届けるVtuber",
     template: "%s | 分福ありさ Fan Site",
   },
   description: "Vtuber分福ありさ（Bunbuku Arisa）の非公式ファンサイト。プロフィール、配信スケジュール、歌ってみた動画、アーカイブ情報を掲載中。あなたに福のお裾分け！",
   keywords: ["分福ありさ", "Vtuber", "Bunbuku Arisa", "歌ってみた", "ゲーム実況", "個人勢Vtuber"],
   authors: [{ name: "Fan Community" }],
   openGraph: {
-    title: "分福ありさ Unofficial Fan Site",
+    title: "分福ありさ Fan Site",
     description: "歌とゲームで福を届けるVtuber、分福ありさの非公式ファンサイトです。",
     url: "https://bunbuku-arisa.creative-garden.com/",
-    siteName: "分福ありさ Unofficial Fan Site",
+    siteName: "分福ありさ Fan Site",
     locale: "ja_JP",
     type: "website",
     images: [
@@ -47,13 +47,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "分福ありさ Unofficial Fan Site",
+        alt: "分福ありさ Fan Site",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "分福ありさ Unofficial Fan Site",
+    title: "分福ありさ Fan Site",
     description: "歌とゲームで福を届けるVtuber、分福ありさの非公式ファンサイトです。",
     creator: "@bunbukuarisa", // Official account
     images: ["/opengraph-image.png"],
@@ -76,7 +76,7 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "WebSite",
-      "name": "分福ありさ Unofficial Fan Site",
+      "name": "分福ありさ Fan Site",
       "url": "https://bunbuku-arisa.creative-garden.com/",
       "description": "Vtuber分福ありさの非公式ファンサイト",
       "inLanguage": "ja",

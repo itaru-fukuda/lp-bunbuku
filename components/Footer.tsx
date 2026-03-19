@@ -13,7 +13,7 @@ export default function Footer() {
                     {footer.rights}
                 </p>
                 <div className="mt-8 text-xs text-gray-500">
-                    © {new Date().getFullYear()} Bunbuku Arisa Unofficial Fan Site
+                    © {new Date().getFullYear()} Bunbuku Arisa Fan Site
                 </div>
             </div>
         </footer>
