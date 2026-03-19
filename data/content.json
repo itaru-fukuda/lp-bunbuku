@@ -7,19 +7,19 @@
         "greetingSequence": [
             {
                 "text": "ぶんぶくぶーん！",
-                "image": "/images/hero/IMG_7669.JPG"
+                "image": "/images/hero/IMG_7691.JPG"
             },
             {
                 "text": "はじまして！\nゲーム大好き！お絵描き大好き！",
-                "image": "/images/hero/fix_missing.jpg"
+                "image": "/images/hero/IMG_7669.JPG"
             },
             {
                 "text": "演技が得意なたぬきVTuberの",
-                "image": "/images/hero/GDPQDldaAAAHfSN.jpg"
+                "image": "/images/hero/fix_missing.jpg"
             },
             {
                 "text": "分福ありさです！",
-                "image": "/images/hero/IMG_7691.JPG"
+                "image": "/images/hero/IMG_8036.PNG"
             }
         ]
     },
@@ -35,9 +35,9 @@
         }
     },
     "about": {
-        "title": "About Me",
+        "title": "About Arisa",
         "image": "/images/profile/icon_profile.jpg",
-        "description": "分福ありさ（Bunbuku Arisa）は、歌とゲームを中心に活動する個人勢のたぬきVtuberです。\nセルフ受肉として自身でモデリング等もこなす多才さが魅力です。\n本サイトは、分福ありさの魅力や最新の配信スケジュール、おすすめアーカイブをまとめた非公式ファンサイトです。",
+        "description": "分福ありさ（Bunbuku Arisa）ちゃんは、\n歌とゲームを中心に活動する個人勢のたぬきVtuber！\nセルフ受肉として自身でモデリング等もこなす多才さが魅力です。\n本サイトは、分福ありさちゃんの魅力や\n最新の配信スケジュールなどをまとめたファンサイトです。",
         "tags": [
             "ゲーム配信",
             "歌ってみた",
