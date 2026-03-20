@@ -130,7 +130,7 @@
         "items": [
             {
                 "text": "底抜けの\n明るさ",
-                "comment": "元気がもらえる！\n楽しい配信！",
+                "comment": "元気がもらえる！楽しい配信！",
                 "color": "bg-blue-100",
                 "rotate": "-2deg"
             },
@@ -147,8 +147,8 @@
                 "rotate": "-1deg"
             },
             {
-                "text": "多才すぎる",
-                "comment": "セルフ受肉の超人！\n歌声も最高！",
+                "text": "天才すぎる",
+                "comment": "セルフ受肉！歌声も最高！",
                 "color": "bg-yellow-100",
                 "rotate": "2deg"
             },
@@ -176,7 +176,7 @@
         "title": "まずはここから！",
         "subtitle": "一問一答自己紹介！",
         "videoId": "HwNAHC0RI3c",
-        "description": "もっと知りたくなったら以下のオススメを見てね！"
+        "description": ""
     },
     "latest": {
         "title": "Latest Archives",
@@ -223,7 +223,8 @@
         "youtube": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ",
         "twitter": "https://x.com/bunbukuarisa",
         "twitterId": "bunbukuarisa",
-        "booth": "https://bunbukuarisa.booth.pm/"
+        "booth": "https://bunbukuarisa.booth.pm/",
+        "tiktok": "https://www.tiktok.com/@bunbukuarisa"
     },
     "footer": {
         "notice": "本ページは、Vtuber『分福ありさ』ちゃんのファンサイトです",
