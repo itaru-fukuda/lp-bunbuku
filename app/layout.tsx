@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "/images/hero/linkage_pic.jpg",
         width: 1200,
         height: 630,
         alt: "分福ありさ Fan Site",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     title: "分福ありさ Fan Site",
     description: "みんなに福を届ける完全セルフ受肉たぬきVtuber、分福ありさちゃんのファンサイトです。",
     creator: "@bunbukuarisa", // Official account
-    images: ["public/images/hero/linkage_pic.jpg"],
+    images: ["/images/hero/linkage_pic.jpg"],
   },
   robots: {
     index: true,
