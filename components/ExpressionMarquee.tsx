@@ -58,16 +58,18 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
                         {marqueeImages.map((src, index) => (
                             <div
                                 key={index}
-                                className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white select-none cursor-pointer hover:scale-105 transition-transform"
+                                className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 select-none cursor-pointer"
                                 onClick={() => handleImageClick(src)}
                             >
-                                <Image
-                                    src={src}
-                                    alt={`Expression ${index}`}
-                                    fill
-                                    className="object-cover pointer-events-none" // prevent image drag
-                                    draggable={false}
-                                />
+                                <div className="absolute inset-0 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white transition-transform duration-300 hover:scale-105">
+                                    <Image
+                                        src={src}
+                                        alt={`Expression ${index}`}
+                                        fill
+                                        className="object-cover pointer-events-none" // prevent image drag
+                                        draggable={false}
+                                    />
+                                </div>
                             </div>
                         ))}
                     </div>
