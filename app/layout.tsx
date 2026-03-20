@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     title: "分福ありさ Fan Site",
     description: "みんなに福を届ける完全セルフ受肉たぬきVtuber、分福ありさちゃんのファンサイトです。",
     creator: "@bunbukuarisa", // Official account
-    images: ["/opengraph-image.png"],
+    images: ["public/images/hero/linkage_pic.jpg"],
   },
   robots: {
     index: true,
