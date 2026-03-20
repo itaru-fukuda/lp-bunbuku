@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import content from "@/data/content.json";
 import HeroSequence from "./HeroSequence";
@@ -13,13 +13,13 @@ export default function Hero() {
     return (
         <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-pink-50 z-20">
             {/* SEO: Hidden H1 for semantic structure */}
-            <h1 className="sr-only">分福ありさ 非公式ファンサイト - Bunbuku Arisa Unofficial Fan Site</h1>
+            <h1 className="sr-only">分福ありさ 非公式ファンサイト - Bunbuku Arisa Fan Site</h1>
 
             {/* Dynamic Sequence Background & Text */}
             <HeroSequence items={sequence} />
 
             {/* CTA Button (Fixed Overlay) */}
-            <div className="absolute bottom-20 left-0 right-0 z-30 flex justify-center pointer-events-none">
+            <div className="absolute bottom-28 md:bottom-24 left-0 right-0 z-30 flex justify-center pointer-events-none">
                 <div className="pointer-events-auto">
                     <Link
                         href={hero.ctaLink}
@@ -31,6 +31,12 @@ export default function Hero() {
                         <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="absolute bottom-6 left-0 right-0 z-30 flex flex-col items-center justify-center opacity-80 pointer-events-none animate-bounce">
+                <span className="text-white text-xs font-bold tracking-[0.2em] mb-1 drop-shadow-md">SCROLL</span>
+                <ChevronDown className="text-white drop-shadow-md" size={32} />
             </div>
         </section>
     );
