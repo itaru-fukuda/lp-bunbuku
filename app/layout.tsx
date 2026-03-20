@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     google: "MUR79J14k5KGd39ygRnGJXeaSEOmyfwighc3fBQzp7A",
   },
   title: {
-    default: "分福ありさ Fan Site | 歌とゲームで福を届けるたぬきVtuber",
+    default: "分福ありさ Fan Site | みんなに福を届ける完全セルフ受肉たぬきVtuber",
     template: "%s | 分福ありさ Fan Site",
   },
   description: "Vtuber分福ありさ（Bunbuku Arisa）のファンサイト。プロフィール、配信スケジュール、歌ってみた動画、アーカイブ情報を掲載中。あなたに福のお裾分け！",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Fan Community" }],
   openGraph: {
     title: "分福ありさ Fan Site",
-    description: "歌とゲームで福を届けるたぬきVtuber、分福ありさちゃんのファンサイトです。",
+    description: "みんなに福を届ける完全セルフ受肉たぬきVtuber、分福ありさちゃんのファンサイトです。",
     url: "https://bunbuku-arisa.creative-garden.com/",
     siteName: "分福ありさ Fan Site",
     locale: "ja_JP",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "分福ありさ Fan Site",
-    description: "歌とゲームで福を届けるたぬきVtuber、分福ありさちゃんのファンサイトです。",
+    description: "みんなに福を届ける完全セルフ受肉たぬきVtuber、分福ありさちゃんのファンサイトです。",
     creator: "@bunbukuarisa", // Official account
     images: ["/opengraph-image.png"],
   },
@@ -87,7 +87,7 @@ const jsonLd = {
       "alternateName": "Bunbuku Arisa",
       "url": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ",
       "image": "https://bunbuku-arisa.creative-garden.com/images/profile/full_body_002.png",
-      "description": "歌とゲームで福を届けるたぬきVtuber",
+      "description": "みんなに福を届ける完全セルフ受肉たぬきVtuber",
       "jobTitle": "Virtual YouTuber",
       "sameAs": [
         "https://twitter.com/bunbukuarisa",
