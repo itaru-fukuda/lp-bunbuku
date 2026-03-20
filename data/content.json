@@ -129,44 +129,44 @@
         "subtitle": "Arisa's Favorites",
         "items": [
             {
-                "text": "底抜けの明るさ",
-                "comment": "落ち込んでても元気になれる！",
+                "text": "底抜けの\n明るさ",
+                "comment": "元気がもらえる！\n楽しい配信！",
                 "color": "bg-blue-100",
                 "rotate": "-2deg"
             },
             {
-                "text": "唯一無二の声質",
+                "text": "唯一無二の\n声質",
                 "comment": "ハキハキボイスが聞き心地最高",
                 "color": "bg-pink-100",
                 "rotate": "1deg"
             },
             {
-                "text": "憑依レベルの演技力",
+                "text": "憑依レベル\nの演技力",
                 "comment": "セリフ読みのギャップに惚れる",
                 "color": "bg-purple-100",
                 "rotate": "-1deg"
             },
             {
                 "text": "多才すぎる",
-                "comment": "セルフ受肉の超人",
+                "comment": "セルフ受肉の超人！\n歌声も最高！",
                 "color": "bg-yellow-100",
                 "rotate": "2deg"
             },
             {
                 "text": "不屈の根性",
-                "comment": "難しいゲームも諦めない姿が尊い",
+                "comment": "難しいゲームも諦めず弱音を吐かない姿が尊い",
                 "color": "bg-orange-100",
                 "rotate": "-3deg"
             },
             {
-                "text": "愛溢れる性格",
-                "comment": "ファンを大切にしてくれるのが伝わる",
+                "text": "愛溢れる\n性格",
+                "comment": "ファンを大切にしているのが伝わる",
                 "color": "bg-red-100",
                 "rotate": "3deg"
             },
             {
-                "text": "豪快な笑い声",
-                "comment": "つられて笑っちゃう最高の笑顔",
+                "text": "豪快な\n笑い声",
+                "comment": "つられて笑っちゃう！最高の笑顔",
                 "color": "bg-green-100",
                 "rotate": "2deg"
             }
@@ -206,6 +206,16 @@
                 "videoId": "tTa93KcnLbc",
                 "title": "Booo！ / Covered by 分福ありさ",
                 "description": "誕生日記念に歌ってみた！"
+            },
+            {
+                "videoId": "xsYhe5yGFDc",
+                "title": "すきっちゅーの！ / Covered by 分福ありさ",
+                "description": "皆だいすきっちゅーーーーーの！！！！！"
+            },
+            {
+                "videoId": "uGzl-yq5dsI",
+                "title": "バニー / Covered by 分福ありさ",
+                "description": "あざとさ100倍！"
             }
         ]
     },
@@ -216,7 +226,7 @@
         "booth": "https://bunbukuarisa.booth.pm/"
     },
     "footer": {
-        "notice": "本ページは、歌とゲームで福を届けるVtuber『分福ありさ』の非公式ファンサイトです",
+        "notice": "本ページは、Vtuber『分福ありさ』ちゃんのファンサイトです",
         "rights": "掲載されている動画・画像の権利は各権利者に帰属します"
     }
 }

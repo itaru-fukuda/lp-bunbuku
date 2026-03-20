@@ -13,7 +13,7 @@ export default function Hero() {
     return (
         <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-pink-50 z-20">
             {/* SEO: Hidden H1 for semantic structure */}
-            <h1 className="sr-only">分福ありさ 非公式ファンサイト - Bunbuku Arisa Fan Site</h1>
+            <h1 className="sr-only">分福ありさ ファンサイト - Bunbuku Arisa Fan Site</h1>
 
             {/* Dynamic Sequence Background & Text */}
             <HeroSequence items={sequence} />
@@ -34,10 +34,10 @@ export default function Hero() {
             </div>
 
             {/* Scroll Indicator */}
-            <div className="absolute bottom-6 left-0 right-0 z-30 flex flex-col items-center justify-center opacity-90 pointer-events-none animate-bounce">
-                <div className="flex flex-col items-center justify-center bg-black/40 backdrop-blur-md rounded-full px-4 pt-3 pb-1 border border-white/20 shadow-lg">
-                    <span className="text-white text-xs font-bold tracking-[0.2em] mb-1">SCROLL</span>
-                    <ChevronDown className="text-white" size={24} />
+            <div className="absolute bottom-6 left-0 right-0 z-30 flex justify-center opacity-90 pointer-events-none animate-bounce">
+                <div className="flex flex-row items-center justify-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-5 py-2 border border-white/20 shadow-lg">
+                    <span className="text-white text-xs font-bold tracking-[0.2em] pt-[2px]">SCROLL</span>
+                    <ChevronDown className="text-white" size={18} />
                 </div>
             </div>
         </section>

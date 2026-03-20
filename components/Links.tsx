@@ -25,7 +25,7 @@ export default function Links() {
                         className="flex items-center justify-center gap-3 px-8 py-5 bg-red-600 text-white rounded-2xl shadow-lg hover:shadow-red-200/50 hover:shadow-xl transition-all"
                     >
                         <Youtube size={32} />
-                        <span className="text-xl font-bold">YouTube Channel</span>
+                        <span className="text-xl font-bold">YouTube</span>
                     </motion.a>
 
                     {links.twitter && (
