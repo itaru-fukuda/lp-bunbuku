@@ -34,9 +34,11 @@ export default function Hero() {
             </div>
 
             {/* Scroll Indicator */}
-            <div className="absolute bottom-6 left-0 right-0 z-30 flex flex-col items-center justify-center opacity-80 pointer-events-none animate-bounce">
-                <span className="text-white text-xs font-bold tracking-[0.2em] mb-1 drop-shadow-md">SCROLL</span>
-                <ChevronDown className="text-white drop-shadow-md" size={32} />
+            <div className="absolute bottom-6 left-0 right-0 z-30 flex flex-col items-center justify-center opacity-90 pointer-events-none animate-bounce">
+                <div className="flex flex-col items-center justify-center bg-black/40 backdrop-blur-md rounded-full px-4 pt-3 pb-1 border border-white/20 shadow-lg">
+                    <span className="text-white text-xs font-bold tracking-[0.2em] mb-1">SCROLL</span>
+                    <ChevronDown className="text-white" size={24} />
+                </div>
             </div>
         </section>
     );
