@@ -41,6 +41,19 @@ export default function ProfileDetail() {
                             </motion.div>
                         </AnimatePresence>
 
+                        {/* Selected Outfit Label (Mobile Only) */}
+                        <div className="absolute top-4 left-4 z-20 md:hidden pointer-events-none">
+                            <motion.div
+                                key={currentIndex}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-full shadow-xl border-2 border-primary/20 text-gray-800 font-bold text-sm flex items-center gap-2"
+                            >
+                                <span className="w-2.5 h-2.5 rounded-full bg-primary/80 animate-pulse shadow-[0_0_8px_rgba(236,72,153,0.6)]" />
+                                {images[currentIndex].label}
+                            </motion.div>
+                        </div>
+
                         {/* Outfit Switcher - Icon Buttons with Hover Reveal (Top-Right) */}
                         <div className="absolute top-4 right-4 z-20 flex flex-col gap-4 items-end">
                             {images.map((img: any, index: number) => (
