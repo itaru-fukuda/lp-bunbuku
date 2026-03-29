@@ -36,7 +36,7 @@
     },
     "aboutSite": {
         "title": "About This Site",
-        "description": "本サイトは、個人勢VTuber『分福ありさ（Bunbuku Arisa）』ちゃんを\n応援するファンサイトです！\n完全セルフ受肉もこなす溢れる魅力や、\n最新の配信スケジュール、おすすめアーカイブ動画などをまとめています。",
+        "description": "本サイトは、個人勢VTuber『分福ありさ（Bunbuku Arisa）』ちゃんを\n応援するファンサイトです！\nありさちゃんの魅力の発信や最新の配信スケジュール、\nおすすめアーカイブ動画などをまとめています。",
         "tags": []
     },
     "aboutArisa": {
@@ -70,12 +70,12 @@
                 "icon": "/images/profile/icon_winter_002.png"
             },
             {
-                "src": "/images/profile/full_body_anniversary01_001.png",
+                "src": "/images/profile/full_body_anniversary01_002.png",
                 "label": "1周年",
-                "icon": "/images/profile/icon_anniversary01_001.png"
+                "icon": "/images/profile/icon_anniversary01_002.png"
             },
             {
-                "src": "/images/profile/full_body_anniversary02_002.png",
+                "src": "/images/profile/full_body_anniversary02_003.png",
                 "label": "2周年",
                 "icon": "/images/profile/icon_anniversary02_001.png"
             },
