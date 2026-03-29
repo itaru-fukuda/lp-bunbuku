@@ -36,7 +36,7 @@ export default async function Home() {
     console.error("Failed to read expression images:", error);
   }
 
-  const { latest, popular, songs } = content;
+  const { latest, popular, songs, aboutSite, aboutArisa } = content;
 
   // Transform YouTube data to UI format
   const latestItems = latestVideos.map((v) => ({
@@ -64,7 +64,8 @@ export default async function Home() {
   return (
     <main className="min-h-screen font-sans selection:bg-primary/30">
       <Hero />
-      <About />
+      <About id="about-site" data={aboutSite} bgColor="bg-pink-50" />
+      <About id="about-arisa" data={aboutArisa} bgColor="bg-white" />
       <ProfileDetail />
 
       {/* Expression Gallery Marquee */}

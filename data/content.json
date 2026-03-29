@@ -34,15 +34,20 @@
             "title": "今週のスケジュール"
         }
     },
-    "about": {
+    "aboutSite": {
+        "title": "About This Site",
+        "description": "本サイトは、個人勢VTuber『分福ありさ（Bunbuku Arisa）』ちゃんを\n応援するファンサイトです！\n完全セルフ受肉もこなす溢れる魅力や、\n最新の配信スケジュール、おすすめアーカイブ動画などをまとめています。",
+        "tags": []
+    },
+    "aboutArisa": {
         "title": "About Arisa",
         "image": "/images/profile/icon_profile.jpg",
-        "description": "分福ありさ（Bunbuku Arisa）ちゃんは、\nゲーム実況・雑談・お絵かき・歌を中心に活動する個人勢のたぬきVtuber！\n完全セルフ受肉もこなす天才さが魅力です。\n本サイトは、分福ありさちゃんの魅力や\n最新の配信スケジュールなどをまとめたファンサイトです。",
+        "description": "分福ありさ（Bunbuku Arisa）ちゃんは、\nゲーム実況・雑談・お絵かき・歌を中心に活動する個人勢のたぬきVtuber！\n完全セルフ受肉もこなす天才さが魅力です。\n元気いっぱいの配信で、みんなに福をお裾分けしています。",
         "tags": [
             "ゲーム配信",
+            "お絵描き",
             "歌ってみた",
-            "雑談",
-            "お絵かき"
+            "雑談"
         ]
     },
     "profileDetail": {
@@ -192,6 +197,11 @@
         "title": "Recommend Songs",
         "subtitle": "おすすめ歌ってみた",
         "items": [
+            {
+                "videoId": "ao2A4-7cHFs",
+                "title": "ヒロインは平均以下。 / Covered by 分福ありさ",
+                "description": "VTuberとして3回目の誕生日記念に！"
+            },
             {
                 "videoId": "KU8eUHnd9os",
                 "title": "にっこり^^調査隊のテーマ / Covered by 稀禾まれ 柊木萩雨 分福ありさ 大口ちび",
