@@ -24,32 +24,44 @@ export default function FavoritesSection() {
                     color="accent"
                 />
 
-                <div className="mt-8 grid grid-cols-2 gap-3 md:flex md:flex-wrap md:justify-center md:gap-6">
-                    {favorites.items.map((item, index) => (
+                <div className="mt-8 flex flex-wrap justify-center gap-4 md:gap-8 px-2">
+                    {favorites.items.map((item: any, index: number) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                            initial={{ opacity: 0, scale: 0.5, y: 50 }}
                             whileInView={{ opacity: 1, scale: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1, type: "spring" }}
-                            whileHover={{
-                                scale: 1.1,
-                                rotate: 0, // Straighten on hover
-                                zIndex: 10,
-                                transition: { type: "spring", stiffness: 300 }
+                            animate={{ 
+                                y: [0, index % 2 === 0 ? -15 : -10, 0] 
                             }}
-                            className={`relative w-full md:w-48 aspect-square flex flex-col items-center justify-center p-2 md:p-4 rounded-xl shadow-lg border-2 border-white/50 cursor-pointer ${item.color}`}
-                            style={{ rotate: item.rotate }}
+                            transition={{ 
+                                y: {
+                                    duration: 3.5 + index * 0.5,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                },
+                                opacity: { duration: 0.6, delay: index * 0.1 },
+                                scale: { duration: 0.6, delay: index * 0.1, type: "spring", bounce: 0.5 }
+                            }}
+                            whileHover={{
+                                scale: 1.05,
+                                transition: { duration: 0.2 }
+                            }}
+                            className={`relative w-40 md:w-56 aspect-square flex flex-col items-center justify-center p-3 md:p-6 rounded-full shadow-[inset_0_4px_20px_rgba(255,255,255,0.9),0_10px_20px_rgba(0,0,0,0.05)] border border-white/60 backdrop-blur-md cursor-pointer ${item.color} bg-opacity-80`}
                         >
-                            {/* Pin / Tape graphic could go here */}
-                            <h3 className="font-mochiy font-bold text-gray-800 text-base md:text-3xl text-center whitespace-pre-wrap mb-1 md:mb-2 leading-relaxed drop-shadow-sm">
+                            {/* Inner Bubble Reflection */}
+                            <div className="absolute top-3 right-5 md:top-4 md:right-8 w-6 h-4 md:w-10 md:h-6 bg-white/70 rounded-[100%] rotate-[-45deg] blur-[2px] opacity-70 pointer-events-none"></div>
+                            
+                            {/* Small secondary bubble attached */}
+                            <div className={`absolute -bottom-2 -left-2 w-8 h-8 rounded-full ${item.color} border border-white/60 shadow-[inset_0_2px_10px_rgba(255,255,255,0.9)] opacity-80 pointer-events-none`}></div>
+
+                            <h3 className="font-mochiy font-bold text-gray-800 text-sm md:text-xl text-center whitespace-pre-wrap leading-relaxed drop-shadow-sm z-10" style={{ rotate: item.rotate }}>
                                 {item.text}
                             </h3>
-                            {/* Decorative line or element could replace icon */}
                             {item.comment && (
-                                <p className="text-[10px] md:text-base text-gray-700 text-center font-bold bg-white/80 px-2 md:px-3 py-1 md:py-2 rounded-lg w-full shadow-sm transform -rotate-1 border border-gray-100 leading-tight">
+                                <span className="mt-2 md:mt-3 text-[10px] md:text-xs text-gray-700 text-center font-bold bg-white/80 px-3 py-1.5 rounded-full w-[105%] shadow-sm z-10 border border-white filter backdrop-blur-sm -rotate-2">
                                     {item.comment}
-                                </p>
+                                </span>
                             )}
                         </motion.div>
                     ))}

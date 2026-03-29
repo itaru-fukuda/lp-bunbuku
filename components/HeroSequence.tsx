@@ -41,7 +41,7 @@ export default function HeroSequence({ items }: Props) {
             <AnimatePresence mode="popLayout">
                 {/* Background Image (Crossfade) */}
                 <motion.div
-                    key={`bg-${currentIndex}`}
+                    key={`bg-${currentItem.image}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
