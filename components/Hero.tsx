@@ -12,14 +12,30 @@ export default function Hero() {
 
     return (
         <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-pink-50 z-20">
-            {/* SEO: Hidden H1 for semantic structure */}
-            <h1 className="sr-only">分福ありさ ファンサイト - Bunbuku Arisa Fan Site</h1>
+            {/* Elegant Site Logo (H1 for SEO) */}
+            <div className="absolute top-6 left-6 md:top-8 md:left-10 z-40 pointer-events-none select-none">
+                <motion.h1
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="flex flex-col gap-1 drop-shadow-sm"
+                >
+                    <span className="text-primary/70 font-black text-sm md:text-base tracking-[0.3em] relative mix-blend-multiply">
+                        分福ありさ ファンサイト
+                        {/* Decorative line */}
+                        <span className="absolute -bottom-1 left-0 w-8 h-[2px] bg-primary/40 rounded-full"></span>
+                    </span>
+                    <span className="text-[0.65rem] md:text-xs text-primary/80 font-medium tracking-wider uppercase mt-1">
+                        Bunbuku Arisa's Fan Site
+                    </span>
+                </motion.h1>
+            </div>
 
             {/* Dynamic Sequence Background & Text */}
             <HeroSequence items={sequence} />
 
             {/* CTA Button (Fixed Overlay) */}
-            <div className="absolute bottom-28 md:bottom-24 left-0 right-0 z-30 flex justify-center pointer-events-none">
+            <div className="absolute bottom-28 md:bottom-24 left-0 right-0 z-30 flex flex-col items-center justify-center gap-3 pointer-events-none">
                 <div className="pointer-events-auto">
                     <Link
                         href={hero.ctaLink}
