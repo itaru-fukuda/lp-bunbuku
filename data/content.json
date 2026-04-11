@@ -42,7 +42,7 @@
     "aboutArisa": {
         "title": "About Arisa",
         "image": "/images/profile/icon_profile.jpg",
-        "description": "分福ありさ（Bunbuku Arisa）ちゃんは、\nゲーム実況・雑談・お絵かき・歌を中心に活動する個人勢のたぬきVtuber！\n完全セルフ受肉もこなす天才さが魅力です。\n元気いっぱいの配信で、みんなに福をお裾分けしています。",
+        "description": "分福ありさ（Bunbuku Arisa）ちゃんは、\nゲーム実況・雑談・お絵かき・歌を中心に活動する個人勢のたぬきVtuber！\n完全セルフ受肉もこなす\n天才さが魅力です。\n元気いっぱいの配信で、\nみんなに福をお裾分けしています。",
         "tags": [
             "ゲーム配信",
             "お絵描き",
@@ -88,6 +88,10 @@
         "description": "",
         "stats": [
             {
+                "label": "推しマーク",
+                "value": "🫧"
+            },
+            {
                 "label": "誕生日",
                 "value": "3月27日"
             },
@@ -132,30 +136,39 @@
     "favorites": {
         "title": "ありさちゃんの「ここ好き」",
         "subtitle": "Arisa's Favorites",
+        "placeholderIcon": "",
+        "memoIcon": "🐾",
+        "decorations": [
+            "🎀",
+            "🎮"
+        ],
         "items": [
             {
-                "text": "底抜けの\n明るさ",
-                "comment": "元気がもらえる！楽しい配信！",
+                "text": "底抜けの明るさ",
+                "comment": "元気がもらえて楽しい配信！",
                 "color": "bg-blue-100",
                 "rotate": "-2deg"
             },
             {
-                "text": "唯一無二の\n声質",
+                "text": "唯一無二の声質",
                 "comment": "ハキハキボイスが聞き心地最高",
                 "color": "bg-pink-100",
-                "rotate": "1deg"
+                "rotate": "1deg",
+                "image": ""
             },
             {
-                "text": "憑依レベル\nの演技力",
+                "text": "引き込まれる演技力",
                 "comment": "セリフ読みのギャップに惚れる",
                 "color": "bg-purple-100",
-                "rotate": "-1deg"
+                "rotate": "-1deg",
+                "image": ""
             },
             {
-                "text": "天才すぎる",
+                "text": "天才（自己申告済）",
                 "comment": "セルフ受肉！歌声も最高！",
                 "color": "bg-yellow-100",
-                "rotate": "2deg"
+                "rotate": "2deg",
+                "image": ""
             },
             {
                 "text": "不屈の根性",
@@ -164,15 +177,21 @@
                 "rotate": "-3deg"
             },
             {
-                "text": "愛溢れる\n性格",
+                "text": "愛溢れる性格",
                 "comment": "ファンを大切にしているのが伝わる",
                 "color": "bg-red-100",
                 "rotate": "3deg"
             },
             {
-                "text": "豪快な\n笑い声",
+                "text": "豪快な笑い声",
                 "comment": "つられて笑っちゃう！最高の笑顔",
                 "color": "bg-green-100",
+                "rotate": "2deg"
+            },
+            {
+                "text": "歌声に惚れる",
+                "comment": "可愛い＆カッコいい！",
+                "color": "bg-amber-100",
                 "rotate": "2deg"
             }
         ]
@@ -237,7 +256,17 @@
         "tiktok": "https://www.tiktok.com/@bunbukuarisa"
     },
     "footer": {
-        "notice": "本ページは、Vtuber『分福ありさ』ちゃんのファンサイトです",
-        "rights": "掲載されている動画・画像の権利は各権利者に帰属します"
+        "notice": "本ページは、Vtuber『分福ありさ』ちゃんの\nファンサイトです",
+        "rights": "掲載されている動画・画像の権利は各権利者に帰属します",
+        "staff": {
+            "title": "制作スタッフ",
+            "roles": "企画・サイト制作・サイトデザイン・システム構築",
+            "name": "@luca_kanegasaki",
+            "url": "https://x.com/luca_kanegasaki",
+            "specialThanks": {
+                "title": "Special Thanks",
+                "name": "福の民 のみなさま"
+            }
+        }
     }
 }

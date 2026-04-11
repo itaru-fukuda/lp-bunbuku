@@ -33,3 +33,14 @@ body {
   color: var(--color-text-main);
   font-family: var(--font-noto-sans-jp), sans-serif;
 }
+
+/* Prevent image dragging, selecting, and long-press saving on iOS/Android */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

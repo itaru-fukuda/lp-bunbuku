@@ -112,6 +112,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.addEventListener('contextmenu', event => event.preventDefault());`
+          }}
+        />
         <BackgroundDecoration />
         <ScheduleWidget />
         {children}
