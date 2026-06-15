@@ -27,14 +27,12 @@ type Props = {
 export default function MosaicBackground({ items }: Props) {
     const [tiles, setTiles] = useState<MosaicTile[]>([]);
 
-    // Initialize tiles
+    // Initialize tiles inside useEffect asynchronously to avoid both purity rule errors (during render)
+    // and set-state-in-effect warnings (synchronous state update inside effect).
     useEffect(() => {
         if (!items || items.length === 0) return;
 
-        const COLS = 8;
-        const ROWS = 6;
         const TOTAL_TILES = 40;
-
         const newTiles: MosaicTile[] = [];
 
         // Group images by type for easy access
@@ -63,9 +61,6 @@ export default function MosaicBackground({ items }: Props) {
             }
 
             // Fallback: If no images exist for the chosen shape, use ANY available images
-            // and force the shape to be consistent with what we have? 
-            // Or just display center-cropped. 
-            // Let's fallback to "all items" if specific list is empty.
             if (targetImages.length === 0) {
                 targetImages = items;
             }
@@ -79,7 +74,10 @@ export default function MosaicBackground({ items }: Props) {
             });
         }
 
-        setTiles(newTiles);
+        const timer = setTimeout(() => {
+            setTiles(newTiles);
+        }, 0);
+        return () => clearTimeout(timer);
     }, [items]);
 
     // Track current images for collision detection (using ref to avoid re-renders)
@@ -179,15 +177,10 @@ type TileProps = {
 };
 
 function Tile({ tile, index, onRequestImage }: TileProps) {
-    // Initial load
-    const [currentImage, setCurrentImage] = useState<BackgroundItem | null>(null);
-
-    // Initial setup
-    useEffect(() => {
-        // Pick initial image safely
-        const img = onRequestImage(index, tile.images);
-        setCurrentImage(img);
-    }, []); // Run once on mount
+    // Initial load - compute initial state directly to avoid useEffect cascading renders
+    const [currentImage, setCurrentImage] = useState<BackgroundItem | null>(() => {
+        return onRequestImage(index, tile.images);
+    });
 
     useEffect(() => {
         if (tile.images.length <= 1) return;

@@ -17,12 +17,11 @@ type DecorationItem = {
 };
 
 export default function BackgroundDecoration() {
-    const { global } = content;
-    const decorations = global?.decorations || [];
     const [items, setItems] = useState<DecorationItem[]>([]);
 
     useEffect(() => {
-        if (!decorations || decorations.length === 0) return;
+        const decorations = content.global?.decorations || [];
+        if (decorations.length === 0) return;
 
         // Generate random scattered items
         // We'll create a fixed number of items (e.g., 15) distributed across the page
@@ -43,7 +42,10 @@ export default function BackgroundDecoration() {
             });
         }
 
-        setItems(generatedItems);
+        const timer = setTimeout(() => {
+            setItems(generatedItems);
+        }, 0);
+        return () => clearTimeout(timer);
     }, []);
 
     if (items.length === 0) return null;

@@ -74,13 +74,52 @@ export default function HeroSequence({ items }: Props) {
                     transition={{ duration: 0.5 }}
                 >
                     <div className="max-w-5xl text-center">
-                        {/* 
-                           We render text as separate characters for impact 
-                           style: "Mochiy Pop P One", big drop shadow (stroke effect)
-                        */}
-                        <p className="text-4xl md:text-6xl lg:text-8xl font-black text-white drop-shadow-[0_4px_4px_rgba(255,105,180,0.8)] leading-tight stroke-text whitespace-pre-wrap">
-                            {currentItem.text}
-                        </p>
+                        <motion.div
+                            variants={{
+                                hidden: {},
+                                visible: {
+                                    transition: {
+                                        staggerChildren: 0.06,
+                                        delayChildren: 0.2
+                                    }
+                                }
+                            }}
+                            initial="hidden"
+                            animate="visible"
+                            className="text-4xl md:text-6xl lg:text-8xl font-black text-white drop-shadow-[0_4px_4px_rgba(255,105,180,0.8)] leading-tight flex flex-col items-center gap-3 md:gap-5"
+                        >
+                            {currentItem.text.split("\n").map((line, lineIdx) => (
+                                <div key={lineIdx} className="flex flex-wrap justify-center gap-x-[0.02em]">
+                                    {Array.from(line).map((char, charIdx) => (
+                                        <motion.span
+                                            key={charIdx}
+                                            variants={{
+                                                hidden: { 
+                                                    opacity: 0, 
+                                                    y: 60,
+                                                    scale: 0.3,
+                                                    rotate: charIdx % 2 === 0 ? -15 : 15
+                                                },
+                                                visible: { 
+                                                    opacity: 1, 
+                                                    y: 0,
+                                                    scale: 1,
+                                                    rotate: 0,
+                                                    transition: {
+                                                        type: "spring",
+                                                        damping: 8,
+                                                        stiffness: 120
+                                                    }
+                                                }
+                                            }}
+                                            className="inline-block stroke-text origin-bottom"
+                                        >
+                                            {char === " " ? "\u00A0" : char}
+                                        </motion.span>
+                                    ))}
+                                </div>
+                            ))}
+                        </motion.div>
                         <style jsx>{`
                             .stroke-text {
                                 -webkit-text-stroke: 2px #FF6EB4; /* Pink Stroke */

@@ -6,6 +6,17 @@ import Image from "next/image";
 import { useState } from "react";
 import { ZoomIn } from "lucide-react";
 
+interface ProfileImage {
+    src: string;
+    label: string;
+    icon?: string;
+}
+
+interface ProfileStat {
+    label: string;
+    value: string;
+}
+
 export default function ProfileDetail() {
     const { profileDetail } = content;
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -56,7 +67,7 @@ export default function ProfileDetail() {
 
                         {/* Outfit Switcher - Icon Buttons with Hover Reveal (Top-Right) */}
                         <div className="absolute top-4 right-4 z-20 flex flex-col gap-4 items-end">
-                            {images.map((img: any, index: number) => (
+                            {images.map((img: ProfileImage, index: number) => (
                                 <motion.button
                                     key={index}
                                     onClick={() => setCurrentIndex(index)}
@@ -148,7 +159,7 @@ export default function ProfileDetail() {
 
                             {/* Stats Grid - 1 Column */}
                             <div className="grid grid-cols-1 gap-4">
-                                {profileDetail.stats.map((item: any, index: number) => (
+                                {profileDetail.stats.map((item: ProfileStat, index: number) => (
                                     <div
                                         key={index}
                                         className="flex flex-col sm:flex-row border-b border-gray-100 py-3 last:border-0 hover:bg-pink-50/50 transition-colors px-2 rounded-lg"

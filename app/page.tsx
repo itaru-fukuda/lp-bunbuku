@@ -13,6 +13,7 @@ import path from "path";
 import ExpressionMarquee from "@/components/ExpressionMarquee";
 import FavoritesSection from "@/components/FavoritesSection";
 import ScrollToTop from "@/components/ScrollToTop";
+import SectionDivider from "@/components/SectionDivider";
 
 export default async function Home() {
   // Fetch data concurrently
@@ -52,6 +53,7 @@ export default async function Home() {
   );
 
   // Simple shuffle
+  // eslint-disable-next-line react-hooks/purity
   const shuffledPopular = [...availablePopularVideos].sort(() => 0.5 - Math.random());
   const selectedPopular = shuffledPopular.slice(0, 3);
 
@@ -64,7 +66,9 @@ export default async function Home() {
   return (
     <main className="min-h-screen font-sans selection:bg-primary/30">
       <Hero />
+      <SectionDivider colorClass="text-pink-50" />
       <About id="about-site" data={aboutSite} bgColor="bg-pink-50" />
+      <SectionDivider colorClass="text-white" />
       <About id="about-arisa" data={aboutArisa} bgColor="bg-white" />
       <ProfileDetail />
 
@@ -77,11 +81,14 @@ export default async function Home() {
         />
       )}
 
+      <SectionDivider colorClass="text-[#FFFDF7]" />
       {/* Favorites Section */}
       <FavoritesSection />
 
+      <SectionDivider colorClass="text-[#FDF2F8]" />
       <QnASection />
 
+      <SectionDivider colorClass="text-gray-50" />
       {/* Latest Archives Section */}
       <VideoSection
         title={latest.title}
@@ -91,6 +98,7 @@ export default async function Home() {
         color="accent"
       />
 
+      <SectionDivider colorClass="text-white" />
       {/* Recommended (Popular) Videos Section */}
       <VideoSection
         title={popular.title}
@@ -100,6 +108,7 @@ export default async function Home() {
         color="primary"
       />
 
+      <SectionDivider colorClass="text-pink-50" />
       {/* Recommended Songs Section (Manual) */}
       <VideoSection
         title={songs.title}
@@ -109,10 +118,11 @@ export default async function Home() {
         color="tertiary"
       />
 
-
+      <SectionDivider colorClass="text-white" />
       <Links />
       <Footer />
       <ScrollToTop />
     </main>
   );
 }
+

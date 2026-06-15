@@ -4,6 +4,15 @@ import { motion } from "framer-motion";
 import SectionTitle from "./SectionTitle";
 import content from "@/data/content.json";
 
+interface FavoriteItem {
+    text: string;
+    comment: string;
+    color?: string;
+    rotate?: string;
+    style?: "sticky" | "memo" | "cheki";
+    image?: string;
+}
+
 export default function FavoritesSection() {
     const { favorites } = content;
 
@@ -31,7 +40,7 @@ export default function FavoritesSection() {
 
                 {/* Scrapbook Board Container */}
                 <div className="mt-16 flex flex-wrap justify-center items-start gap-x-6 gap-y-12 md:gap-x-12 md:gap-y-16 px-4 max-w-6xl mx-auto">
-                    {favorites.items.map((item: any, index: number) => {
+                    {favorites.items.map((item: FavoriteItem, index: number) => {
                         // Determine style: 0 = Sticky, 1 = Memo, 2 = Cheki
                         let typeIndex = index % 2; // Default behavior (alternates between Sticky and Memo)
                         

@@ -2,6 +2,34 @@ const API_KEY = process.env.YOUTUBE_API_KEY;
 const CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID;
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 
+interface YouTubePlaylistItem {
+    snippet: {
+        title: string;
+        publishedAt: string;
+        resourceId: {
+            videoId: string;
+        };
+        thumbnails: {
+            high?: { url: string };
+            medium?: { url: string };
+        };
+    };
+}
+
+interface YouTubeSearchItem {
+    id: {
+        videoId: string;
+    };
+    snippet: {
+        title: string;
+        publishedAt: string;
+        thumbnails: {
+            high?: { url: string };
+            medium?: { url: string };
+        };
+    };
+}
+
 export interface YouTubeVideo {
     id: string;
     title: string;
@@ -30,7 +58,7 @@ export async function getLatestVideos(): Promise<YouTubeVideo[]> {
         if (!res.ok) throw new Error("Failed to fetch latest videos");
 
         const data = await res.json();
-        return data.items.map((item: any) => ({
+        return (data.items || []).map((item: YouTubePlaylistItem) => ({
             id: item.snippet.resourceId.videoId,
             title: item.snippet.title,
             thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
@@ -63,7 +91,7 @@ export async function getPopularVideos(): Promise<YouTubeVideo[]> {
         if (!res.ok) throw new Error("Failed to fetch popular videos");
 
         const data = await res.json();
-        return data.items.map((item: any) => ({
+        return (data.items || []).map((item: YouTubeSearchItem) => ({
             id: item.id.videoId,
             title: item.snippet.title,
             thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
