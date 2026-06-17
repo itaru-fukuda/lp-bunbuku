@@ -26,6 +26,27 @@
 
   --font-sans: var(--font-noto-sans-jp), sans-serif;
   --font-poppins: var(--font-poppins), sans-serif;
+  --font-mochiy: var(--font-mochiy), sans-serif;
+
+  /* Custom Animations */
+  --animate-float-slow: float-slow 8s ease-in-out infinite;
+  --animate-float-medium: float-medium 6s ease-in-out infinite;
+  --animate-float-fast: float-fast 4s ease-in-out infinite;
+  --animate-spin-slow: spin 30s linear infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(3deg); }
+  }
+  @keyframes float-medium {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(-3deg); }
+  }
+  @keyframes float-fast {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(2deg); }
+  }
 }
 
 body {
@@ -44,3 +65,51 @@ img {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 15, 15, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Shine Effect (for buttons) */
+.btn-shine-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -80%;
+  width: 30%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.45);
+  transform: rotate(30deg);
+  transition: none;
+}
+
+.btn-shine-container:hover::after {
+  left: 150%;
+  transition: all 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Soft Glow Orbs */
+.glow-orb {
+  filter: blur(80px);
+  opacity: 0.65;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  border-radius: 50%;
+}
+

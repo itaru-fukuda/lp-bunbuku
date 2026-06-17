@@ -106,7 +106,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${notoSansJP.variable} ${poppins.variable} ${mochiy.variable} antialiased`}
+        className={`${notoSansJP.variable} ${poppins.variable} ${mochiy.variable} antialiased w-full overflow-x-hidden`}
       >
         <script
           type="application/ld+json"
