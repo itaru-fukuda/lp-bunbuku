@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://bunbuku-arisa.creative-garden.com'
+    const baseUrl = 'https://bunbuku-arisa.creative-garden.com/'
 
     return [
         {
