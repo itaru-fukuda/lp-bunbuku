@@ -24,6 +24,9 @@ const mochiy = Mochiy_Pop_P_One({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bunbuku-arisa.creative-garden.com/"),
+  alternates: {
+    canonical: "/",
+  },
   manifest: "/manifest.json",
   verification: {
     google: "MUR79J14k5KGd39ygRnGJXeaSEOmyfwighc3fBQzp7A",
