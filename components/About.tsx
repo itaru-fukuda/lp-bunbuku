@@ -115,7 +115,8 @@ export default function About({ id, data, bgColor = "bg-white" }: AboutProps) {
                                         src={image}
                                         alt={title}
                                         fill
-                                        className="object-cover"
+                                        className="object-cover pointer-events-none select-none"
+                                        draggable={false}
                                         priority
                                     />
                                 </div>

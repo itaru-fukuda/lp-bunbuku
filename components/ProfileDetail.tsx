@@ -72,7 +72,7 @@ export default function ProfileDetail() {
     return (
         <section className="py-20 bg-gradient-to-b from-white to-pink-50 overflow-hidden md:overflow-x-hidden md:overflow-y-visible relative z-20">
             <div className="container mx-auto px-4 max-w-6xl relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-20 md:gap-12 items-stretch">
                     {/* Visual Area (Left or Top) - Static Blended Image */}
                     <div className="relative min-h-[400px] md:min-h-[600px] h-auto w-full flex items-end justify-center group z-30">
                         
@@ -105,7 +105,8 @@ export default function ProfileDetail() {
                                         src={images[currentIndex].src}
                                         alt={profileDetail.name}
                                         fill
-                                        className="object-contain drop-shadow-2xl pointer-events-none"
+                                        className="object-contain drop-shadow-2xl pointer-events-none select-none"
+                                        draggable={false}
                                         priority
                                     />
                                 </div>

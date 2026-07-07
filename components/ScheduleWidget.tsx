@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CalendarDays, X, Maximize2 } from "lucide-react";
+import { CalendarDays, X, Maximize2, ZoomIn } from "lucide-react";
 import content from "@/data/content.json";
 import Image from "next/image";
 
@@ -25,7 +25,6 @@ export default function ScheduleWidget() {
 
     return (
         <>
-            {/* Toggle Button (Collapsed State) */}
             {/* Toggle Button (Collapsed State) */}
             <motion.button
                 onClick={() => setIsOpen(true)}
@@ -73,19 +72,31 @@ export default function ScheduleWidget() {
                                     <CalendarDays className="text-primary" />
                                     {schedule.title}
                                 </h3>
-                                <div className="flex gap-2">
+                                <div className="flex items-center gap-1">
+                                    {/* Open image in new tab for standard mobile zoom & save */}
+                                    <a
+                                        href={thumbnailUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-2 hover:bg-pink-50 rounded-full transition-colors text-gray-500 hover:text-primary flex items-center gap-1 text-xs font-bold"
+                                        title="画像を拡大して保存"
+                                    >
+                                        <ZoomIn size={18} />
+                                        <span className="hidden sm:inline">画像を拡大・保存</span>
+                                    </a>
                                     <a
                                         href={videoUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="p-2 hover:bg-white rounded-full transition-colors text-gray-500 hover:text-primary"
+                                        className="p-2 hover:bg-pink-50 rounded-full transition-colors text-gray-500 hover:text-primary flex items-center gap-1 text-xs font-bold"
                                         title="YouTubeで見る"
                                     >
-                                        <Maximize2 size={20} />
+                                        <Maximize2 size={18} />
+                                        <span className="hidden sm:inline">YouTubeで見る</span>
                                     </a>
                                     <button
                                         onClick={() => setIsOpen(false)}
-                                        className="p-2 hover:bg-white rounded-full transition-colors text-gray-500 hover:text-red-500"
+                                        className="p-2 hover:bg-pink-50 rounded-full transition-colors text-gray-500 hover:text-red-500"
                                     >
                                         <X size={20} />
                                     </button>
@@ -98,7 +109,9 @@ export default function ScheduleWidget() {
                                     src={thumbnailUrl}
                                     alt="Weekly Schedule"
                                     fill
+                                    sizes="(max-width: 1024px) 100vw, 1024px"
                                     className="object-contain"
+                                    priority
                                 />
                                 {/* Overlay Link */}
                                 <a

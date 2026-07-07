@@ -3,6 +3,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import SectionTitle from "./SectionTitle";
 import content from "@/data/content.json";
+import useEmblaCarousel from "embla-carousel-react";
+import Image from "next/image";
 
 interface FavoriteItem {
     text: string;
@@ -20,6 +22,13 @@ export default function FavoritesSection() {
     const { scrollY } = useScroll();
     const ySticker1 = useTransform(scrollY, [1000, 3000], [-30, 70]);
     const ySticker2 = useTransform(scrollY, [1000, 3000], [50, -50]);
+
+    // Embla Carousel setup for mobile
+    const [emblaRef] = useEmblaCarousel({
+        loop: true,
+        align: "center",
+        containScroll: "trimSnaps"
+    });
 
     if (!favorites) return null;
 
@@ -58,22 +67,33 @@ export default function FavoritesSection() {
                         
                         const tiltX = index % 2 === 0 ? 10 : -10;
                         const tiltY = index % 3 === 0 ? -8 : 8;
+                        const baseRotate = parseFloat(item.rotate || "0");
 
                         return (
                             <motion.div
                                 key={`desktop-${index}`}
                                 initial={{ opacity: 0, scale: 0.8, y: 50, rotate: (index % 2 === 0 ? -10 : 10) }}
-                                whileInView={{ opacity: 1, scale: 1, y: 0, rotate: parseFloat(item.rotate || "0") }}
+                                whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true, margin: "-50px" }}
+                                animate={{
+                                    y: [0, -6, 0],
+                                    rotate: [baseRotate - 1, baseRotate + 1, baseRotate - 1]
+                                }}
+                                transition={{
+                                    opacity: { duration: 0.6, delay: index * 0.08 },
+                                    scale: { duration: 0.6, delay: index * 0.08, type: "spring", bounce: 0.3 },
+                                    y: { duration: 3.5 + (index % 3), repeat: Infinity, ease: "easeInOut" },
+                                    rotate: { duration: 4.5 + (index % 2), repeat: Infinity, ease: "easeInOut" }
+                                }}
                                 whileHover={{ 
                                     scale: 1.08, 
-                                    rotate: 0, 
+                                    rotate: baseRotate, 
                                     rotateX: tiltX,
                                     rotateY: tiltY,
+                                    y: -12,
                                     zIndex: 50,
                                     transition: { type: "spring", stiffness: 400, damping: 15 }
                                 }}
-                                transition={{ duration: 0.6, delay: index * 0.08, type: "spring", bounce: 0.3 }}
                                 className="relative cursor-pointer group flex justify-center"
                                 style={{ zIndex: index, transformStyle: "preserve-3d" }}
                             >
@@ -81,7 +101,7 @@ export default function FavoritesSection() {
                                 {typeIndex === 0 && (
                                     <div className={`w-56 p-6 transition-all duration-300 rounded-sm ${item.color || "bg-yellow-100"} shadow-[2px_4px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[15px_22px_35px_rgba(0,0,0,0.12)] border border-black/5`}>
                                         {/* Washi Tape */}
-                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-pink-300 opacity-60 -rotate-3 mix-blend-multiply shadow-sm"></div>
+                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-pink-300/80 -rotate-3 mix-blend-multiply shadow-sm"></div>
                                         <h3 className="font-mochiy font-bold text-gray-800 text-lg mb-3 drop-shadow-sm leading-relaxed whitespace-pre-wrap">{item.text}</h3>
                                         <p className="text-sm font-bold text-gray-700 leading-snug">{item.comment}</p>
                                     </div>
@@ -91,7 +111,7 @@ export default function FavoritesSection() {
                                 {typeIndex === 1 && (
                                     <div className={`w-60 p-5 transition-all duration-300 bg-white border-t-4 border-dashed border-blue-300 rounded-b-md shadow-[3px_5px_15px_rgba(0,0,0,0.06)] group-hover:shadow-[16px_25px_38px_rgba(0,0,0,0.1)]`}>
                                         {/* Corner Tape */}
-                                        <div className="absolute -top-4 -left-4 w-12 h-5 bg-yellow-300 opacity-60 rotate-45 mix-blend-multiply shadow-sm"></div>
+                                        <div className="absolute -top-4 -left-4 w-12 h-5 bg-yellow-300/80 rotate-45 mix-blend-multiply shadow-sm"></div>
                                         <div className="absolute -bottom-2 -right-2 text-3xl opacity-40 transition-transform duration-300 group-hover:scale-110">
                                             {favorites.memoIcon ?? "🐾"}
                                         </div>
@@ -104,11 +124,17 @@ export default function FavoritesSection() {
                                 {typeIndex === 2 && (
                                     <div className="w-48 p-3 pb-8 bg-white transition-all duration-300 rounded-sm shadow-[2px_4px_16px_rgba(0,0,0,0.12)] group-hover:shadow-[18px_28px_40px_rgba(0,0,0,0.18)] border border-gray-100">
                                         {/* Top Tape */}
-                                        <div className="absolute -top-3 right-4 w-12 h-5 bg-blue-200 opacity-70 rotate-[15deg] mix-blend-multiply shadow-sm"></div>
+                                        <div className="absolute -top-3 right-4 w-12 h-5 bg-blue-200/80 rotate-[15deg] mix-blend-multiply shadow-sm"></div>
                                         {/* Photo frame area */}
                                         <div className={`w-full aspect-square ${item.color || "bg-pink-50"} mb-3 flex items-center justify-center rounded-sm overflow-hidden relative shadow-inner`}>
                                             {item.image ? (
-                                                <img src={item.image} alt={item.text} className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500" />
+                                                <Image 
+                                                    src={item.image} 
+                                                    alt={item.text} 
+                                                    fill 
+                                                    sizes="(max-width: 768px) 150px, 180px"
+                                                    className="object-cover group-hover:scale-108 transition-transform duration-500" 
+                                                />
                                             ) : (
                                                 <>
                                                     <span className="text-6xl drop-shadow-md group-hover:scale-110 transition-transform duration-300">
@@ -127,85 +153,101 @@ export default function FavoritesSection() {
                     })}
                 </div>
 
-                {/* Mobile Scrapbook Board (Visible below md) */}
-                <div className="mt-12 flex flex-col items-center gap-y-12 max-w-sm mx-auto px-4 md:hidden">
-                    {favorites.items.map((item: FavoriteItem, index: number) => {
-                        let typeIndex = index % 2;
-                        
-                        if (item.style === "sticky") typeIndex = 0;
-                        else if (item.style === "memo") typeIndex = 1;
-                        else if (item.style === "cheki") typeIndex = 2;
-                        else if (item.image) typeIndex = 2;
+                {/* Mobile Scrapbook Board (Visible below md) - Carousel View */}
+                <div 
+                    className="mt-12 overflow-hidden px-4 md:hidden cursor-grab active:cursor-grabbing" 
+                    ref={emblaRef}
+                >
+                    <div className="flex gap-6 pb-6">
+                        {favorites.items.map((item: FavoriteItem, index: number) => {
+                            let typeIndex = index % 2;
+                            
+                            if (item.style === "sticky") typeIndex = 0;
+                            else if (item.style === "memo") typeIndex = 1;
+                            else if (item.style === "cheki") typeIndex = 2;
+                            else if (item.image) typeIndex = 2;
 
-                        const isEven = index % 2 === 0;
-                        const mobileRotate = isEven ? -3 : 3;
-                        const mobileTranslateX = isEven ? "-12px" : "12px";
+                            const isEven = index % 2 === 0;
+                            const baseRotate = isEven ? -2 : 2;
 
-                        return (
-                            <motion.div
-                                key={`mobile-${index}`}
-                                initial={{ opacity: 0, scale: 0.9, y: 30, rotate: isEven ? -6 : 6 }}
-                                whileInView={{ 
-                                    opacity: 1, 
-                                    scale: 1, 
-                                    y: 0, 
-                                    rotate: mobileRotate,
-                                    x: mobileTranslateX
-                                }}
-                                viewport={{ once: true, margin: "-30px" }}
-                                whileTap={{ scale: 0.98 }}
-                                transition={{ duration: 0.5, type: "spring", bounce: 0.2 }}
-                                className="relative w-full max-w-[270px] flex justify-center"
-                                style={{ zIndex: index }}
-                            >
-                                {/* Scrap Style A (Sticky Note) */}
-                                {typeIndex === 0 && (
-                                    <div className={`w-full p-5 rounded-sm ${item.color || "bg-yellow-100"} shadow-[2px_4px_12px_rgba(0,0,0,0.08)] border border-black/5`}>
-                                        {/* Washi Tape */}
-                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-pink-300 opacity-60 -rotate-3 mix-blend-multiply shadow-sm"></div>
-                                        <h3 className="font-mochiy font-bold text-gray-800 text-base mb-2 drop-shadow-sm leading-relaxed whitespace-pre-wrap">{item.text}</h3>
-                                        <p className="text-sm font-bold text-gray-700 leading-snug">{item.comment}</p>
-                                    </div>
-                                )}
-
-                                {/* Scrap Style B (Torn/Dashed Memo) */}
-                                {typeIndex === 1 && (
-                                    <div className={`w-full p-5 bg-white border-t-4 border-dashed border-blue-300 rounded-b-md shadow-[3px_5px_15px_rgba(0,0,0,0.06)]`}>
-                                        {/* Corner Tape */}
-                                        <div className="absolute -top-4 -left-4 w-12 h-5 bg-yellow-300 opacity-60 rotate-45 mix-blend-multiply shadow-sm"></div>
-                                        <div className="absolute -bottom-1 -right-1 text-2xl opacity-40">
-                                            {favorites.memoIcon ?? "🐾"}
+                            return (
+                                <motion.div
+                                    key={`mobile-${index}`}
+                                    initial={{ opacity: 0, scale: 0.9, y: 30, rotate: isEven ? -6 : 6 }}
+                                    whileInView={{ 
+                                        opacity: 1, 
+                                        scale: 1
+                                    }}
+                                    viewport={{ once: true, margin: "-30px" }}
+                                    animate={{
+                                        y: [0, -5, 0],
+                                        rotate: [baseRotate - 1, baseRotate + 1, baseRotate - 1]
+                                    }}
+                                    transition={{
+                                        opacity: { duration: 0.5 },
+                                        scale: { duration: 0.5, type: "spring", bounce: 0.2 },
+                                        y: { duration: 3.5 + (index % 2), repeat: Infinity, ease: "easeInOut" },
+                                        rotate: { duration: 4.5 + (index % 3), repeat: Infinity, ease: "easeInOut" }
+                                    }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="relative w-[260px] flex-shrink-0 flex justify-center"
+                                    style={{ zIndex: index }}
+                                >
+                                    {/* Scrap Style A (Sticky Note) */}
+                                    {typeIndex === 0 && (
+                                        <div className={`w-full p-5 rounded-sm ${item.color || "bg-yellow-100"} shadow-[2px_4px_12px_rgba(0,0,0,0.08)] border border-black/5`}>
+                                            {/* Washi Tape */}
+                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-pink-300/80 -rotate-3 mix-blend-multiply shadow-sm"></div>
+                                            <h3 className="font-mochiy font-bold text-gray-800 text-base mb-2 drop-shadow-sm leading-relaxed whitespace-pre-wrap">{item.text}</h3>
+                                            <p className="text-sm font-bold text-gray-700 leading-snug">{item.comment}</p>
                                         </div>
-                                        <h3 className="font-mochiy font-bold text-pink-500 text-base mb-2 leading-relaxed whitespace-pre-wrap">{item.text}</h3>
-                                        <p className="text-sm font-bold text-gray-600 leading-snug">{item.comment}</p>
-                                    </div>
-                                )}
+                                    )}
 
-                                {/* Scrap Style C (Polaroid/Card) */}
-                                {typeIndex === 2 && (
-                                    <div className="w-full p-3 pb-6 bg-white rounded-sm shadow-[2px_4px_16px_rgba(0,0,0,0.12)] border border-gray-100">
-                                        {/* Top Tape */}
-                                        <div className="absolute -top-3 right-4 w-12 h-5 bg-blue-200 opacity-70 rotate-[15deg] mix-blend-multiply shadow-sm"></div>
-                                        {/* Photo frame area */}
-                                        <div className={`w-full aspect-square ${item.color || "bg-pink-50"} mb-3 flex items-center justify-center rounded-sm overflow-hidden relative shadow-inner`}>
-                                            {item.image ? (
-                                                <img src={item.image} alt={item.text} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <>
-                                                    <span className="text-5xl drop-shadow-md">
-                                                        {favorites.placeholderIcon ?? "🫧"}
-                                                    </span>
-                                                    <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white/40 to-transparent pointer-events-none"></div>
-                                                </>
-                                            )}
+                                    {/* Scrap Style B (Torn/Dashed Memo) */}
+                                    {typeIndex === 1 && (
+                                        <div className={`w-full p-5 bg-white border-t-4 border-dashed border-blue-300 rounded-b-md shadow-[3px_5px_15px_rgba(0,0,0,0.06)]`}>
+                                            {/* Corner Tape */}
+                                            <div className="absolute -top-4 -left-4 w-12 h-5 bg-yellow-300/80 rotate-45 mix-blend-multiply shadow-sm"></div>
+                                            <div className="absolute -bottom-1 -right-1 text-2xl opacity-40">
+                                                {favorites.memoIcon ?? "🐾"}
+                                            </div>
+                                            <h3 className="font-mochiy font-bold text-pink-500 text-base mb-2 leading-relaxed whitespace-pre-wrap">{item.text}</h3>
+                                            <p className="text-sm font-bold text-gray-600 leading-snug">{item.comment}</p>
                                         </div>
-                                        <h3 className="font-mochiy font-bold text-gray-800 text-sm text-center mb-1 drop-shadow-sm whitespace-pre-wrap leading-tight">{item.text}</h3>
-                                        <p className="text-xs font-bold text-gray-500 text-center leading-snug px-1 border-b border-gray-200 pb-1 inline-block mx-auto w-full border-dashed">{item.comment}</p>
-                                    </div>
-                                )}
-                            </motion.div>
-                        );
-                    })}
+                                    )}
+
+                                    {/* Scrap Style C (Polaroid/Card) */}
+                                    {typeIndex === 2 && (
+                                        <div className="w-full p-3 pb-6 bg-white rounded-sm shadow-[2px_4px_16px_rgba(0,0,0,0.12)] border border-gray-100">
+                                            {/* Top Tape */}
+                                            <div className="absolute -top-3 right-4 w-12 h-5 bg-blue-200/80 rotate-[15deg] mix-blend-multiply shadow-sm"></div>
+                                            {/* Photo frame area */}
+                                            <div className={`w-full aspect-square ${item.color || "bg-pink-50"} mb-3 flex items-center justify-center rounded-sm overflow-hidden relative shadow-inner`}>
+                                                {item.image ? (
+                                                    <Image 
+                                                        src={item.image} 
+                                                        alt={item.text} 
+                                                        fill 
+                                                        sizes="200px"
+                                                        className="object-cover" 
+                                                    />
+                                                ) : (
+                                                    <>
+                                                        <span className="text-5xl drop-shadow-md">
+                                                            {favorites.placeholderIcon ?? "🫧"}
+                                                        </span>
+                                                        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white/40 to-transparent pointer-events-none"></div>
+                                                    </>
+                                                )}
+                                            </div>
+                                            <h3 className="font-mochiy font-bold text-gray-800 text-sm text-center mb-1 drop-shadow-sm whitespace-pre-wrap leading-tight">{item.text}</h3>
+                                            <p className="text-xs font-bold text-gray-500 text-center leading-snug px-1 border-b border-gray-200 pb-1 inline-block mx-auto w-full border-dashed">{item.comment}</p>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
 

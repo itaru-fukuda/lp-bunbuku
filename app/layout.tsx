@@ -23,7 +23,7 @@ const mochiy = Mochiy_Pop_P_One({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bunbuku-arisa.creative-garden.com/"),
+  metadataBase: new URL("https://bunbuku-arisa.rasu.jp/"),
   alternates: {
     canonical: "/",
   },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "分福ありさ ファンサイト",
     description: "みんなに福を届ける完全セルフ受肉たぬきVtuber、分福ありさちゃんのファンサイトです。",
-    url: "https://bunbuku-arisa.creative-garden.com/",
+    url: "https://bunbuku-arisa.rasu.jp/",
     siteName: "分福ありさ ファンサイト",
     locale: "ja_JP",
     type: "website",
@@ -80,7 +80,7 @@ const jsonLd = {
     {
       "@type": "WebSite",
       "name": "分福ありさ ファンサイト",
-      "url": "https://bunbuku-arisa.creative-garden.com/",
+      "url": "https://bunbuku-arisa.rasu.jp/",
       "description": "Vtuber分福ありさのファンサイト",
       "inLanguage": "ja",
     },
@@ -89,7 +89,7 @@ const jsonLd = {
       "name": "分福ありさ",
       "alternateName": "Bunbuku Arisa",
       "url": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ",
-      "image": "https://bunbuku-arisa.creative-garden.com/images/profile/full_body_002.png",
+      "image": "https://bunbuku-arisa.rasu.jp/images/profile/full_body_002.png",
       "description": "みんなに福を届ける完全セルフ受肉たぬきVtuber",
       "jobTitle": "Virtual YouTuber",
       "sameAs": [
@@ -114,11 +114,6 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `document.addEventListener('contextmenu', event => event.preventDefault());`
-          }}
         />
         <BackgroundDecoration />
         <ScheduleWidget />

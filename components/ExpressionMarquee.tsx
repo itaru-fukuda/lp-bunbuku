@@ -96,6 +96,42 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
         setGlareOpacity(0);
     }, []);
 
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        const card = e.currentTarget;
+        const box = card.getBoundingClientRect();
+        const touch = e.touches[0];
+        const x = touch.clientX - box.left - box.width / 2;
+        const y = touch.clientY - box.top - box.height / 2;
+        
+        // 3D Tilt max rotation (12 degrees)
+        const factor = 12;
+        const rx = -(y / (box.height / 2)) * factor;
+        const ry = (x / (box.width / 2)) * factor;
+        
+        const clampedRx = Math.max(-factor, Math.min(factor, rx));
+        const clampedRy = Math.max(-factor, Math.min(factor, ry));
+
+        setRotateX(clampedRx);
+        setRotateY(clampedRy);
+
+        // Glare calculation
+        const px = ((touch.clientX - box.left) / box.width) * 100;
+        const py = ((touch.clientY - box.top) / box.height) * 100;
+        
+        const clampedPx = Math.max(0, Math.min(100, px));
+        const clampedPy = Math.max(0, Math.min(100, py));
+
+        setGlareX(clampedPx);
+        setGlareY(clampedPy);
+        setGlareOpacity(0.35);
+    };
+
+    const handleTouchEnd = () => {
+        setRotateX(0);
+        setRotateY(0);
+        setGlareOpacity(0);
+    };
+
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const card = e.currentTarget;
         const box = card.getBoundingClientRect();
@@ -149,6 +185,7 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
                                         src={src}
                                         alt={`Expression ${index}`}
                                         fill
+                                        sizes="(max-width: 768px) 128px, 160px"
                                         className="object-cover pointer-events-none" // prevent image drag
                                         draggable={false}
                                     />
@@ -194,31 +231,39 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
                             ))}
                         </div>
 
-                        {/* Polaroid Card Wrapper with Tilt style */}
+                        {/* Polaroid Card Wrapper (Floating Animation layer) */}
                         <motion.div
                             initial={{ scale: 0.6, rotate: -12, opacity: 0 }}
                             animate={{ 
                                 scale: 1, 
                                 rotate: 0, 
                                 opacity: 1,
+                                y: [0, -8, 0],
                                 transition: {
-                                    type: "spring",
-                                    stiffness: 280,
-                                    damping: 18
+                                    scale: { type: "spring", stiffness: 280, damping: 18 },
+                                    rotate: { type: "spring", stiffness: 280, damping: 18 },
+                                    opacity: { duration: 0.25 },
+                                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
                                 }
                             }}
                             exit={{ scale: 0.6, rotate: 12, opacity: 0, transition: { duration: 0.25 } }}
                             className="relative max-w-[420px] w-full z-10 cursor-default"
                             onClick={(e) => e.stopPropagation()}
-                            onMouseMove={handleMouseMove}
-                            onMouseLeave={handleMouseLeave}
-                            style={{
-                                transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-                                transition: rotateX === 0 && rotateY === 0 ? "transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)" : "transform 0.05s ease-out"
-                            }}
                         >
-                            {/* Polaroid Card Body */}
-                            <div className="bg-white p-4 pb-20 rounded-3xl shadow-[0_35px_80px_rgba(0,0,0,0.6)] border-4 border-white flex flex-col items-center relative select-none">
+                            {/* Polaroid Card Body (3D Tilt & Touch/Mouse listener layer) */}
+                            <div 
+                                onMouseMove={handleMouseMove}
+                                onMouseLeave={handleMouseLeave}
+                                onTouchMove={handleTouchMove}
+                                onTouchEnd={handleTouchEnd}
+                                onTouchCancel={handleTouchEnd}
+                                style={{
+                                    transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+                                    transition: rotateX === 0 && rotateY === 0 ? "transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)" : "transform 0.05s ease-out",
+                                    transformStyle: "preserve-3d"
+                                }}
+                                className="bg-white p-4 pb-20 rounded-3xl shadow-[0_35px_80px_rgba(0,0,0,0.6)] border-4 border-white flex flex-col items-center relative select-none"
+                            >
                                 {/* Masking Tape decoration */}
                                 <div className="absolute -top-7 left-1/2 -translate-x-1/2 w-36 h-10 bg-pink-300/75 backdrop-blur-[2px] shadow-sm -rotate-2 border-x-4 border-dashed border-white/30 pointer-events-none select-none z-20" />
                                 
@@ -232,11 +277,14 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
                                 
                                 {/* Image Container with inner shadow */}
                                 <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-pink-50/20 border border-gray-100 shadow-inner">
-                                    <img
+                                    <Image
                                         src={selectedImage}
                                         alt="Expanded expression"
-                                        className="w-full h-full object-cover pointer-events-none"
+                                        fill
+                                        sizes="(max-width: 768px) 380px, 420px"
+                                        className="object-cover pointer-events-none"
                                         draggable={false}
+                                        priority
                                     />
                                     
                                     {/* 3D Glare (Shiny reflect overlay) */}

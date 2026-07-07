@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 type SequenceItem = {
     text: string;
@@ -34,8 +35,6 @@ export default function HeroSequence({ items }: Props) {
 
     const currentItem = items[currentIndex];
 
-
-
     return (
         <div className="absolute inset-0 w-full h-full overflow-hidden bg-pink-50 font-[family-name:var(--font-mochiy)]">
             <AnimatePresence mode="popLayout">
@@ -50,18 +49,25 @@ export default function HeroSequence({ items }: Props) {
                 >
                     {/* Layer 1: Blurred Fill (for mobile letterboxing) */}
                     <div className="absolute inset-0 overflow-hidden">
-                        <img
+                        <Image
                             src={currentItem.image}
                             alt=""
-                            className="w-full h-full object-cover opacity-70 blur-sm scale-110"
+                            fill
+                            sizes="100vw"
+                            className="object-cover opacity-70 blur-sm scale-110 pointer-events-none"
+                            draggable={false}
                         />
                     </div>
 
                     {/* Layer 2: Main Image (Contain on mobile, Cover on desktop) */}
-                    <img
+                    <Image
                         src={currentItem.image}
                         alt={`分福ありさ: ${currentItem.text.replace(/\n/g, ' ')}`}
-                        className="absolute inset-0 w-full h-full object-contain md:object-cover opacity-80"
+                        fill
+                        sizes="100vw"
+                        className="absolute inset-0 w-full h-full object-contain md:object-cover opacity-80 pointer-events-none select-none"
+                        draggable={false}
+                        priority
                     />
                 </motion.div>
 
