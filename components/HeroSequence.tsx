@@ -1,144 +1,105 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
-type SequenceItem = {
+interface SequenceItem {
     text: string;
     image: string;
-};
+}
 
-type Props = {
+interface Props {
     items: SequenceItem[];
-};
+}
+
+export const HERO_SEQUENCE_INTERVAL = 3000;
+export const HERO_SEQUENCE_TEXT_FADE_DURATION = 700;
 
 export default function HeroSequence({ items }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // One-shot sequence logic
+    // One-shot sequence looping logic
     useEffect(() => {
         if (!items || items.length === 0) return;
 
-        // Tempo configuration (ms)
-        const INTERVAL = 3000;
-
-        if (currentIndex < items.length - 1) {
+        if (currentIndex < items.length) {
             const timer = setTimeout(() => {
                 setCurrentIndex((prev) => prev + 1);
-            }, INTERVAL);
+            }, HERO_SEQUENCE_INTERVAL);
             return () => clearTimeout(timer);
         }
     }, [items, currentIndex]);
 
-    if (!items || items.length === 0) return null;
-
-    const currentItem = items[currentIndex];
+    if (!items || items.length === 0) {
+        return (
+            <div className="absolute inset-0 w-full h-full overflow-hidden bg-pink-50" />
+        );
+    }
 
     return (
         <div className="absolute inset-0 w-full h-full overflow-hidden bg-pink-50 font-[family-name:var(--font-mochiy)]">
-            <AnimatePresence mode="popLayout">
-                {/* Background Image (Crossfade) */}
-                <motion.div
-                    key={`bg-${currentItem.image}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 1.5, ease: "easeInOut" }}
-                    className="absolute inset-0 z-0"
-                >
-                    {/* Layer 1: Blurred Fill (for mobile letterboxing) */}
-                    <div className="absolute inset-0 overflow-hidden">
+            
+            {/* Image Layers (Plain Tailwind Crossfade to prevent Framer Motion Hydration Mismatch) */}
+            {items.map((item, index) => {
+                const isActive = index === currentIndex || (currentIndex === items.length && index === items.length - 1);
+                return (
+                    <div
+                        key={`img-layer-${index}`}
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                            isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+                        }`}
+                    >
+                        {/* Layer 1: Blurred Fill (for mobile letterboxing) */}
+                        <div className="absolute inset-0 overflow-hidden opacity-60 blur-sm scale-110 pointer-events-none select-none">
+                            <Image
+                                src={item.image}
+                                alt=""
+                                fill
+                                sizes="100vw"
+                                className="object-cover"
+                                draggable={false}
+                                priority={index === 0}
+                            />
+                        </div>
+
+                        {/* Layer 2: Main Image (Contain on mobile, Cover on desktop) */}
                         <Image
-                            src={currentItem.image}
-                            alt=""
+                            src={item.image}
+                            alt={`分福ありさ`}
                             fill
                             sizes="100vw"
-                            className="object-cover opacity-70 blur-sm scale-110 pointer-events-none"
+                            className="absolute inset-0 w-full h-full object-contain md:object-cover opacity-80 pointer-events-none select-none"
                             draggable={false}
+                            priority={index === 0}
                         />
                     </div>
+                );
+            })}
 
-                    {/* Layer 2: Main Image (Contain on mobile, Cover on desktop) */}
-                    <Image
-                        src={currentItem.image}
-                        alt={`分福ありさ: ${currentItem.text.replace(/\n/g, ' ')}`}
-                        fill
-                        sizes="100vw"
-                        className="absolute inset-0 w-full h-full object-contain md:object-cover opacity-80 pointer-events-none select-none"
-                        draggable={false}
-                        priority
-                    />
-                </motion.div>
-
-                {/* Text Animation (MV Style) */}
-                <motion.div
-                    key={`text-container-${currentIndex}`}
-                    className="absolute inset-0 z-10 flex items-center justify-center p-4 pointer-events-none"
-                    initial={{ opacity: 1 }}
-                    exit={{ opacity: 0, scale: 1.5, filter: "blur(10px)" }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="max-w-5xl text-center">
-                        <motion.div
-                            variants={{
-                                hidden: {},
-                                visible: {
-                                    transition: {
-                                        staggerChildren: 0.06,
-                                        delayChildren: 0.2
-                                    }
-                                }
-                            }}
-                            initial="hidden"
-                            animate="visible"
-                            className="text-4xl md:text-6xl lg:text-8xl font-black text-white drop-shadow-[0_4px_4px_rgba(255,105,180,0.8)] leading-tight flex flex-col items-center gap-3 md:gap-5"
-                        >
-                            {currentItem.text.split("\n").map((line, lineIdx) => (
-                                <div key={lineIdx} className="flex flex-wrap justify-center gap-x-[0.02em]">
-                                    {Array.from(line).map((char, charIdx) => (
-                                        <motion.span
-                                            key={charIdx}
-                                            variants={{
-                                                hidden: { 
-                                                    opacity: 0, 
-                                                    y: 60,
-                                                    scale: 0.3,
-                                                    rotate: charIdx % 2 === 0 ? -15 : 15
-                                                },
-                                                visible: { 
-                                                    opacity: 1, 
-                                                    y: 0,
-                                                    scale: 1,
-                                                    rotate: 0,
-                                                    transition: {
-                                                        type: "spring",
-                                                        damping: 8,
-                                                        stiffness: 120
-                                                    }
-                                                }
-                                            }}
-                                            className="inline-block stroke-text origin-bottom"
-                                        >
-                                            {char === " " ? "\u00A0" : char}
-                                        </motion.span>
-                                    ))}
-                                </div>
+            {/* Speach bubble / Text Messages Overlay (Plain transition crossfade) */}
+            <div className="absolute inset-0 z-20 flex items-center justify-center p-4 pointer-events-none">
+                {items.map((item, index) => (
+                    <div
+                        key={`text-layer-${index}`}
+                        className={`absolute transition-all duration-700 ease-out max-w-5xl text-center flex flex-col items-center gap-3 ${
+                            index === currentIndex 
+                                ? "opacity-100 transform translate-y-0 scale-100" 
+                                : "opacity-0 transform translate-y-6 scale-95 pointer-events-none"
+                        }`}
+                    >
+                        <div className="text-4xl md:text-6xl lg:text-8xl font-extrabold text-white drop-shadow-[0_4px_12px_rgba(255,105,180,0.85)] leading-tight flex flex-col items-center gap-3">
+                            {item.text.split("\n").map((line, lIdx) => (
+                                <span key={lIdx} className="block whitespace-nowrap">
+                                    {line}
+                                </span>
                             ))}
-                        </motion.div>
-                        <style jsx>{`
-                            .stroke-text {
-                                -webkit-text-stroke: 2px #FF6EB4; /* Pink Stroke */
-                                text-shadow: 4px 4px 0px #FFB6C1; /* Hard shadow offset */
-                            }
-                        `}</style>
+                        </div>
                     </div>
-                </motion.div>
-            </AnimatePresence>
+                ))}
+            </div>
 
-            {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-transparent to-white/90 pointer-events-none z-0" />
+            {/* Overlay gradient to soften the edges */}
+            <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-transparent to-white/90 pointer-events-none z-30" />
         </div>
     );
 }
-

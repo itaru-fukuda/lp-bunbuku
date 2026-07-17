@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
-import { Noto_Sans_JP, Poppins, Mochiy_Pop_P_One } from "next/font/google";
+import { Noto_Sans_JP, Poppins, Mochiy_Pop_P_One, Noto_Serif_JP } from "next/font/google";
 import "./globals.css";
 
-import BackgroundDecoration from "@/components/BackgroundDecoration";
 import ScheduleWidget from "@/components/ScheduleWidget";
+import SteamBackground from "@/components/SteamBackground";
+import FloatingNav from "@/components/FloatingNav";
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
   subsets: ["latin"],
+});
+
+const notoSerifJP = Noto_Serif_JP({
+  variable: "--font-noto-serif-jp",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 const poppins = Poppins({
@@ -57,7 +64,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "分福ありさ ファンサイト",
-    description: "みんなに福を届ける完全セルフ受肉たぬきVtuber、分福ありさちゃんのファンサイトです。",
+    description: "みんなに福を届ける完全セルフ受肉たぬ起Vtuber、分福ありさちゃんのファンサイトです。",
     creator: "@bunbukuarisa", // Official account
     images: ["/images/hero/linkage_pic.jpg"],
   },
@@ -109,13 +116,14 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${notoSansJP.variable} ${poppins.variable} ${mochiy.variable} antialiased w-full overflow-x-hidden`}
+        className={`${notoSansJP.variable} ${notoSerifJP.variable} ${poppins.variable} ${mochiy.variable} antialiased w-full overflow-x-hidden`}
       >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <BackgroundDecoration />
+        <SteamBackground />
+        <FloatingNav />
         <ScheduleWidget />
         {children}
       </body>

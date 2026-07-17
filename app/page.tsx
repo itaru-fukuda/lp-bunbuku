@@ -7,22 +7,36 @@ import Links from "@/components/Links";
 import Footer from "@/components/Footer";
 import content from "@/data/content.json";
 
-import { getLatestVideos, getPopularVideos } from "@/lib/youtube";
+import { getDailyRecommendedVideos, getLatestCompletedLiveStreams, getYouTubeChannelStats } from "@/lib/youtube";
 import fs from "fs";
 import path from "path";
+import ChannelStats from "@/components/ChannelStats";
 import ExpressionMarquee from "@/components/ExpressionMarquee";
 import FavoritesSection from "@/components/FavoritesSection";
 import ScrollToTop from "@/components/ScrollToTop";
 import SectionDivider from "@/components/SectionDivider";
+import SectionReveal from "@/components/SectionReveal";
+
+export const dynamic = "force-dynamic";
+
+function shuffle<T>(items: T[]) {
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
 
 export default async function Home() {
-  // Fetch data concurrently
-  const [latestVideos, popularVideos] = await Promise.all([
-    getLatestVideos(),
-    getPopularVideos(),
+  const [latestVideos, dailyRecommendedVideos, channelStats] = await Promise.all([
+    getLatestCompletedLiveStreams(),
+    getDailyRecommendedVideos(),
+    getYouTubeChannelStats(),
   ]);
 
-  // Read expression images dynamically
   const expressionsDir = path.join(process.cwd(), "public/images/expressions");
   let expressionImages: string[] = [];
 
@@ -31,33 +45,24 @@ export default async function Home() {
       const files = fs.readdirSync(expressionsDir);
       expressionImages = files
         .filter((file) => /\.(png|jpg|jpeg|webp)$/i.test(file))
+        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }))
         .map((file) => `/images/expressions/${file}`);
+
+      expressionImages = shuffle(expressionImages);
     }
   } catch (error) {
     console.error("Failed to read expression images:", error);
   }
 
-  const { latest, popular, songs, aboutSite, aboutArisa } = content;
+  const { latest, popular, songs, aboutSite, aboutArisa, expressionGallery } = content;
 
-  // Transform YouTube data to UI format
   const latestItems = latestVideos.map((v) => ({
     videoId: v.id,
     title: v.title,
     description: new Date(v.publishedAt).toLocaleDateString("ja-JP"),
   }));
 
-  // Filter out videos that are already in "Latest", then shuffle and pick 3
-  const latestVideoIds = new Set(latestVideos.map((v) => v.id));
-  const availablePopularVideos = popularVideos.filter(
-    (v) => !latestVideoIds.has(v.id)
-  );
-
-  // Simple shuffle
-  // eslint-disable-next-line react-hooks/purity
-  const shuffledPopular = [...availablePopularVideos].sort(() => 0.5 - Math.random());
-  const selectedPopular = shuffledPopular.slice(0, 3);
-
-  const popularItems = selectedPopular.map((v) => ({
+  const popularItems = dailyRecommendedVideos.map((v) => ({
     videoId: v.id,
     title: v.title,
     description: new Date(v.publishedAt).toLocaleDateString("ja-JP"),
@@ -66,63 +71,73 @@ export default async function Home() {
   return (
     <main className="min-h-screen font-sans selection:bg-primary/30">
       <Hero />
-      <SectionDivider colorClass="text-pink-50" />
-      <About id="about-site" data={aboutSite} bgColor="bg-pink-50" />
-      <SectionDivider colorClass="text-white" />
-      <About id="about-arisa" data={aboutArisa} bgColor="bg-white" />
-      <ProfileDetail />
+      <ChannelStats stats={channelStats} />
+      <SectionDivider colorClass="text-[#FFF9FC]" />
+      <SectionReveal>
+        <About id="about" aboutArisa={aboutArisa} aboutSite={aboutSite} />
+      </SectionReveal>
+      <SectionReveal>
+        <ProfileDetail />
+      </SectionReveal>
 
-      {/* Expression Gallery Marquee */}
       {expressionImages.length > 0 && (
-        <ExpressionMarquee
-          images={expressionImages}
-          title="表情ギャラリー"
-          subtitle="Visual Gallery"
-        />
+        <SectionReveal>
+          <ExpressionMarquee
+            images={expressionImages}
+            comicDecorations={expressionGallery.comicDecorations}
+            title="表情ギャラリー"
+            subtitle="Visual Gallery"
+          />
+        </SectionReveal>
       )}
 
       <SectionDivider colorClass="text-[#FFFDF7]" />
-      {/* Favorites Section */}
-      <FavoritesSection />
+      <SectionReveal>
+        <FavoritesSection />
+      </SectionReveal>
 
-      <SectionDivider colorClass="text-[#FDF2F8]" />
-      <QnASection />
+      <SectionReveal>
+        <QnASection />
+      </SectionReveal>
 
       <SectionDivider colorClass="text-gray-50" />
-      {/* Latest Archives Section */}
-      <VideoSection
-        title={latest.title}
-        subtitle={latest.subtitle}
-        items={latestItems}
-        bgColor="bg-gray-50"
-        color="accent"
-      />
+      <SectionReveal>
+        <VideoSection
+          id="videos"
+          title={latest.title}
+          subtitle={latest.subtitle}
+          items={latestItems}
+          bgColor="bg-gray-50/90"
+          color="accent"
+        />
+      </SectionReveal>
+
+      <SectionReveal>
+        <VideoSection
+          title={popular.title}
+          subtitle={popular.subtitle}
+          items={popularItems}
+          bgColor="bg-gray-50/90"
+          color="primary"
+        />
+      </SectionReveal>
+
+      <SectionReveal>
+        <VideoSection
+          title={songs.title}
+          subtitle={songs.subtitle}
+          items={songs.items}
+          bgColor="bg-gray-50/90"
+          color="tertiary"
+        />
+      </SectionReveal>
 
       <SectionDivider colorClass="text-white" />
-      {/* Recommended (Popular) Videos Section */}
-      <VideoSection
-        title={popular.title}
-        subtitle={popular.subtitle}
-        items={popularItems}
-        bgColor="bg-white"
-        color="primary"
-      />
-
-      <SectionDivider colorClass="text-pink-50" />
-      {/* Recommended Songs Section (Manual) */}
-      <VideoSection
-        title={songs.title}
-        subtitle={songs.subtitle}
-        items={songs.items}
-        bgColor="bg-pink-50"
-        color="tertiary"
-      />
-
-      <SectionDivider colorClass="text-white" />
-      <Links />
+      <SectionReveal>
+        <Links />
+      </SectionReveal>
       <Footer />
       <ScrollToTop />
     </main>
   );
 }
-

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Play } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 
 interface YouTubeCardProps {
     videoId: string;
@@ -13,30 +14,45 @@ interface YouTubeCardProps {
 
 export default function YouTubeCard({ videoId, title, description, note }: YouTubeCardProps) {
     const [isPlaying, setIsPlaying] = useState(false);
+    const reduceMotion = useReducedMotion();
 
     return (
         <motion.div 
-            whileHover={{ y: -6 }}
-            transition={{ type: "spring", stiffness: 350, damping: 20 }}
-            className="bg-white rounded-2xl shadow-md hover:shadow-[0_15px_35px_rgba(255,110,180,0.15)] overflow-hidden transition-shadow border border-pink-100/40 hover:border-primary/30 flex flex-col h-full cursor-pointer relative"
+            whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="glass-panel rounded-3xl shadow-[0_8px_30px_rgba(36,19,13,0.03)] hover:shadow-[0_20px_45px_rgba(255,110,180,0.14)] overflow-hidden transition-all duration-300 border border-white/80 hover:border-accent/40 flex flex-col h-full cursor-pointer relative"
         >
-            <div className="relative aspect-video bg-gray-200 group overflow-hidden" onClick={() => setIsPlaying(true)}>
+            {/* Subtle paper grid pattern inside card for Japanese Shoji look */}
+            <div className="absolute inset-0 opacity-[0.01] bg-[linear-gradient(to_right,#24130d_1px,transparent_1px),linear-gradient(to_bottom,#24130d_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
+
+            <div className="relative aspect-video bg-gray-200 group overflow-hidden">
                 {!isPlaying ? (
-                    <>
-                        <img
+                    <button
+                        type="button"
+                        className="absolute inset-0 h-full w-full text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                        onClick={() => setIsPlaying(true)}
+                        aria-label={title ? `${title} を再生` : "動画を再生"}
+                    >
+                        <Image
                             src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
                             alt={title || "Video"}
-                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                         />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-colors duration-300">
-                            <div className="w-16 h-16 bg-gradient-to-tr from-red-600 to-rose-500 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 relative">
-                                <Play className="text-white fill-white ml-1" size={28} />
+                        {/* Red-tinted overlay on hover to reflect Arisa's theme */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-primary/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/30 transition-colors duration-300">
+                            {/* Play Button like a Japanese Seal/Stamp */}
+                            <div className="w-14 h-14 bg-gradient-to-tr from-red-600 to-rose-500 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 relative border-2 border-white/40">
+                                <Play className="text-white fill-white ml-1" size={22} />
                                 
-                                {/* Bouncing/pulsing radar ring when hovered */}
-                                <span className="absolute inset-0 rounded-full bg-red-500/50 scale-100 opacity-0 group-hover:animate-ping group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                                {/* Pulse ring */}
+                                <span className="absolute inset-0 rounded-full bg-primary/40 scale-100 opacity-0 group-hover:animate-ping group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                             </div>
                         </div>
-                    </>
+                    </button>
                 ) : (
                     <iframe
                         src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
@@ -47,17 +63,18 @@ export default function YouTubeCard({ videoId, title, description, note }: YouTu
                     />
                 )}
             </div>
-            <div className="p-5 flex flex-col flex-grow bg-gradient-to-b from-white to-pink-50/10">
+            
+            <div className="p-6 flex flex-col flex-grow bg-white/45 relative z-10 border-t border-dark/5">
                 {title && (
-                    <h3 className="font-extrabold text-base md:text-lg text-text-main line-clamp-2 mb-2 leading-snug group-hover:text-primary transition-colors">
+                    <h3 className="font-serif font-black text-base text-dark line-clamp-2 mb-2 leading-snug hover:text-primary transition-colors">
                         {title}
                     </h3>
                 )}
-                <p className="text-xs md:text-sm text-text-sub line-clamp-2 mb-3 flex-grow font-medium leading-relaxed">
+                <p className="text-xs text-text-sub line-clamp-2 mb-4 flex-grow font-bold leading-relaxed">
                     {description}
                 </p>
                 {note && (
-                    <span className="text-xs text-primary font-bold bg-pink-50/80 border border-pink-100/60 px-2.5 py-1 rounded-md w-fit self-start">
+                    <span className="text-[9px] text-primary font-black bg-white border border-primary/20 px-3 py-1.5 rounded-full uppercase tracking-wider w-fit self-start shadow-sm">
                         {note}
                     </span>
                 )}
@@ -65,4 +82,3 @@ export default function YouTubeCard({ videoId, title, description, note }: YouTu
         </motion.div>
     );
 }
-

@@ -1,56 +1,54 @@
+import { ExternalLink } from "lucide-react";
 import content from "@/data/content.json";
 
 export default function Footer() {
     const { footer } = content;
+    const year = new Date().getFullYear();
 
     return (
-        <footer className="bg-text-main text-white py-12 relative z-50">
-            <div className="container mx-auto px-4 text-center relative z-20">
-                {/* Staff / Credits Section */}
-                <div className="mb-10 px-6 py-6 border border-white/10 rounded-xl max-w-sm mx-auto bg-white/5 backdrop-blur-sm">
-                    <h3 className="font-mochiy font-bold text-sm mb-4 border-b border-white/20 pb-2 inline-block px-4">
-                        {footer.staff.title}
-                    </h3>
-                    <div className="text-xs space-y-1 mb-6">
-                        <p className="opacity-80 leading-relaxed font-bold">
+        <footer className="relative z-50 overflow-hidden bg-gradient-to-br from-pink-50/95 via-rose-50/95 to-violet-100/95 text-dark">
+            <div className="absolute inset-0 opacity-[0.035] bg-[radial-gradient(#24130d_1px,transparent_1px)] [background-size:18px_18px] pointer-events-none" />
+
+            <div className="container relative z-10 mx-auto flex max-w-5xl flex-col gap-8 px-4 py-12 text-center md:py-14">
+                <div className="space-y-3">
+                    <p className="font-[family-name:var(--font-mochiy)] text-2xl text-dark md:text-3xl">
+                        Bunbuku Arisa Fan Site
+                    </p>
+                    <p className="mx-auto max-w-2xl whitespace-pre-wrap text-sm font-bold leading-relaxed text-text-sub">
+                        {footer.notice}
+                    </p>
+                </div>
+
+                <div className="mx-auto grid w-full max-w-3xl gap-4 rounded-3xl border border-white/70 bg-white/45 p-5 text-left shadow-[0_8px_24px_rgba(36,19,13,0.035)] sm:grid-cols-[1fr_auto] sm:items-center">
+                    <div>
+                        <p className="font-[family-name:var(--font-mochiy)] text-sm text-dark">
+                            {footer.staff.title}
+                        </p>
+                        <p className="mt-2 text-xs font-bold leading-relaxed text-text-sub">
                             {footer.staff.roles}
                         </p>
-                        <a 
-                            href={footer.staff.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="inline-flex items-center gap-1 mt-2 text-pink-300 hover:text-pink-200 transition-colors font-bold"
-                        >
-                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                            </svg>
-                            {footer.staff.name}
-                        </a>
                     </div>
-                    
-                    {/* Special Thanks */}
+                    <a
+                        href={footer.staff.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-primary/15 bg-white/75 px-4 py-2 text-sm font-black text-primary transition duration-300 hover:-translate-y-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                    >
+                        {footer.staff.name}
+                        <ExternalLink size={13} aria-hidden="true" />
+                    </a>
                     {footer.staff.specialThanks && (
-                        <>
-                            <h3 className="font-mochiy font-bold text-sm mb-3 border-b border-white/20 pb-2 inline-block px-4 text-yellow-200">
-                                {footer.staff.specialThanks.title}
-                            </h3>
-                            <div className="text-sm font-mochiy">
-                                <p className="opacity-90 leading-relaxed font-bold text-yellow-100 drop-shadow-md">
-                                    {footer.staff.specialThanks.name}
-                                </p>
-                            </div>
-                        </>
+                        <p className="text-xs font-bold text-text-sub sm:col-span-2">
+                            {footer.staff.specialThanks.title}: {footer.staff.specialThanks.name}
+                        </p>
                     )}
                 </div>
 
-                <p className="text-sm md:text-base opacity-80 mb-2 font-bold whitespace-pre-wrap leading-relaxed">
-                    {footer.notice}
-                </p>
-                <p className="text-xs md:text-sm opacity-60">
-                    {footer.rights}
-                </p>
-                <div className="mt-10 text-[10px] text-gray-500 font-poppins tracking-wider">
-                    © {new Date().getFullYear()} Bunbuku Arisa Fan Site
+                <div className="mx-auto max-w-3xl space-y-2 border-t border-primary/10 pt-6 text-xs font-bold leading-relaxed text-text-sub md:text-sm">
+                    <p className="whitespace-pre-wrap">{footer.rights}</p>
+                    <p className="font-poppins text-[11px] uppercase tracking-[0.18em] text-text-sub/80">
+                        Copyright &copy; {year} Bunbuku Arisa Fan Site
+                    </p>
                 </div>
             </div>
         </footer>

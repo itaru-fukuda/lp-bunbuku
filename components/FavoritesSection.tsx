@@ -1,270 +1,470 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+    PolarAngleAxis,
+    PolarGrid,
+    PolarRadiusAxis,
+    Radar,
+    RadarChart,
+    ResponsiveContainer,
+} from "recharts";
 import SectionTitle from "./SectionTitle";
 import content from "@/data/content.json";
-import useEmblaCarousel from "embla-carousel-react";
-import Image from "next/image";
 
-interface FavoriteItem {
-    text: string;
-    comment: string;
-    color?: string;
-    rotate?: string;
-    style?: "sticky" | "memo" | "cheki";
-    image?: string;
+interface FavoritePoint {
+    key: string;
+    label: string;
+    value: number;
+    description: string;
+}
+
+interface AxisTickProps {
+    x?: string | number;
+    y?: string | number;
+    textAnchor?: string;
+    payload?: { value: string };
+}
+
+interface PointDotProps {
+    cx?: number;
+    cy?: number;
+    index?: number;
+    payload?: FavoritePoint;
+}
+
+const DESKTOP_CALLOUT_POSITIONS = [
+    "left-1/2 top-0 -ml-28",
+    "left-[76%] top-[23%]",
+    "left-[74%] top-[82%]",
+    "right-[74%] top-[82%]",
+    "right-[76%] top-[23%]",
+];
+
+const DESKTOP_CALLOUT_ARROWS = [
+    "-bottom-2 left-1/2 -translate-x-1/2 border-b border-r",
+    "-left-2 top-1/2 -translate-y-1/2 border-b border-l",
+    "-left-2 top-5 border-b border-l",
+    "-right-2 top-5 border-r border-t",
+    "-right-2 top-1/2 -translate-y-1/2 border-r border-t",
+];
+
+const MOBILE_LABEL_HIT_POSITIONS = [
+    "left-1/2 top-[17%] -translate-x-1/2",
+    "left-[68%] top-[34%]",
+    "left-[56%] top-[61%]",
+    "right-[56%] top-[61%]",
+    "right-[68%] top-[34%]",
+];
+
+function createSparklePath(x: number, y: number, size: number) {
+    return `M ${x} ${y - size} L ${x + size * 0.45} ${y - size * 0.45} L ${x + size} ${y} L ${x + size * 0.45} ${y + size * 0.45} L ${x} ${y + size} L ${x - size * 0.45} ${y + size * 0.45} L ${x - size} ${y} L ${x - size * 0.45} ${y - size * 0.45} Z`;
 }
 
 export default function FavoritesSection() {
     const { favorites } = content;
-    
-    // Parallax logic for stickers
-    const { scrollY } = useScroll();
-    const ySticker1 = useTransform(scrollY, [1000, 3000], [-30, 70]);
-    const ySticker2 = useTransform(scrollY, [1000, 3000], [50, -50]);
+    const sectionRef = useRef<HTMLElement>(null);
+    const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+    const shouldReduceMotion = Boolean(useReducedMotion());
+    const [activeKey, setActiveKey] = useState<string | null>(null);
+    const [hasChartExpanded, setHasChartExpanded] = useState(false);
+    const [hasChartAnimationFinished, setHasChartAnimationFinished] = useState(false);
+    const [openPointKey, setOpenPointKey] = useState<string>(content.favorites.points[0]?.key ?? "voice");
 
-    // Embla Carousel setup for mobile
-    const [emblaRef] = useEmblaCarousel({
-        loop: true,
-        align: "center",
-        containScroll: "trimSnaps"
-    });
+    useEffect(() => {
+        if (!isInView || shouldReduceMotion) return;
 
-    if (!favorites) return null;
+        // 0の形を先に描画し、カードが見え始めてから最終値へ展開する。
+        const timer = window.setTimeout(() => setHasChartExpanded(true), 500);
+        return () => window.clearTimeout(timer);
+    }, [isInView, shouldReduceMotion]);
+
+    const points = favorites.points as FavoritePoint[];
+    const chartData = useMemo(
+        () => points.map((point) => ({
+            ...point,
+            value: hasChartExpanded || shouldReduceMotion ? point.value : 0,
+        })),
+        [hasChartExpanded, points, shouldReduceMotion],
+    );
+    const openPoint = points.find((point) => point.key === openPointKey);
+
+    const renderAxisTick = ({ x = 0, y = 0, textAnchor = "middle", payload }: AxisTickProps) => {
+        if (!payload) return null;
+
+        const tickX = Number(x);
+        const tickY = Number(y);
+        const anchor = textAnchor === "start" || textAnchor === "end" ? textAnchor : "middle";
+        const isLongLabel = payload.value === "リスナーとの距離感";
+        const pointKey = points.find((point) => point.label === payload.value)?.key;
+        const isActive = pointKey === activeKey || pointKey === openPointKey;
+        const lines = isLongLabel ? ["リスナーとの", "距離感"] : [payload.value];
+
+        return (
+            <text
+                x={tickX}
+                y={tickY}
+                dy={isLongLabel ? -6 : 4}
+                textAnchor={anchor}
+                className={isActive
+                    ? "pointer-events-none fill-[#B93678] text-[15px] font-bold transition-[fill,font-size] duration-200 lg:text-[12px] lg:font-semibold"
+                    : "pointer-events-none fill-[#5C3F55] text-[11px] font-medium transition-[fill,font-size] duration-200 sm:text-[12px]"}
+                style={isActive ? { filter: "drop-shadow(0 1px 2px rgba(185,54,120,0.2))" } : undefined}
+            >
+                {lines.map((line, index) => (
+                    <tspan key={line} x={tickX} dy={index === 0 ? 0 : 15}>
+                        {line}
+                    </tspan>
+                ))}
+            </text>
+        );
+    };
+
+    const renderPointDot = ({ cx = 0, cy = 0, index = 0, payload }: PointDotProps) => {
+        const isActive = payload?.key === activeKey;
+        const isPerfectScore = payload?.value === 5;
+        const pointKey = payload?.key;
+        const sparkleX = cx + 8;
+        const sparkleY = cy - 8;
+        const sparklePath = createSparklePath(sparkleX, sparkleY, 4);
+        const sparklePathLeft = createSparklePath(cx - 10, cy + 1, 2.7);
+        const sparklePathBottom = createSparklePath(cx + 6, cy + 10, 2.2);
+
+        return (
+            <motion.g
+                role="button"
+                tabIndex={0}
+                aria-label={payload ? `${payload.label}の説明を表示` : undefined}
+                aria-controls="favorite-point-description"
+                onClick={() => pointKey && setOpenPointKey(pointKey)}
+                onKeyDown={(event) => {
+                    if (pointKey && (event.key === "Enter" || event.key === " ")) {
+                        event.preventDefault();
+                        setOpenPointKey(pointKey);
+                    }
+                }}
+                onMouseEnter={() => pointKey && setActiveKey(pointKey)}
+                onMouseLeave={() => setActiveKey(null)}
+                onFocus={() => pointKey && setActiveKey(pointKey)}
+                onBlur={() => setActiveKey(null)}
+                initial={shouldReduceMotion || hasChartAnimationFinished ? false : { opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={shouldReduceMotion ? { duration: 0 } : {
+                    duration: 0.32,
+                    delay: index * 0.1,
+                    ease: "easeOut",
+                }}
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+            >
+                <circle cx={cx} cy={cy} r={18} fill="transparent" className="cursor-pointer" />
+                {isPerfectScore && (
+                    <>
+                        <motion.circle
+                            aria-hidden="true"
+                            cx={cx}
+                            cy={cy}
+                            r={11}
+                            fill="#FFD76A"
+                            initial={false}
+                            animate={shouldReduceMotion ? { opacity: 0.18, r: 11 } : {
+                                opacity: [0.08, 0.32, 0.08],
+                                r: [8, 15, 8],
+                            }}
+                            transition={shouldReduceMotion ? { duration: 0 } : {
+                                duration: 1.8,
+                                delay: index * 0.16,
+                                repeat: Infinity,
+                                ease: "easeOut",
+                            }}
+                            style={{ filter: "drop-shadow(0 0 5px rgba(229,168,35,0.7))" }}
+                        />
+                        <motion.circle
+                            aria-hidden="true"
+                            cx={cx}
+                            cy={cy}
+                            r={8}
+                            fill="none"
+                            stroke="#F0B429"
+                            strokeWidth={1.8}
+                            initial={false}
+                            animate={shouldReduceMotion ? { opacity: 0.45, r: 8 } : {
+                                opacity: [0.25, 0.9, 0.25],
+                                r: [7, 13, 7],
+                            }}
+                            transition={shouldReduceMotion ? { duration: 0 } : {
+                                duration: 1.8,
+                                delay: index * 0.18,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                            }}
+                        />
+                        <motion.g
+                            aria-hidden="true"
+                            initial={false}
+                            animate={shouldReduceMotion ? { opacity: 0.65, rotate: 0 } : {
+                                opacity: [0.15, 0.85, 0.15],
+                                rotate: [0, 45, 90],
+                            }}
+                            transition={shouldReduceMotion ? { duration: 0 } : {
+                                duration: 2.4,
+                                delay: index * 0.16,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                            }}
+                            style={{ transformOrigin: `${cx}px ${cy}px` }}
+                        >
+                            <line x1={cx} y1={cy - 9} x2={cx} y2={cy - 15} stroke="#E5A823" strokeWidth={1.7} strokeLinecap="round" />
+                            <line x1={cx + 9} y1={cy} x2={cx + 15} y2={cy} stroke="#E5A823" strokeWidth={1.7} strokeLinecap="round" />
+                            <line x1={cx} y1={cy + 9} x2={cx} y2={cy + 15} stroke="#E5A823" strokeWidth={1.7} strokeLinecap="round" />
+                            <line x1={cx - 9} y1={cy} x2={cx - 15} y2={cy} stroke="#E5A823" strokeWidth={1.7} strokeLinecap="round" />
+                        </motion.g>
+                        <motion.path
+                            aria-hidden="true"
+                            d={sparklePath}
+                            fill="#FFD54F"
+                            initial={false}
+                            animate={shouldReduceMotion ? { opacity: 0.8, scale: 1 } : {
+                                opacity: [0.2, 1, 0.2],
+                                scale: [0.55, 1.35, 0.55],
+                            }}
+                            transition={shouldReduceMotion ? { duration: 0 } : {
+                                duration: 1.45,
+                                delay: 0.3 + index * 0.18,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                            }}
+                            style={{
+                                filter: "drop-shadow(0 0 4px rgba(229,168,35,0.85))",
+                                transformOrigin: `${sparkleX}px ${sparkleY}px`,
+                            }}
+                        />
+                        {[sparklePathLeft, sparklePathBottom].map((path, sparkleIndex) => (
+                            <motion.path
+                                key={path}
+                                aria-hidden="true"
+                                d={path}
+                                fill={sparkleIndex === 0 ? "#FF8FC7" : "#FFF2A8"}
+                                initial={false}
+                                animate={shouldReduceMotion ? { opacity: 0.75, scale: 1 } : {
+                                    opacity: [0.1, 1, 0.1],
+                                    scale: [0.5, 1.25, 0.5],
+                                }}
+                                transition={shouldReduceMotion ? { duration: 0 } : {
+                                    duration: 1.6,
+                                    delay: 0.65 + sparkleIndex * 0.35 + index * 0.16,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                }}
+                                style={{
+                                    filter: "drop-shadow(0 0 3px rgba(255,110,180,0.65))",
+                                    transformOrigin: sparkleIndex === 0 ? `${cx - 10}px ${cy + 1}px` : `${cx + 6}px ${cy + 10}px`,
+                                }}
+                            />
+                        ))}
+                    </>
+                )}
+                <circle
+                    cx={cx}
+                    cy={cy}
+                    r={isActive ? 7 : isPerfectScore ? 5.5 : 4.5}
+                    fill={isPerfectScore ? "#FFF8D6" : "#FFFFFF"}
+                    stroke={isActive ? "#B93678" : isPerfectScore ? "#E5A823" : "#D84F98"}
+                    strokeWidth={isActive ? 3 : 2.5}
+                    style={isPerfectScore ? { filter: "drop-shadow(0 0 5px rgba(229,168,35,0.9))" } : undefined}
+                />
+            </motion.g>
+        );
+    };
 
     return (
-        <section className="py-20 bg-[#FFFDF7] relative overflow-hidden">
-            {/* Scrapbook Dot Grid Background */}
-            <div className="absolute inset-0 opacity-40 mix-blend-multiply" 
-                 style={{ backgroundImage: 'radial-gradient(#E2D9C8 2px, transparent 2px)', backgroundSize: '30px 30px' }}>
-            </div>
+        <section
+            id="favorites"
+            ref={sectionRef}
+            className="relative z-20 overflow-hidden bg-[rgba(255,253,247,0.90)] py-16 md:py-20"
+        >
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-25"
+                style={{
+                    backgroundImage: "radial-gradient(rgba(200,121,216,0.25) 1.5px, transparent 1.5px)",
+                    backgroundSize: "26px 26px",
+                }}
+            />
+            <div aria-hidden="true" className="pointer-events-none absolute -left-20 top-24 h-64 w-64 rounded-full bg-pink-200/25 blur-3xl" />
+            <div aria-hidden="true" className="pointer-events-none absolute -right-24 bottom-16 h-72 w-72 rounded-full bg-purple-200/25 blur-3xl" />
 
-            <div className="container mx-auto px-4 relative z-10">
-                <SectionTitle
-                    title={
-                        <>
-                            ありさちゃんの
-                            <br className="md:hidden" />
-                            「ここ好き」
-                        </>
-                    }
-                    subtitle={favorites.subtitle}
-                    color="accent"
-                />
-
-                {/* Desktop Scrapbook Board (Visible on md and up) */}
-                <div 
-                    className="mt-16 hidden md:flex md:flex-wrap md:justify-center md:gap-x-12 md:gap-y-16 px-4 max-w-6xl mx-auto"
-                    style={{ perspective: 1200 }}
+            <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+                <motion.div
+                    initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+                    animate={isInView || shouldReduceMotion ? { opacity: 1, y: 0 } : undefined}
+                    transition={{ duration: shouldReduceMotion ? 0 : 0.6, ease: "easeOut" }}
                 >
-                    {favorites.items.map((item: FavoriteItem, index: number) => {
-                        let typeIndex = index % 2;
-                        
-                        if (item.style === "sticky") typeIndex = 0;
-                        else if (item.style === "memo") typeIndex = 1;
-                        else if (item.style === "cheki") typeIndex = 2;
-                        else if (item.image) typeIndex = 2;
-                        
-                        const tiltX = index % 2 === 0 ? 10 : -10;
-                        const tiltY = index % 3 === 0 ? -8 : 8;
-                        const baseRotate = parseFloat(item.rotate || "0");
+                    <SectionTitle
+                        title={favorites.heading}
+                        subtitle={favorites.subtitle}
+                        color="primary"
+                        className="mb-5"
+                    />
+                    <p className="mx-auto max-w-2xl whitespace-pre-line text-center text-sm leading-7 text-text-sub sm:text-base">
+                        {favorites.description}
+                    </p>
+                </motion.div>
 
-                        return (
-                            <motion.div
-                                key={`desktop-${index}`}
-                                initial={{ opacity: 0, scale: 0.8, y: 50, rotate: (index % 2 === 0 ? -10 : 10) }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true, margin: "-50px" }}
-                                animate={{
-                                    y: [0, -6, 0],
-                                    rotate: [baseRotate - 1, baseRotate + 1, baseRotate - 1]
-                                }}
-                                transition={{
-                                    opacity: { duration: 0.6, delay: index * 0.08 },
-                                    scale: { duration: 0.6, delay: index * 0.08, type: "spring", bounce: 0.3 },
-                                    y: { duration: 3.5 + (index % 3), repeat: Infinity, ease: "easeInOut" },
-                                    rotate: { duration: 4.5 + (index % 2), repeat: Infinity, ease: "easeInOut" }
-                                }}
-                                whileHover={{ 
-                                    scale: 1.08, 
-                                    rotate: baseRotate, 
-                                    rotateX: tiltX,
-                                    rotateY: tiltY,
-                                    y: -12,
-                                    zIndex: 50,
-                                    transition: { type: "spring", stiffness: 400, damping: 15 }
-                                }}
-                                className="relative cursor-pointer group flex justify-center"
-                                style={{ zIndex: index, transformStyle: "preserve-3d" }}
+                <div className="mx-auto mt-10 max-w-5xl lg:mt-14">
+                    <motion.div
+                        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.96, y: 20 }}
+                        animate={isInView || shouldReduceMotion ? { opacity: 1, scale: 1, y: 0 } : undefined}
+                        transition={{ duration: shouldReduceMotion ? 0 : 0.72, delay: shouldReduceMotion ? 0 : 0.12, ease: "easeOut" }}
+                        className="group/chart relative min-w-0 rounded-[2rem] border border-white/80 bg-white/65 p-3 shadow-[0_16px_50px_rgba(117,74,117,0.09)] backdrop-blur-xl transition-[border-color,box-shadow] duration-300 hover:border-pink-200 hover:shadow-[0_20px_55px_rgba(180,92,145,0.14)] motion-reduce:transition-none sm:p-5 lg:p-6"
+                    >
+                        <span aria-hidden="true" className="pointer-events-none absolute left-7 top-7 text-lg text-pink-300/60">✦</span>
+                        <span aria-hidden="true" className="pointer-events-none absolute bottom-16 right-8 text-sm text-purple-300/60">✧</span>
+                        <div className="relative h-[250px] w-full sm:h-[340px] lg:h-[620px]">
+                            <div
+                                role="group"
+                                aria-label={favorites.chartAriaLabel}
+                                className="absolute inset-0"
                             >
-                                {/* Scrap Style A (Sticky Note) */}
-                                {typeIndex === 0 && (
-                                    <div className={`w-56 p-6 transition-all duration-300 rounded-sm ${item.color || "bg-yellow-100"} shadow-[2px_4px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[15px_22px_35px_rgba(0,0,0,0.12)] border border-black/5`}>
-                                        {/* Washi Tape */}
-                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-pink-300/80 -rotate-3 mix-blend-multiply shadow-sm"></div>
-                                        <h3 className="font-mochiy font-bold text-gray-800 text-lg mb-3 drop-shadow-sm leading-relaxed whitespace-pre-wrap">{item.text}</h3>
-                                        <p className="text-sm font-bold text-gray-700 leading-snug">{item.comment}</p>
-                                    </div>
-                                )}
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <RadarChart
+                                        data={chartData}
+                                        cx="50%"
+                                        cy="50%"
+                                        outerRadius="55%"
+                                        margin={{ top: 42, right: 48, bottom: 42, left: 48 }}
+                                    >
+                                        <PolarGrid stroke="#DFCDE2" strokeWidth={1} radialLines />
+                                        <PolarAngleAxis
+                                            dataKey="label"
+                                            tick={renderAxisTick}
+                                            tickLine={false}
+                                            tickSize={30}
+                                        />
+                                        <PolarRadiusAxis
+                                            domain={[0, 5]}
+                                            tick={false}
+                                            axisLine={false}
+                                            tickCount={6}
+                                        />
+                                        <Radar
+                                            key={hasChartExpanded || shouldReduceMotion ? "expanded" : "collapsed"}
+                                            name="推し度"
+                                            dataKey="value"
+                                            stroke="#D84F98"
+                                            strokeWidth={2.5}
+                                            fill="#C879D8"
+                                            fillOpacity={0.3}
+                                            dot={renderPointDot}
+                                            isAnimationActive={!shouldReduceMotion && hasChartExpanded && !hasChartAnimationFinished}
+                                            animationBegin={80}
+                                            animationDuration={1000}
+                                            animationEasing="ease-out"
+                                            onAnimationEnd={() => setHasChartAnimationFinished(true)}
+                                        />
+                                    </RadarChart>
+                                </ResponsiveContainer>
+                            </div>
 
-                                {/* Scrap Style B (Torn/Dashed Memo) */}
-                                {typeIndex === 1 && (
-                                    <div className={`w-60 p-5 transition-all duration-300 bg-white border-t-4 border-dashed border-blue-300 rounded-b-md shadow-[3px_5px_15px_rgba(0,0,0,0.06)] group-hover:shadow-[16px_25px_38px_rgba(0,0,0,0.1)]`}>
-                                        {/* Corner Tape */}
-                                        <div className="absolute -top-4 -left-4 w-12 h-5 bg-yellow-300/80 rotate-45 mix-blend-multiply shadow-sm"></div>
-                                        <div className="absolute -bottom-2 -right-2 text-3xl opacity-40 transition-transform duration-300 group-hover:scale-110">
-                                            {favorites.memoIcon ?? "🐾"}
-                                        </div>
-                                        <h3 className="font-mochiy font-bold text-pink-500 text-lg mb-3 leading-relaxed whitespace-pre-wrap">{item.text}</h3>
-                                        <p className="text-sm font-bold text-gray-600 leading-snug">{item.comment}</p>
-                                    </div>
-                                )}
-
-                                {/* Scrap Style C (Polaroid/Card) */}
-                                {typeIndex === 2 && (
-                                    <div className="w-48 p-3 pb-8 bg-white transition-all duration-300 rounded-sm shadow-[2px_4px_16px_rgba(0,0,0,0.12)] group-hover:shadow-[18px_28px_40px_rgba(0,0,0,0.18)] border border-gray-100">
-                                        {/* Top Tape */}
-                                        <div className="absolute -top-3 right-4 w-12 h-5 bg-blue-200/80 rotate-[15deg] mix-blend-multiply shadow-sm"></div>
-                                        {/* Photo frame area */}
-                                        <div className={`w-full aspect-square ${item.color || "bg-pink-50"} mb-3 flex items-center justify-center rounded-sm overflow-hidden relative shadow-inner`}>
-                                            {item.image ? (
-                                                <Image 
-                                                    src={item.image} 
-                                                    alt={item.text} 
-                                                    fill 
-                                                    sizes="(max-width: 768px) 150px, 180px"
-                                                    className="object-cover group-hover:scale-108 transition-transform duration-500" 
-                                                />
-                                            ) : (
-                                                <>
-                                                    <span className="text-6xl drop-shadow-md group-hover:scale-110 transition-transform duration-300">
-                                                        {favorites.placeholderIcon ?? "🫧"}
-                                                    </span>
-                                                    <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white/40 to-transparent pointer-events-none"></div>
-                                                </>
-                                            )}
-                                        </div>
-                                        <h3 className="font-mochiy font-bold text-gray-800 text-base text-center mb-1 drop-shadow-sm whitespace-pre-wrap leading-tight">{item.text}</h3>
-                                        <p className="text-xs font-bold text-gray-500 text-center leading-snug px-1 border-b border-gray-200 pb-1 inline-block mx-auto w-full border-dashed">{item.comment}</p>
-                                    </div>
-                                )}
-                            </motion.div>
-                        );
-                    })}
-                </div>
-
-                {/* Mobile Scrapbook Board (Visible below md) - Carousel View */}
-                <div 
-                    className="mt-12 overflow-hidden px-4 md:hidden cursor-grab active:cursor-grabbing" 
-                    ref={emblaRef}
-                >
-                    <div className="flex gap-6 pb-6">
-                        {favorites.items.map((item: FavoriteItem, index: number) => {
-                            let typeIndex = index % 2;
-                            
-                            if (item.style === "sticky") typeIndex = 0;
-                            else if (item.style === "memo") typeIndex = 1;
-                            else if (item.style === "cheki") typeIndex = 2;
-                            else if (item.image) typeIndex = 2;
-
-                            const isEven = index % 2 === 0;
-                            const baseRotate = isEven ? -2 : 2;
-
-                            return (
-                                <motion.div
-                                    key={`mobile-${index}`}
-                                    initial={{ opacity: 0, scale: 0.9, y: 30, rotate: isEven ? -6 : 6 }}
-                                    whileInView={{ 
-                                        opacity: 1, 
-                                        scale: 1
-                                    }}
-                                    viewport={{ once: true, margin: "-30px" }}
-                                    animate={{
-                                        y: [0, -5, 0],
-                                        rotate: [baseRotate - 1, baseRotate + 1, baseRotate - 1]
-                                    }}
+                            {points.map((point, index) => (
+                                <motion.article
+                                    key={`desktop-callout-${point.key}`}
+                                    initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.96, y: 8 }}
+                                    animate={isInView || shouldReduceMotion ? { opacity: 1, scale: 1, y: 0 } : undefined}
+                                    whileHover={shouldReduceMotion ? undefined : { y: -4 }}
                                     transition={{
-                                        opacity: { duration: 0.5 },
-                                        scale: { duration: 0.5, type: "spring", bounce: 0.2 },
-                                        y: { duration: 3.5 + (index % 2), repeat: Infinity, ease: "easeInOut" },
-                                        rotate: { duration: 4.5 + (index % 3), repeat: Infinity, ease: "easeInOut" }
+                                        duration: shouldReduceMotion ? 0 : 0.45,
+                                        delay: shouldReduceMotion ? 0 : 0.7 + index * 0.1,
+                                        ease: "easeOut",
                                     }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="relative w-[260px] flex-shrink-0 flex justify-center"
-                                    style={{ zIndex: index }}
+                                    onMouseEnter={() => setActiveKey(point.key)}
+                                    onMouseLeave={() => setActiveKey(null)}
+                                    className={`absolute z-20 hidden w-56 rounded-[1.25rem] border border-pink-100 bg-white/95 p-4 shadow-[0_10px_28px_rgba(180,92,145,0.12)] backdrop-blur-md transition-[border-color,box-shadow] duration-200 hover:border-pink-200 hover:shadow-[0_14px_34px_rgba(180,92,145,0.17)] motion-reduce:transition-none lg:block ${DESKTOP_CALLOUT_POSITIONS[index]}`}
                                 >
-                                    {/* Scrap Style A (Sticky Note) */}
-                                    {typeIndex === 0 && (
-                                        <div className={`w-full p-5 rounded-sm ${item.color || "bg-yellow-100"} shadow-[2px_4px_12px_rgba(0,0,0,0.08)] border border-black/5`}>
-                                            {/* Washi Tape */}
-                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-pink-300/80 -rotate-3 mix-blend-multiply shadow-sm"></div>
-                                            <h3 className="font-mochiy font-bold text-gray-800 text-base mb-2 drop-shadow-sm leading-relaxed whitespace-pre-wrap">{item.text}</h3>
-                                            <p className="text-sm font-bold text-gray-700 leading-snug">{item.comment}</p>
-                                        </div>
-                                    )}
+                                    <span
+                                        aria-hidden="true"
+                                        className={`absolute h-4 w-4 rotate-45 border-pink-100 bg-white ${DESKTOP_CALLOUT_ARROWS[index]}`}
+                                    />
+                                    <h3 className="sr-only">{point.label}</h3>
+                                    <div className="relative flex justify-end">
+                                        <span
+                                            aria-label={`5点満点中${point.value}点`}
+                                            className="rounded-full bg-pink-50 px-3 py-1 font-[family-name:var(--font-poppins)] text-lg font-black leading-none text-primary shadow-sm"
+                                        >
+                                            <span aria-hidden="true">{point.value}/5点</span>
+                                        </span>
+                                    </div>
+                                    <p className="relative mt-1.5 text-xs leading-5 text-text-sub">
+                                        {point.description}
+                                    </p>
+                                </motion.article>
+                            ))}
 
-                                    {/* Scrap Style B (Torn/Dashed Memo) */}
-                                    {typeIndex === 1 && (
-                                        <div className={`w-full p-5 bg-white border-t-4 border-dashed border-blue-300 rounded-b-md shadow-[3px_5px_15px_rgba(0,0,0,0.06)]`}>
-                                            {/* Corner Tape */}
-                                            <div className="absolute -top-4 -left-4 w-12 h-5 bg-yellow-300/80 rotate-45 mix-blend-multiply shadow-sm"></div>
-                                            <div className="absolute -bottom-1 -right-1 text-2xl opacity-40">
-                                                {favorites.memoIcon ?? "🐾"}
-                                            </div>
-                                            <h3 className="font-mochiy font-bold text-pink-500 text-base mb-2 leading-relaxed whitespace-pre-wrap">{item.text}</h3>
-                                            <p className="text-sm font-bold text-gray-600 leading-snug">{item.comment}</p>
-                                        </div>
-                                    )}
+                            {points.map((point, index) => (
+                                <button
+                                    key={`mobile-label-hit-${point.key}`}
+                                    type="button"
+                                    aria-label={`${point.label}の説明を表示`}
+                                    aria-pressed={openPointKey === point.key}
+                                    aria-controls="favorite-point-description"
+                                    onClick={() => setOpenPointKey(point.key)}
+                                    onFocus={() => setActiveKey(point.key)}
+                                    onBlur={() => setActiveKey(null)}
+                                    className={`absolute z-30 h-14 touch-manipulation rounded-xl bg-transparent text-transparent outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:hidden ${point.key === "distance" ? "w-32" : "w-24"} ${MOBILE_LABEL_HIT_POSITIONS[index]}`}
+                                >
+                                    <span className="sr-only">{point.label}</span>
+                                </button>
+                            ))}
 
-                                    {/* Scrap Style C (Polaroid/Card) */}
-                                    {typeIndex === 2 && (
-                                        <div className="w-full p-3 pb-6 bg-white rounded-sm shadow-[2px_4px_16px_rgba(0,0,0,0.12)] border border-gray-100">
-                                            {/* Top Tape */}
-                                            <div className="absolute -top-3 right-4 w-12 h-5 bg-blue-200/80 rotate-[15deg] mix-blend-multiply shadow-sm"></div>
-                                            {/* Photo frame area */}
-                                            <div className={`w-full aspect-square ${item.color || "bg-pink-50"} mb-3 flex items-center justify-center rounded-sm overflow-hidden relative shadow-inner`}>
-                                                {item.image ? (
-                                                    <Image 
-                                                        src={item.image} 
-                                                        alt={item.text} 
-                                                        fill 
-                                                        sizes="200px"
-                                                        className="object-cover" 
-                                                    />
-                                                ) : (
-                                                    <>
-                                                        <span className="text-5xl drop-shadow-md">
-                                                            {favorites.placeholderIcon ?? "🫧"}
-                                                        </span>
-                                                        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white/40 to-transparent pointer-events-none"></div>
-                                                    </>
-                                                )}
-                                            </div>
-                                            <h3 className="font-mochiy font-bold text-gray-800 text-sm text-center mb-1 drop-shadow-sm whitespace-pre-wrap leading-tight">{item.text}</h3>
-                                            <p className="text-xs font-bold text-gray-500 text-center leading-snug px-1 border-b border-gray-200 pb-1 inline-block mx-auto w-full border-dashed">{item.comment}</p>
-                                        </div>
-                                    )}
-                                </motion.div>
-                            );
-                        })}
-                    </div>
+                        </div>
+
+                        <AnimatePresence mode="wait">
+                            {openPoint && (
+                                <motion.article
+                                    id="favorite-point-description"
+                                    key={openPoint.key}
+                                    aria-live="polite"
+                                    initial={shouldReduceMotion ? false : { opacity: 0, height: 0, y: -6 }}
+                                    animate={{ opacity: 1, height: "auto", y: 0 }}
+                                    exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, height: 0, y: -6 }}
+                                    transition={{ duration: shouldReduceMotion ? 0 : 0.28, ease: "easeOut" }}
+                                    className="relative mx-2 mb-5 overflow-visible rounded-[1.35rem] border border-pink-100 bg-white/95 p-4 shadow-[0_10px_28px_rgba(180,92,145,0.12)] lg:hidden"
+                                >
+                                    <span aria-hidden="true" className="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-l border-t border-pink-100 bg-white" />
+                                    <div className="relative flex items-center justify-between gap-3">
+                                        <h3 className="text-lg font-bold text-[#4B3045]">
+                                            {openPoint.label}
+                                        </h3>
+                                        <span
+                                            aria-label={`5点満点中${openPoint.value}点`}
+                                            className="rounded-full bg-pink-50 px-3.5 py-1.5 font-[family-name:var(--font-poppins)] text-xl font-black leading-none text-primary shadow-sm"
+                                        >
+                                            <span aria-hidden="true">{openPoint.value}/5点</span>
+                                        </span>
+                                    </div>
+                                    <p className="relative mt-2 text-sm leading-6 text-text-sub">
+                                        {openPoint.description}
+                                    </p>
+                                </motion.article>
+                            )}
+                        </AnimatePresence>
+
+                        <div className="mx-auto -mt-2 flex w-fit items-center gap-2 rounded-full border border-pink-100 bg-white/85 px-4 py-2 text-xs font-medium text-[#704D67] shadow-sm sm:text-sm">
+                            <span aria-hidden="true" className="text-primary">♥</span>
+                            {favorites.scaleLabel}
+                        </div>
+                    </motion.div>
                 </div>
-            </div>
 
-            {/* Extra Decorative Scrapbook Elements (Stickers) with Parallax */}
-            <motion.div 
-                style={{ y: ySticker1 }}
-                className="absolute top-10 right-10 text-6xl opacity-35 rotate-12 pointer-events-none drop-shadow-lg"
-            >
-                {favorites.decorations?.[0] ?? "🎀"}
-            </motion.div>
-            <motion.div 
-                style={{ y: ySticker2 }}
-                className="absolute bottom-24 left-10 text-7xl opacity-35 -rotate-12 pointer-events-none drop-shadow-lg"
-            >
-                {favorites.decorations?.[1] ?? "🎮"}
-            </motion.div>
-            <div className="absolute top-1/2 right-4 w-24 h-24 rounded-full border-4 border-pink-200/50 border-dashed opacity-40 animate-spin-slow pointer-events-none"></div>
+                <motion.p
+                    initial={shouldReduceMotion ? false : { opacity: 0 }}
+                    animate={isInView || shouldReduceMotion ? { opacity: 1 } : undefined}
+                    transition={{ duration: shouldReduceMotion ? 0 : 0.45, delay: shouldReduceMotion ? 0 : 0.95 }}
+                    className="mt-7 text-center text-xs leading-6 text-[#806C78] sm:text-sm"
+                >
+                    {favorites.note}
+                </motion.p>
+            </div>
         </section>
     );
 }

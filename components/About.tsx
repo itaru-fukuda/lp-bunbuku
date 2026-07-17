@@ -2,179 +2,258 @@
 
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Heart } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
 import Image from "next/image";
 
 interface AboutProps {
     id: string;
-    data: {
+    aboutArisa: {
         title: string;
         image?: string;
         description: string;
         tags?: string[];
     };
-    bgColor?: string;
+    aboutSite: {
+        title: string;
+        description: string;
+    };
 }
 
-export default function About({ id, data, bgColor = "bg-white" }: AboutProps) {
-    const { title, image, description, tags } = data;
-
+export default function About({ id, aboutArisa, aboutSite }: AboutProps) {
     // Mounted check to prevent Hydration mismatch with scroll transforms
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
-        setIsMounted(true);
+        const mountTimer = window.setTimeout(() => setIsMounted(true), 0);
+        return () => window.clearTimeout(mountTimer);
     }, []);
 
-    // Scroll parallax logic defined unconditionally at top level
+    // Scroll parallax logic
     const { scrollY } = useScroll();
     
     // Parallax movement for background elements & decorative shapes
-    const yOrb1 = useTransform(scrollY, [200, 1800], [-30, 120]);
-    const yOrb2 = useTransform(scrollY, [200, 1800], [50, -100]);
-    const yImageBgShape = useTransform(scrollY, [300, 1600], [0, 80]);
-
-    // Apply parallax style only after mount
-    const orb1Style = isMounted ? { y: yOrb1 } : {};
-    const orb2Style = isMounted ? { y: yOrb2 } : {};
-    const imageBgStyle = isMounted ? { y: yImageBgShape } : {};
-
-    const isPinkBg = bgColor.includes("pink");
+    const xMarquee = useTransform(scrollY, [100, 1800], [60, -60]);
+    const marqueeStyle = isMounted ? { x: xMarquee } : {};
 
     return (
         <section 
             id={id} 
-            className={`py-20 relative overflow-hidden md:overflow-x-hidden md:overflow-y-visible ${bgColor}`}
+            className="relative overflow-hidden bg-[rgba(255,249,252,0.90)] py-16 md:overflow-x-hidden md:overflow-y-visible md:py-20"
         >
-            {/* Background Glow Orbs - pointer-events-none is crucial for scroll smoothness */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-                <motion.div 
-                    style={orb1Style}
-                    animate={{
-                        x: [0, 30, -20, 0],
-                    }}
-                    transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                    className={`absolute top-10 left-[-5%] w-80 h-80 rounded-full blur-[90px] ${
-                        isPinkBg ? "bg-primary/10" : "bg-tertiary/15"
-                    }`}
-                />
-                <motion.div 
-                    style={orb2Style}
-                    animate={{
-                        x: [0, -40, 10, 0],
-                    }}
-                    transition={{
-                        duration: 24,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                    className={`absolute bottom-10 right-[-5%] w-96 h-96 rounded-full blur-[100px] ${
-                        isPinkBg ? "bg-accent/10" : "bg-primary/10"
-                    }`}
-                />
+            {/* Infinite scrolling bg text / Parallax big text */}
+            <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden select-none flex items-center">
+                <motion.div
+                    style={marqueeStyle}
+                    className="text-[12vw] font-black text-primary/[0.015] uppercase tracking-widest whitespace-nowrap font-[family-name:var(--font-poppins)]"
+                >
+                    ABOUT VTUBER • WELCOME • HAPPY BUNBUKU • ABOUT SITE •
+                </motion.div>
             </div>
 
-            <div className="container mx-auto px-4 max-w-5xl relative z-20">
-                {image ? (
-                    /* Layout with Image (e.g. About Arisa) - Side by Side Grid with overflowing Image */
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-center text-left">
-                        
-                        {/* Visual Column */}
-                        <div className="md:col-span-5 flex justify-center relative pointer-events-none">
-                            {/* Scroll parallax layer (Only handles translation, pointer-events-none) */}
-                            <motion.div 
-                                style={imageBgStyle}
-                                className="absolute inset-0 flex items-center justify-center z-0"
-                            >
-                                {/* Animated background shape layer (Only handles scale and rotation for performance) */}
-                                <motion.div 
-                                    animate={{
-                                        scale: [1, 1.08, 0.95, 1],
-                                        rotate: [0, 90, 180, 360]
-                                    }}
-                                    transition={{
-                                        duration: 15,
-                                        repeat: Infinity,
-                                        ease: "linear"
-                                    }}
-                                    className="w-56 h-56 rounded-3xl bg-gradient-to-tr from-primary/25 via-secondary/20 to-accent/25 opacity-70 blur-xl"
-                                />
-                            </motion.div>
+            {/* Background Glow Orbs */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                <div className="absolute w-96 h-96 rounded-full blur-[120px] top-10 left-[-10%] bg-primary/5" />
+                <div className="absolute w-96 h-96 rounded-full blur-[120px] bottom-10 right-[-10%] bg-accent/5" />
+            </div>
+
+            {/* Subtle traditional Japanese Kanoko background pattern overlay */}
+            <div className="absolute inset-0 opacity-[0.01] bg-[radial-gradient(#24130d_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none z-0" />
+
+            <div className="container mx-auto px-4 max-w-4xl relative z-20 flex flex-col gap-10 md:gap-14">
+                
+                {/* 1. About This Site (Upper Section) */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.6 }}
+                    className="glass-panel relative overflow-hidden rounded-[2rem] border border-pink-100/80 p-6 shadow-[0_12px_32px_rgba(255,110,180,0.08)] sm:p-8"
+                >
+                    <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-10 text-[7rem] font-black leading-none text-primary/[0.035]">
+                        ✦
+                    </div>
+                    <div aria-hidden="true" className="pointer-events-none absolute bottom-4 right-6 rotate-12 text-xl text-accent/15">
+                        🐾
+                    </div>
+
+                    <div className="relative">
+                        <div className="flex items-center gap-3">
+                            <span aria-hidden="true" className="h-9 w-1 rounded-full bg-gradient-to-b from-primary to-accent" />
+                            <h2 className="font-[family-name:var(--font-poppins)] text-2xl font-black tracking-tight text-dark sm:text-3xl">
+                                {aboutSite.title}
+                            </h2>
+                        </div>
+
+                        <p className="mt-5 max-w-3xl whitespace-pre-wrap text-xs font-bold leading-loose tracking-wide text-text-sub sm:text-sm">
+                            {aboutSite.description}
+                        </p>
+
+                        <nav aria-label="サイト内の主なコンテンツ" className="mt-6 flex flex-wrap gap-2.5">
+                            {[
+                                { label: "プロフィール", href: "#profile" },
+                                { label: "表情ギャラリー", href: "#expression-gallery" },
+                                { label: "推しポイント", href: "#favorites" },
+                            ].map((item) => (
+                                <a
+                                    key={item.href}
+                                    href={item.href}
+                                    className="group inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/15 bg-white/85 px-4 py-2 text-xs font-bold text-[#624658] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:bg-pink-50 hover:text-primary hover:shadow-[0_8px_18px_rgba(255,110,180,0.10)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary motion-reduce:transform-none motion-reduce:transition-none sm:text-sm"
+                                >
+                                    <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-transform duration-300 group-hover:scale-125" />
+                                    {item.label}
+                                </a>
+                            ))}
+                        </nav>
+                    </div>
+                </motion.div>
+
+                {/* 2. About Arisa (Lower Section) */}
+                
+                {/* --- PC Layout (lg:block hidden) --- */}
+                <div className="hidden lg:block">
+                    <div className="grid grid-cols-12 gap-8 items-center">
+                        {/* Left Side Image */}
+                        <div className="col-span-4 flex justify-center relative">
+                            <div className="absolute -inset-3 bg-gradient-to-tr from-accent/10 to-primary/10 rounded-full rotate-[4deg] -z-10 scale-95 pointer-events-none" />
+                            <div className="absolute -inset-3 bg-white/80 backdrop-blur-sm rounded-full -rotate-[3deg] -z-20 scale-95 border border-primary/5 pointer-events-none" />
                             
-                            {/* Image Container with rotation, neon glow, and responsive margin (overflows only on desktop) */}
                             <motion.div 
-                                whileHover={{ scale: 1.04, rotate: 1, y: -4 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                                className="relative p-[3px] rounded-[2.5rem] bg-gradient-to-tr from-primary/60 via-secondary/40 to-accent/50 shadow-[0_20px_50px_rgba(255,110,180,0.22)] md:rotate-[-3deg] rotate-0 cursor-pointer z-45 md:-mb-40 mb-4 pointer-events-auto"
+                                whileHover={{ scale: 1.03, rotate: 1, y: -3 }}
+                                transition={{ type: "spring", stiffness: 260, damping: 15 }}
+                                className="relative p-2 rounded-full bg-gradient-to-br from-primary via-secondary to-accent shadow-[0_15px_35px_rgba(36,19,13,0.08)] rotate-[-1.5deg] z-10 cursor-pointer pointer-events-auto"
                             >
-                                <div className="relative w-48 h-48 md:w-72 md:h-72 rounded-[2.3rem] overflow-hidden border-4 border-white bg-white">
-                                    <Image
-                                        src={image}
-                                        alt={title}
-                                        fill
-                                        className="object-cover pointer-events-none select-none"
-                                        draggable={false}
-                                        priority
-                                    />
+                                <div className="relative w-52 h-52 rounded-full overflow-hidden border-[5px] border-white bg-white">
+                                    {aboutArisa.image && (
+                                        <Image
+                                            src={aboutArisa.image}
+                                            alt={aboutArisa.title}
+                                            fill
+                                            sizes="208px"
+                                            className="object-cover"
+                                            draggable={false}
+                                            priority
+                                        />
+                                    )}
                                 </div>
+                                <motion.div 
+                                    animate={{ y: [0, -6, 0] }}
+                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                    className="absolute -bottom-2 -right-2 bg-accent text-dark w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shadow-md border-2 border-white select-none"
+                                >
+                                    🍂
+                                </motion.div>
                             </motion.div>
                         </div>
 
-                        {/* Content Column with premium Glassmorphism plate */}
-                        <div className="md:col-span-7 flex flex-col items-start pb-8 md:pb-0 z-30 pointer-events-auto">
+                        {/* Right Side Text Grid */}
+                        <div className="col-span-8">
                             <motion.div 
-                                initial={{ opacity: 0, x: 30 }}
-                                whileInView={{ opacity: 1, x: 0 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.8 }}
-                                className="glass-panel p-6 md:p-10 rounded-[2.2rem] border border-white/60 shadow-[0_15px_35px_rgba(255,182,193,0.12)] w-full"
+                                transition={{ duration: 0.6 }}
+                                className="glass-panel relative overflow-hidden rounded-[2rem] border border-white/80 p-6 shadow-sm"
                             >
-                                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-6 relative tracking-tight inline-block">
-                                    {title}
-                                    <span className="absolute -bottom-2 left-0 w-14 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full"></span>
-                                </h2>
-                                <p className="text-base md:text-lg text-text-sub leading-relaxed whitespace-pre-wrap mb-8 font-medium">
-                                    {description}
-                                </p>
+                                <div aria-hidden="true" className="pointer-events-none absolute -right-3 -top-5 font-[family-name:var(--font-poppins)] text-7xl font-black tracking-tight text-primary/[0.025]">
+                                    ARISA
+                                </div>
 
-                                <div className="flex flex-wrap gap-2.5">
-                                    {tags && tags.map((tag: string, index: number) => (
-                                        <motion.span 
-                                            key={index} 
-                                            whileHover={{ scale: 1.08, y: -2 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                                            className="px-5 py-2.5 bg-white text-primary border border-pink-100 rounded-full text-sm font-bold shadow-sm flex items-center gap-2 cursor-pointer hover:bg-pink-50/50 hover:border-pink-200 transition-colors"
-                                        >
-                                            <Heart size={14} className="text-primary fill-primary animate-pulse" />
-                                            {tag}
-                                        </motion.span>
-                                    ))}
+                                <div className="relative">
+                                    <div className="mb-5 flex items-center gap-3">
+                                        <span aria-hidden="true" className="h-9 w-1 rounded-full bg-gradient-to-b from-primary to-accent" />
+                                        <h2 className="flex items-center gap-2 font-[family-name:var(--font-poppins)] text-2xl font-black tracking-tight text-dark">
+                                            {aboutArisa.title}
+                                            <Sparkles className="text-accent" size={16} aria-hidden="true" />
+                                        </h2>
+                                    </div>
+
+                                    <p className="text-xs sm:text-sm text-text-sub leading-loose whitespace-pre-wrap mb-4 font-bold tracking-wide">
+                                        {aboutArisa.description}
+                                    </p>
+
+                                    <div className="flex flex-wrap gap-2">
+                                        {aboutArisa.tags && aboutArisa.tags.map((tag: string, index: number) => (
+                                            <motion.span 
+                                                key={index} 
+                                                whileHover={{ scale: 1.05, y: -1 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                className="px-3.5 py-1.5 bg-white text-primary border border-primary/10 rounded-full text-[10px] font-black shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-primary hover:text-white hover:border-transparent transition-all duration-300"
+                                            >
+                                                <Heart size={8} className="fill-current animate-pulse" />
+                                                {tag}
+                                            </motion.span>
+                                        ))}
+                                    </div>
                                 </div>
                             </motion.div>
                         </div>
                     </div>
-                ) : (
-                    /* Layout without Image (e.g. About Site) - Centered Premium Glass Panel */
+                </div>
+
+                {/* --- Smartphone Layout (lg:hidden block) --- */}
+                <div className="block lg:hidden">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.8 }}
-                        className="glass-panel p-8 md:p-14 rounded-[2rem] shadow-xl max-w-3xl mx-auto border border-white/50 text-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="glass-panel relative overflow-hidden rounded-[2rem] border border-white/80 p-5 shadow-sm"
                     >
-                        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-6 relative inline-block tracking-tight">
-                            {title}
-                            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-14 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full"></span>
-                        </h2>
-                        <p className="text-base md:text-lg text-text-sub leading-relaxed whitespace-pre-wrap font-medium">
-                            {description}
-                        </p>
+                        <div aria-hidden="true" className="pointer-events-none absolute -right-3 -top-4 font-[family-name:var(--font-poppins)] text-6xl font-black tracking-tight text-primary/[0.025]">
+                            ARISA
+                        </div>
+
+                        <div className="relative mb-5 flex items-center gap-3">
+                            <span aria-hidden="true" className="h-9 w-1 rounded-full bg-gradient-to-b from-primary to-accent" />
+                            <h2 className="flex items-center gap-2 font-[family-name:var(--font-poppins)] text-2xl font-black tracking-tight text-dark sm:text-3xl">
+                                {aboutArisa.title}
+                                <Sparkles className="text-accent" size={16} aria-hidden="true" />
+                            </h2>
+                        </div>
+
+                        <div className="relative flex justify-center border-b border-primary/10 pb-5">
+                            <div className="relative shrink-0">
+                                <div className="absolute -inset-2.5 bg-gradient-to-tr from-accent/10 to-primary/10 rounded-full rotate-[3deg] -z-10 scale-95" />
+                                <div className="relative p-2 rounded-full bg-gradient-to-br from-primary via-secondary to-accent shadow-md rotate-[-1.5deg]">
+                                    <div className="relative w-48 h-48 sm:w-52 sm:h-52 rounded-full overflow-hidden border-4 border-white bg-white">
+                                        {aboutArisa.image && (
+                                            <Image
+                                                src={aboutArisa.image}
+                                                alt={aboutArisa.title}
+                                                fill
+                                                sizes="208px"
+                                                className="object-cover"
+                                                draggable={false}
+                                                priority
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="absolute -bottom-2 -left-2 bg-accent text-dark w-10 h-10 rounded-full flex items-center justify-center font-bold text-base shadow-md border border-white select-none">
+                                    🍂
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-5 w-full">
+                            <p className="text-xs leading-loose whitespace-pre-wrap mb-4 font-bold tracking-wide text-text-sub">
+                                {aboutArisa.description}
+                            </p>
+
+                            <div className="flex flex-wrap gap-2">
+                                {aboutArisa.tags && aboutArisa.tags.map((tag: string, index: number) => (
+                                    <span 
+                                        key={index}
+                                        className="px-3 py-1.5 bg-white text-primary border border-primary/10 rounded-full text-[10px] font-black shadow-sm flex items-center gap-1"
+                                    >
+                                        <Heart size={8} className="fill-current animate-pulse" />
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
                     </motion.div>
-                )}
+                </div>
+
             </div>
         </section>
     );

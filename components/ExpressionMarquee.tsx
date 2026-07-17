@@ -1,21 +1,15 @@
 "use client";
 
-import useEmblaCarousel from "embla-carousel-react";
-import AutoScroll from "embla-carousel-auto-scroll";
 import Image from "next/image";
 import { useCallback, useState } from "react";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
 import SectionTitle from "./SectionTitle";
 
 interface ExpressionMarqueeProps {
     images: string[];
-    /**
-     * Speed of the auto-scroll. Higher usage number means faster scroll.
-     * Default: 1
-     */
-    speed?: number;
+    comicDecorations?: Record<string, string>;
     title?: string;
     subtitle?: string;
 }
@@ -31,9 +25,24 @@ interface Particle {
     delay: number;
 }
 
-export default function ExpressionMarquee({ images, speed = 1, title, subtitle }: ExpressionMarqueeProps) {
+const PANEL_LAYOUTS = [
+    "col-span-2 row-span-2 md:col-span-3 md:row-span-2",
+    "col-span-1 row-span-1 md:col-span-2 md:row-span-1",
+    "col-span-1 row-span-1 md:col-span-1 md:row-span-2",
+    "col-span-2 row-span-1 md:col-span-2 md:row-span-1",
+    "col-span-1 row-span-2 md:col-span-2 md:row-span-2",
+    "col-span-1 row-span-1 md:col-span-1 md:row-span-1",
+    "col-span-1 row-span-1 md:col-span-2 md:row-span-1",
+    "col-span-2 row-span-1 md:col-span-3 md:row-span-1",
+];
+
+const INITIAL_VISIBLE_COUNT = 15;
+
+export default function ExpressionMarquee({ images, comicDecorations = {}, title, subtitle }: ExpressionMarqueeProps) {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [particles, setParticles] = useState<Particle[]>([]);
+    const [showAll, setShowAll] = useState(false);
+    const reduceMotion = useReducedMotion();
 
     // 3D Tilt and Glare State
     const [rotateX, setRotateX] = useState(0);
@@ -42,24 +51,13 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
     const [glareY, setGlareY] = useState(50);
     const [glareOpacity, setGlareOpacity] = useState(0);
 
-    // Ensure enough images for seamless looping
-    const MIN_IMAGES = 10;
-    const marqueeImages = [...images];
-    while (marqueeImages.length < MIN_IMAGES && marqueeImages.length > 0) {
-        marqueeImages.push(...images);
-    }
-
-    // Embla Carousel setup with AutoScroll plugin
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, dragFree: true }, [
-        AutoScroll({ playOnInit: true, stopOnInteraction: false, speed }),
-    ]);
+    const displayedImages = showAll ? images : images.slice(0, INITIAL_VISIBLE_COUNT);
 
     const handleImageClick = useCallback((src: string) => {
-        if (!emblaApi) return;
         setSelectedImage(src);
 
         // Generate burst particles on image selection
-        const count = 28;
+        const count = reduceMotion ? 0 : 28;
         const icons = ["🐾", "⭐", "❤️", "🫧", "✨", "💖"];
         const colors = [
             "text-pink-400", 
@@ -86,7 +84,7 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
             };
         });
         setParticles(newParticles);
-    }, [emblaApi]);
+    }, [reduceMotion]);
 
     const handleCloseModal = useCallback(() => {
         setSelectedImage(null);
@@ -97,6 +95,7 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
     }, []);
 
     const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (reduceMotion) return;
         const card = e.currentTarget;
         const box = card.getBoundingClientRect();
         const touch = e.touches[0];
@@ -133,6 +132,7 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
     };
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (reduceMotion) return;
         const card = e.currentTarget;
         const box = card.getBoundingClientRect();
         const x = e.clientX - box.left - box.width / 2;
@@ -162,37 +162,92 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
 
     return (
         <>
-            <section className="py-12 bg-pink-50 overflow-hidden relative border-y border-pink-100 z-20">
+            <section id="expression-gallery" className="relative z-20 overflow-hidden bg-[rgba(255,249,252,0.90)] py-16 md:py-20">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 opacity-[0.16]"
+                    style={{
+                        backgroundImage: "radial-gradient(#C879D8 1.2px, transparent 1.2px)",
+                        backgroundSize: "18px 18px",
+                    }}
+                />
+                <div aria-hidden="true" className="pointer-events-none absolute -left-20 top-1/3 h-64 w-64 rounded-full bg-pink-200/20 blur-3xl" />
+                <div aria-hidden="true" className="pointer-events-none absolute -right-20 bottom-16 h-72 w-72 rounded-full bg-sky-200/20 blur-3xl" />
+
                 {title && (
-                    <div className="container mx-auto px-4 relative z-30">
+                    <div className="container relative z-30 mx-auto mb-10 px-4 md:mb-14">
                         <SectionTitle title={title} subtitle={subtitle} color="tertiary" />
+                        <p className="mx-auto -mt-7 max-w-xl text-center text-sm leading-7 text-text-sub sm:text-base">
+                            くるくる変わる表情をお裾分け。配信でも見れるよ！
+                        </p>
                     </div>
                 )}
-                {/* Gradient masks for smooth fade edges */}
-                <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-pink-50 to-transparent z-10 pointer-events-none" />
-                <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-pink-50 to-transparent z-10 pointer-events-none" />
 
-                <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
-                    <div className="flex gap-8 px-4 backface-hidden touch-pan-y">
-                        {marqueeImages.map((src, index) => (
-                            <div
-                                key={index}
-                                className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 select-none cursor-pointer"
-                                onClick={() => handleImageClick(src)}
-                            >
-                                <div className="absolute inset-0 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white transition-transform duration-300 hover:scale-105">
+                <div className="relative z-10 mx-auto max-w-6xl px-3 sm:px-5">
+                    <motion.div
+                        layout={!reduceMotion}
+                        className="grid auto-rows-[112px] grid-flow-dense grid-cols-2 gap-3 sm:auto-rows-[145px] sm:gap-4 md:grid-cols-6 md:auto-rows-[150px]"
+                    >
+                        {displayedImages.map((src, index) => {
+                            const layout = PANEL_LAYOUTS[index % PANEL_LAYOUTS.length];
+                            const word = comicDecorations[src];
+
+                            return (
+                                <motion.button
+                                    layout={!reduceMotion}
+                                    key={src}
+                                    type="button"
+                                    aria-label={`表情ギャラリー ${index + 1}枚目を拡大`}
+                                    initial={reduceMotion ? false : { opacity: 0, scale: 0.96, y: 18 }}
+                                    whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-50px" }}
+                                    transition={{ duration: 0.45, delay: Math.min((index % 8) * 0.05, 0.25), ease: "easeOut" }}
+                                    whileHover={reduceMotion ? undefined : { y: -4 }}
+                                    whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+                                    onClick={() => handleImageClick(src)}
+                                    className={`group relative isolate overflow-hidden rounded-[1.15rem] border-[3px] border-[#4B3045] bg-white text-left shadow-[5px_6px_0_rgba(75,48,69,0.14)] transition-[border-color,box-shadow] duration-300 hover:border-primary hover:shadow-[7px_9px_0_rgba(255,110,180,0.18)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none sm:rounded-[1.5rem] ${layout}`}
+                                >
                                     <Image
                                         src={src}
-                                        alt={`Expression ${index}`}
+                                        alt=""
                                         fill
-                                        sizes="(max-width: 768px) 128px, 160px"
-                                        className="object-cover pointer-events-none" // prevent image drag
+                                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 520px"
+                                        className="pointer-events-none object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                                         draggable={false}
                                     />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                                    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#4B3045]/25 via-transparent to-white/5" />
+                                    <span aria-hidden="true" className="pointer-events-none absolute left-2.5 top-2.5 rounded-full border border-white/70 bg-[#4B3045]/75 px-2 py-1 font-[family-name:var(--font-poppins)] text-[9px] font-bold tracking-wider text-white backdrop-blur-sm sm:left-3 sm:top-3 sm:text-[10px]">
+                                        SCENE {String(index + 1).padStart(2, "0")}
+                                    </span>
+                                    {word && (
+                                        <motion.span
+                                            aria-hidden="true"
+                                            animate={reduceMotion ? undefined : { rotate: [-5, -2, -5], scale: [1, 1.04, 1] }}
+                                            transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+                                            className="pointer-events-none absolute bottom-2.5 right-2.5 -rotate-3 rounded-full border-2 border-[#4B3045] bg-white/95 px-2.5 py-1 font-[family-name:var(--font-mochiy)] text-[11px] text-primary shadow-sm sm:bottom-4 sm:right-4 sm:px-3 sm:text-sm"
+                                        >
+                                            {word}
+                                        </motion.span>
+                                    )}
+                                    <span aria-hidden="true" className="pointer-events-none absolute -right-8 -top-8 h-16 w-16 rounded-full border-[10px] border-white/15 transition-transform duration-500 group-hover:scale-125 motion-reduce:transition-none" />
+                                </motion.button>
+                            );
+                        })}
+                    </motion.div>
+
+                    {images.length > INITIAL_VISIBLE_COUNT && (
+                        <div className="mt-10 flex justify-center">
+                            <button
+                                type="button"
+                                aria-expanded={showAll}
+                                onClick={() => setShowAll((current) => !current)}
+                                className="group inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-primary/30 bg-white/90 px-6 py-3 text-sm font-bold text-primary shadow-[0_8px_24px_rgba(255,110,180,0.10)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_12px_28px_rgba(255,110,180,0.16)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transform-none motion-reduce:transition-none"
+                            >
+                                <span aria-hidden="true" className="text-base">{showAll ? "−" : "＋"}</span>
+                                {showAll ? "少なく表示" : `すべての表情を見る（${images.length}枚）`}
+                            </button>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -200,7 +255,7 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
             <AnimatePresence>
                 {selectedImage && (
                     <motion.div
-                        initial={{ opacity: 0 }}
+                        initial={reduceMotion ? false : { opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 cursor-pointer"
@@ -233,10 +288,10 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
 
                         {/* Polaroid Card Wrapper (Floating Animation layer) */}
                         <motion.div
-                            initial={{ scale: 0.6, rotate: -12, opacity: 0 }}
-                            animate={{ 
-                                scale: 1, 
-                                rotate: 0, 
+                            initial={reduceMotion ? false : { scale: 0.6, rotate: -12, opacity: 0 }}
+                            animate={reduceMotion ? { scale: 1, rotate: 0, opacity: 1, y: 0 } : {
+                                scale: 1,
+                                rotate: 0,
                                 opacity: 1,
                                 y: [0, -8, 0],
                                 transition: {
@@ -246,7 +301,7 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
                                     y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
                                 }
                             }}
-                            exit={{ scale: 0.6, rotate: 12, opacity: 0, transition: { duration: 0.25 } }}
+                            exit={reduceMotion ? { opacity: 0 } : { scale: 0.6, rotate: 12, opacity: 0, transition: { duration: 0.25 } }}
                             className="relative max-w-[420px] w-full z-10 cursor-default"
                             onClick={(e) => e.stopPropagation()}
                         >
@@ -269,6 +324,8 @@ export default function ExpressionMarquee({ images, speed = 1, title, subtitle }
                                 
                                 {/* Close button */}
                                 <button
+                                    type="button"
+                                    aria-label="拡大表示を閉じる"
                                     onClick={handleCloseModal}
                                     className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-pink-500 hover:bg-pink-600 text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110 z-30"
                                 >

@@ -18,25 +18,25 @@ interface SectionDividerProps {
     animate?: boolean;
 }
 
-export default function SectionDivider({ colorClass, inverted = false, animate = true }: SectionDividerProps) {
-    // Hand-drawn cloud-like / raccoon tail puffy wave curves
-    // A sequence of round bumps.
-    const mocomocoPath1 = "M0,75 C60,35 100,35 160,75 C220,35 260,35 320,75 C380,35 420,35 480,75 C540,35 580,35 640,75 C700,35 740,35 800,75 C860,35 900,35 960,75 C1020,35 1060,35 1120,75 C1180,35 1220,35 1280,75 C1340,35 1380,35 1440,75 L1440,120 L0,120 Z";
-    const mocomocoPath2 = "M0,65 C60,25 100,25 160,65 C220,25 260,25 320,65 C380,25 420,25 480,65 C540,25 580,25 640,65 C700,25 740,25 800,65 C860,25 900,25 960,65 C1020,25 1060,25 1120,65 C1180,25 1220,25 1280,65 C1340,25 1380,25 1440,65 L1440,120 L0,120 Z";
+export default function SectionDivider({ colorClass, inverted = false, animate = false }: SectionDividerProps) {
+    // 章の境界にだけ使う、余白を取りすぎない浅いウェーブ。
+    const wavePath1 = "M0,34 C180,12 300,12 480,34 C660,56 780,56 960,34 C1140,12 1260,12 1440,34 L1440,64 L0,64 Z";
+    const wavePath2 = "M0,32 C180,16 300,16 480,32 C660,48 780,48 960,32 C1140,16 1260,16 1440,32 L1440,64 L0,64 Z";
 
     return (
-        <div className={`w-full overflow-hidden leading-[0] select-none pointer-events-none relative z-30 ${inverted ? "transform rotate-180 -mt-[1px]" : "-mb-[1px]"}`}>
+        <div aria-hidden="true" className={`relative z-30 h-8 w-full select-none overflow-hidden leading-[0] pointer-events-none md:h-12 ${inverted ? "-mt-px rotate-180" : "-mb-px"}`}>
             <svg
-                viewBox="0 0 1440 120"
+                viewBox="0 0 1440 64"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className={`w-full h-auto ${colorClass}`}
+                preserveAspectRatio="none"
+                className={`h-full w-full ${colorClass}`}
             >
                 {animate ? (
                     <motion.path
-                        d={mocomocoPath1}
+                        d={wavePath1}
                         animate={{
-                            d: [mocomocoPath1, mocomocoPath2, mocomocoPath1]
+                            d: [wavePath1, wavePath2, wavePath1]
                         }}
                         transition={{
                             duration: 8,
@@ -46,7 +46,7 @@ export default function SectionDivider({ colorClass, inverted = false, animate =
                         fill="currentColor"
                     />
                 ) : (
-                    <path d={mocomocoPath1} fill="currentColor" />
+                    <path d={wavePath1} fill="currentColor" />
                 )}
             </svg>
         </div>

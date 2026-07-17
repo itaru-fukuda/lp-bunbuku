@@ -1,7 +1,7 @@
 {
     "hero": {
         "catchphrase": "あなたに福のお裾分け！",
-        "subtext": "みんなに福を届ける完全セルフ受肉たぬきVtuber",
+        "subtext": "みんなに福を届ける\n完全セルフ受肉\nたぬきVtuber",
         "ctaText": "YouTubeチャンネルを見る",
         "ctaLink": "https://www.youtube.com/channel/UCerNAq_y5avwJIV0arI5pCQ",
         "greetingSequence": [
@@ -33,6 +33,24 @@
             "videoId": "mUdmycXYyzY",
             "title": "今週のスケジュール"
         }
+    },
+    "expressionGallery": {
+        "comicDecorations": {
+            "/images/expressions/000.PNG": "わくわく",
+            "/images/expressions/003.PNG": "びっくり！",
+            "/images/expressions/006.PNG": "すやぁ",
+            "/images/expressions/010.JPG": "つんっ",
+            "/images/expressions/013.PNG": "（泣）",
+            "/images/expressions/016.PNG": "にこっ",
+            "/images/expressions/019.PNG": "あわわ",
+            "/images/expressions/022.PNG": "・・・",
+            "/images/expressions/025.PNG": "（泣）",
+            "/images/expressions/028.PNG": "うるっ",
+            "/images/expressions/031.PNG": "ほぇぇ",
+            "/images/expressions/034.PNG": "きらきら",
+            "/images/expressions/037.PNG": "？",
+            "/images/expressions/050.PNG": "（引）"
+            }
     },
     "aboutSite": {
         "title": "About This Site",
@@ -134,8 +152,46 @@
         ]
     },
     "favorites": {
+        "heading": "推しポイント",
+        "subtitle": "Favorite Points",
+        "description": "歌声、かわいさ、配信の楽しさ。\nファン目線で感じる、ありさちゃんの魅力をまとめました。",
+        "scaleLabel": "5段階評価",
+        "note": "※数値はサイト運営者による個人的な推し度です。",
+        "chartAriaLabel": "分福ありさの推しポイントを5項目で示したレーダーチャート",
+        "points": [
+            {
+                "key": "voice",
+                "label": "歌声",
+                "value": 5,
+                "description": "元気をもらえる歌声と、曲ごとに変わる豊かな表現力。"
+            },
+            {
+                "key": "cute",
+                "label": "かわいさ",
+                "value": 5,
+                "description": "表情やリアクションまで含めて、見ているだけで楽しい。"
+            },
+            {
+                "key": "gameSkill",
+                "label": "ゲームテク",
+                "value": 5,
+                "description": "ゲームを心から楽しむ姿と、ここぞという場面のプレイが魅力。"
+            },
+            {
+                "key": "talk",
+                "label": "トーク",
+                "value": 5,
+                "description": "自然体の雑談と、思わず笑顔になるテンポのよいリアクション。"
+            },
+            {
+                "key": "distance",
+                "label": "距離感",
+                "value": 5,
+                "description": "コメントとのやり取りを大事にし、みんな輪に入りやすい。"
+            }
+        ],
         "title": "ありさちゃんの「ここ好き」",
-        "subtitle": "Arisa's Favorites",
+        "legacySubtitle": "Arisa's Favorites",
         "placeholderIcon": "",
         "memoIcon": "🐾",
         "decorations": [
@@ -144,55 +200,52 @@
         ],
         "items": [
             {
-                "text": "底抜けの明るさ",
-                "comment": "元気がもらえて楽しい配信！",
                 "color": "bg-blue-100",
-                "rotate": "-2deg"
+                "rotate": "-2deg",
+                "image": "/images/tanuki/smile_pop.png",
+                "comment": "底抜けの明るさ\n元気がもらえて楽しい配信！"
             },
             {
-                "text": "唯一無二の声質",
-                "comment": "ハキハキボイスが聞き心地最高",
                 "color": "bg-pink-100",
                 "rotate": "1deg",
-                "image": ""
+                "image": "/images/tanuki/wink_pop.png",
+                "comment": "唯一無二の声質\nハキハキボイスが聞き心地最高"
             },
             {
-                "text": "引き込まれる演技力",
-                "comment": "セリフ読みのギャップに惚れる",
                 "color": "bg-purple-100",
                 "rotate": "-1deg",
-                "image": ""
+                "image": "/images/tanuki/happy_pop.png",
+                "comment": "引き込まれる演技力\nセリフ読みのギャップに惚れる"
             },
             {
-                "text": "天才（自己申告済）",
-                "comment": "セルフ受肉！歌声も最高！",
                 "color": "bg-yellow-100",
                 "rotate": "2deg",
-                "image": ""
+                "image": "/images/tanuki/smile_pop.png",
+                "comment": "天才（自己申告済）\nセルフ受肉！歌声も最高！"
             },
             {
-                "text": "不屈の根性",
-                "comment": "難しいゲームも諦めず弱音を吐かない姿が尊い",
                 "color": "bg-orange-100",
-                "rotate": "-3deg"
+                "rotate": "-3deg",
+                "image": "/images/tanuki/wink_pop.png",
+                "comment": "不屈の根性\n難しいゲームも諦めず弱音を吐かない姿が尊い"
             },
             {
-                "text": "愛溢れる性格",
-                "comment": "ファンを大切にしているのが伝わる",
                 "color": "bg-red-100",
-                "rotate": "3deg"
+                "rotate": "3deg",
+                "image": "/images/tanuki/happy_pop.png",
+                "comment": "愛溢れる性格\nファンを大切にしているのが伝わる"
             },
             {
-                "text": "豪快な笑い声",
-                "comment": "つられて笑っちゃう！最高の笑顔",
                 "color": "bg-green-100",
-                "rotate": "2deg"
+                "rotate": "2deg",
+                "image": "/images/tanuki/smile_pop.png",
+                "comment": "豪快な笑い声\nつられて笑っちゃう！最高の笑顔"
             },
             {
-                "text": "歌声に惚れる",
-                "comment": "可愛い＆カッコいい！",
                 "color": "bg-amber-100",
-                "rotate": "2deg"
+                "rotate": "2deg",
+                "image": "/images/tanuki/happy_pop.png",
+                "comment": "歌声に惚れる\n可愛い＆カッコいい！"
             }
         ]
     },
