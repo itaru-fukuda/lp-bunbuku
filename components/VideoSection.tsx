@@ -1,17 +1,11 @@
-"use client";
-
-import { motion } from "framer-motion";
+import VideoGrid, { type VideoItem } from "./VideoGrid";
+import PageLink from "./PageLink";
+import content from "@/data/content.json";
 import SectionTitle from "./SectionTitle";
-import YouTubeCard from "./YouTubeCard";
 
-interface VideoItem {
-    videoId: string;
-    title: string;
-    description: string;
-    note?: string;
-}
 
 interface VideoSectionProps {
+    moreHref?: string;
     id?: string;
     title: string;
     subtitle: string;
@@ -20,7 +14,7 @@ interface VideoSectionProps {
     bgColor?: string;
 }
 
-export default function VideoSection({ id, title, subtitle, items, color = "primary", bgColor = "bg-white" }: VideoSectionProps) {
+export default function VideoSection({ moreHref, id, title, subtitle, items, color = "primary", bgColor = "bg-white" }: VideoSectionProps) {
     return (
         <section id={id} className={`relative z-20 overflow-hidden py-16 md:py-20 ${bgColor}`}>
             {/* Background huge typography underlay for depth */}
@@ -44,25 +38,8 @@ export default function VideoSection({ id, title, subtitle, items, color = "prim
                     </div>
                 </div>
 
-                {/* Asymmetric offsets: 2nd column pushes down slightly to create a masonry magazine look */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 md:pb-12">
-                    {items.map((item, index) => {
-                        // Offset the second card in MD and LG viewports to break symmetry
-                        const offsetClass = index % 3 === 1 ? "md:translate-y-6 lg:translate-y-10" : "";
-                        return (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 35 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-50px" }}
-                                transition={{ delay: index * 0.08, duration: 0.6, type: "spring", stiffness: 120 }}
-                                className={offsetClass}
-                            >
-                                <YouTubeCard {...item} />
-                            </motion.div>
-                        );
-                    })}
-                </div>
+                {items.length ? <VideoGrid items={items} /> : <p className="text-center text-sm leading-8 text-text-sub">現在、動画情報を取得できません。<br /><a href={content.links.youtube} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">YouTubeチャンネルで見る</a></p>}
+                {moreHref && <div className="mt-10 text-center"><PageLink href={moreHref}>すべての動画を見る</PageLink></div>}
             </div>
         </section>
     );

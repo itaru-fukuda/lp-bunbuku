@@ -1,15 +1,8 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next";
+import { SITE_URL, sitePages } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://bunbuku-arisa.rasu.jp/'
-
-    return [
-        {
-            url: baseUrl,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 1,
-        },
-        // Add other routes here if needed in the future
-    ]
+  return sitePages.map(({ href, priority, changeFrequency }) => ({
+    url: `${SITE_URL}${href}`, priority, changeFrequency,
+  }));
 }

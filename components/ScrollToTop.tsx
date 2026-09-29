@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 
 export default function ScrollToTop() {
+    const reduceMotion = useReducedMotion();
     const [isVisible, setIsVisible] = useState(false);
 
     // Toggle visibility based on scroll position
@@ -24,7 +25,7 @@ export default function ScrollToTop() {
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
-            behavior: "smooth",
+            behavior: reduceMotion ? "instant" : "smooth",
         });
     };
 

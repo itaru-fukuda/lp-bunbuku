@@ -1,186 +1,56 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-
-const NAV_ITEMS = [
-  { label: "Top", href: "#hero" },
-  { label: "About", href: "#about" },
-  { label: "Profile", href: "#profile" },
-  { label: "Favorites", href: "#favorites" },
-  { label: "Q&A", href: "#qna" },
-  { label: "Videos", href: "#videos" },
-];
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { sitePages } from "@/lib/site";
+import Modal from "./Modal";
 
 export default function FloatingNav() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
-
+  const pathname = usePathname();
+  const router = useRouter();
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 80);
+    if (pathname !== "/" && pathname !== "/videos") return;
+    const followLegacyHash = () => {
+      if (window.location.hash === "#songs") { router.replace("/songs"); return; }
+      if (pathname !== "/") return;
+      const routes: Record<string, string> = { "#profile": "/profile#profile", "#qna": "/profile#qna", "#favorites": "/profile#favorites", "#videos": "/videos#videos", "#daily": "/videos#playlists", "#expression-gallery": "/gallery#expression-gallery" };
+      const destination = routes[window.location.hash];
+      if (destination) router.replace(destination);
     };
+    followLegacyHash();
+    window.addEventListener("hashchange", followLegacyHash);
+    return () => window.removeEventListener("hashchange", followLegacyHash);
+  }, [pathname, router]);
+  return <Navigation key={pathname} pathname={pathname} />;
+}
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => {
-            const center = window.innerHeight / 2;
-            const aDistance = Math.abs(a.boundingClientRect.top + a.boundingClientRect.height / 2 - center);
-            const bDistance = Math.abs(b.boundingClientRect.top + b.boundingClientRect.height / 2 - center);
-            return aDistance - bDistance;
-          });
-
-        const activeId = visibleEntries[0]?.target.id;
-        if (activeId) {
-          setActiveSection(`#${activeId}`);
-        }
-      },
-      {
-        root: null,
-        rootMargin: "-35% 0px -45% 0px",
-        threshold: [0, 0.1, 0.25, 0.5],
-      }
-    );
-
-    const sections = NAV_ITEMS
-      .map((item) => document.querySelector(item.href))
-      .filter((section): section is Element => Boolean(section));
-
-    sections.forEach((section) => observer.observe(section));
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Run once initially
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      observer.disconnect();
-    };
+function Navigation({ pathname }: { pathname: string }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 768px)");
+    const close = () => { if (query.matches) setMenuOpen(false); };
+    query.addEventListener("change", close);
+    return () => query.removeEventListener("change", close);
   }, []);
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    setMenuOpen(false);
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  return (
-    <>
-      {/* PC Header Navigation Bar (Desktop Only) */}
-      <motion.header
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className={`fixed top-0 left-0 w-full h-20 z-[990] hidden md:flex items-center transition-all duration-300 ${
-          scrolled
-            ? "bg-white/80 backdrop-blur-md shadow-[0_2px_20px_rgba(36,19,13,0.04)] border-b border-primary/5"
-            : "bg-transparent border-b border-transparent"
-        }`}
-      >
-        <div className="container mx-auto px-8 max-w-5xl flex justify-center items-center">
-          {/* Navigation Links */}
-          <nav className="flex items-center gap-8">
-            {NAV_ITEMS.map((item) => {
-              const isActive = activeSection === item.href;
-              return (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  className={`relative font-black text-xs tracking-[0.2em] uppercase py-2 transition-colors duration-300 ${
-                    isActive ? "text-primary" : "text-text-sub hover:text-primary"
-                  }`}
-                >
-                  {item.label}
-                  {/* Underline for active state */}
-                  {isActive && (
-                    <motion.span
-                      layoutId="activeUnderline"
-                      className="absolute bottom-0 left-0 w-full h-[2px] bg-primary rounded-full"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </a>
-              );
-            })}
-          </nav>
-        </div>
-      </motion.header>
-
-      {/* Floating Toggle Button - Always on Top Right (Mobile Only) */}
-      <div className="fixed top-6 right-6 z-[999] block md:hidden">
-        <motion.button
-          onClick={() => setMenuOpen(!menuOpen)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className={`w-12 h-12 rounded-full flex items-center justify-center border transition-all duration-300 ${
-            menuOpen
-              ? "bg-primary text-white border-transparent shadow-lg shadow-primary/20"
-              : scrolled
-              ? "bg-white/90 backdrop-blur-md text-text-main border-white/60 shadow-md"
-              : "bg-white/40 backdrop-blur-sm text-text-main border-white/30 hover:bg-white/85 pointer-events-auto"
-          }`}
-          aria-label="Toggle navigation menu"
-        >
-          {menuOpen ? <X size={20} /> : <Menu size={20} />}
-        </motion.button>
-      </div>
-
-      {/* Navigation Overlay Menu (Mobile Only Drawer) */}
-      <AnimatePresence>
-        {menuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMenuOpen(false)}
-              className="fixed inset-0 bg-dark/15 backdrop-blur-sm z-[980] block md:hidden"
-            />
-
-            {/* Menu Card (Slides in/out from top/right) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -20 }}
-              transition={{ type: "spring", stiffness: 380, damping: 26 }}
-              className="fixed right-6 top-20 w-[280px] z-[985] glass-panel p-6 rounded-3xl border border-white/80 shadow-2xl flex flex-col gap-2.5 block md:hidden"
-            >
-              <div className="font-serif font-black text-xs text-primary/80 border-b border-primary/20 pb-3 mb-2 flex items-center justify-between">
-                <span>NAVIGATION</span>
-                <span className="text-[10px] text-accent">🐾 BUNBUKU</span>
-              </div>
-              
-              {NAV_ITEMS.map((item, idx) => {
-                const isActive = activeSection === item.href;
-                return (
-                  <motion.a
-                    key={item.label}
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.href)}
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.04 }}
-                    className={`w-full px-5 py-3 rounded-2xl font-black text-[13px] tracking-[0.2em] text-center transition-all duration-300 ${
-                      isActive
-                        ? "bg-gradient-to-r from-primary to-rose-400 text-white shadow-md shadow-primary/10"
-                        : "text-text-sub hover:bg-primary/5 hover:text-primary"
-                    }`}
-                  >
-                    {item.label.toUpperCase()}
-                  </motion.a>
-                );
-              })}
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-    </>
-  );
+  const links = (mobile: boolean) => sitePages.map((item) => {
+    const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+    return <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} onClick={() => setMenuOpen(false)}
+      className={`relative min-h-11 py-3 text-xs font-black tracking-[0.2em] transition-colors ${mobile ? "rounded-2xl px-5 text-center" : "px-3"} ${active ? "bg-pink-50 text-[#82415f]" : "text-text-sub hover:bg-pink-50"}`}>
+      {item.label}{active && <span aria-hidden="true" className="absolute inset-x-4 bottom-1 h-0.5 rounded-full bg-primary" />}
+    </Link>;
+  });
+  return <>
+    <motion.header initial={reduceMotion ? false : { y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.3 }} className="fixed inset-x-0 top-0 z-[990] hidden h-20 items-center justify-center border-b border-primary/10 bg-white/90 shadow-sm backdrop-blur-md md:flex">
+      <nav aria-label="メインナビゲーション" className="flex items-center gap-8">{links(false)}</nav>
+    </motion.header>
+    <button type="button" onClick={() => setMenuOpen(true)} aria-label="メニューを開く" aria-expanded={menuOpen} aria-controls="mobile-navigation" className="fixed right-6 top-6 z-[999] flex h-12 w-12 items-center justify-center rounded-full border border-pink-100 bg-white/95 text-dark shadow-md md:hidden"><Menu size={20} /></button>
+    {menuOpen && <Modal label="サイトナビゲーション" onClose={() => setMenuOpen(false)} className="nav-dialog">
+      <div className="flex items-center justify-between border-b border-primary/20 pb-3"><span className="text-xs font-bold tracking-widest text-[#82415f]">NAVIGATION</span><button type="button" aria-label="メニューを閉じる" onClick={() => setMenuOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-pink-50"><X size={20} /></button></div>
+      <nav id="mobile-navigation" aria-label="モバイルナビゲーション" className="mt-4 flex flex-col gap-2">{links(true)}</nav>
+    </Modal>}
+  </>;
 }

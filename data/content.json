@@ -1,4 +1,40 @@
 {
+    "explore": {
+        "title": "",
+        "subtitle": "Explore Arisa",
+        "items": [
+            {
+                "href": "/profile",
+                "label": "PROFILE",
+                "title": "もっと知りたい！",
+                "description": "プロフィール・衣装・推しポイント",
+                "image": "/images/hero/IMG_8036.PNG",
+                "position": "70% 40%",
+                "backgroundBlur": "none",
+                "align": "left"
+            },
+            {
+                "href": "/videos",
+                "label": "VIDEOS",
+                "title": "好きな配信を見つけよう！",
+                "description": "最新アーカイブ・プレイリスト・歌ってみた",
+                "image": "/images/hero/IMG_7691.JPG",
+                "position": "25% 35%",
+                "backgroundBlur": "right",
+                "align": "right"
+            },
+            {
+                "href": "/gallery",
+                "label": "GALLERY",
+                "title": "いろんな表情を楽しもう！",
+                "description": "お気に入りの一枚を探してね",
+                "image": "/images/hero/GDPQDldaAAAHfSN.jpg",
+                "position": "80% 40%",
+                "backgroundBlur": "left",
+                "align": "left"
+            }
+        ]
+    },
     "hero": {
         "catchphrase": "あなたに福のお裾分け！",
         "subtext": "みんなに福を届ける\n完全セルフ受肉\nたぬきVtuber",
@@ -52,15 +88,12 @@
             "/images/expressions/050.PNG": "（引）"
             }
     },
-    "aboutSite": {
-        "title": "About This Site",
-        "description": "本サイトは、個人勢VTuber『分福ありさ（Bunbuku Arisa）』ちゃんを\n応援するファンサイトです！\nありさちゃんの魅力の発信や最新の配信スケジュール、\nおすすめアーカイブ動画などをまとめています。",
-        "tags": []
-    },
     "aboutArisa": {
         "title": "About Arisa",
+        "visual": "/images/profile/full_body_004.png",
+        "greeting": "ぶんぶくぶーん！ゲーム大好き！お絵描き大好き！演技が得意なたぬきVTuber！あなたに福のお裾分け！",
         "image": "/images/profile/icon_profile.jpg",
-        "description": "分福ありさ（Bunbuku Arisa）ちゃんは、\nゲーム実況・雑談・お絵かき・歌を中心に活動する個人勢のたぬきVtuber！\n完全セルフ受肉もこなす\n天才さが魅力です。\n元気いっぱいの配信で、\nみんなに福をお裾分けしています。",
+        "description": "ゲーム実況・雑談・お絵かき・歌を中心に活動する個人勢のたぬきVtuber！\n完全セルフ受肉もこなす天才たぬき。\n元気いっぱいの配信で、みんなに福をお裾分け！。",
         "tags": [
             "ゲーム配信",
             "お絵描き",
@@ -309,7 +342,7 @@
         "tiktok": "https://www.tiktok.com/@bunbukuarisa"
     },
     "footer": {
-        "notice": "本ページは、Vtuber『分福ありさ』ちゃんの\nファンサイトです",
+        "notice": "本サイトは、個人勢VTuber『分福ありさ（Bunbuku Arisa）』ちゃんを\n応援するファンサイトです！\nありさちゃんの魅力の発信や最新の配信スケジュール、\nおすすめアーカイブ動画などをまとめています。",
         "rights": "掲載されている動画・画像の権利は各権利者に帰属します",
         "staff": {
             "title": "制作スタッフ",

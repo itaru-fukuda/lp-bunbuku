@@ -5,6 +5,9 @@ import "./globals.css";
 import ScheduleWidget from "@/components/ScheduleWidget";
 import SteamBackground from "@/components/SteamBackground";
 import FloatingNav from "@/components/FloatingNav";
+import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
+import MotionProvider from "@/components/MotionProvider";
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
@@ -39,8 +42,8 @@ export const metadata: Metadata = {
     google: "MUR79J14k5KGd39ygRnGJXeaSEOmyfwighc3fBQzp7A",
   },
   title: {
-    default: "分福ありさ ファンサイト | みんなに福を届ける完全セルフ受肉たぬきVtuber",
-    template: "%s | 分福ありさ ファンサイト",
+    default: "分福ありさ 非公式ファンサイト",
+    template: "%s | 分福ありさ 非公式ファンサイト",
   },
   description: "Vtuber分福ありさ（Bunbuku Arisa）のファンサイト。プロフィール、配信スケジュール、歌ってみた動画、アーカイブ情報を掲載中。あなたに福のお裾分け！",
   keywords: ["分福ありさ", "Vtuber", "Bunbuku Arisa", "歌ってみた", "ゲーム実況", "個人勢Vtuber", "ファンサイト"],
@@ -122,10 +125,15 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <a href="#main-content" className="skip-link">本文へスキップ</a>
+        <MotionProvider>
         <SteamBackground />
         <FloatingNav />
         <ScheduleWidget />
         {children}
+        <Footer />
+        <ScrollToTop />
+        </MotionProvider>
       </body>
     </html>
   );

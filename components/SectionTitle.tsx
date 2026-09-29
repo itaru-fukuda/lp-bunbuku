@@ -9,9 +9,9 @@ interface SectionTitleProps {
 
 export default function SectionTitle({ title, subtitle, className, color = "primary" }: SectionTitleProps) {
     const colorMap = {
-        primary: "text-primary",
-        accent: "text-accent",
-        tertiary: "text-tertiary",
+        primary: "text-[#a13d70]",
+        accent: "text-[#876018]",
+        tertiary: "text-[#346c7d]",
     };
 
     return (
@@ -21,7 +21,7 @@ export default function SectionTitle({ title, subtitle, className, color = "prim
                     {subtitle}
                 </span>
             )}
-            <h2 className="text-3xl md:text-4xl font-bold text-text-main">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl break-words font-bold text-text-main">
                 {title}
             </h2>
             <div className={cn("w-16 h-1 mx-auto mt-4 rounded-full", `bg-${color}`)} />

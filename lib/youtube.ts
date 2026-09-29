@@ -1,3 +1,6 @@
+import "server-only";
+import { selectLatestStreams, type LiveStream } from "./liveStreams";
+
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID || "UCerNAq_y5avwJIV0arI5pCQ";
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
@@ -121,36 +124,66 @@ function shuffleWithSeed<T>(items: T[], seedText: string): T[] {
     return shuffled;
 }
 
-/**
- * Fetch the 3 most recent completed live streams.
- * Cost: 100 units per call (Search API)
- */
-export async function getLatestCompletedLiveStreams(): Promise<YouTubeVideo[]> {
-    if (!API_KEY || !CHANNEL_ID) return [];
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5 seconds timeout
-
+/** Share cached discovery between TOP and VIDEOS to limit search API usage. */
+async function searchStreams(eventType: LiveStream["status"]): Promise<YouTubeSearchItem[] | null> {
+    if (!API_KEY || !CHANNEL_ID) return null;
     try {
-        const res = await fetch(
-            `${BASE_URL}/search?part=snippet&channelId=${CHANNEL_ID}&eventType=completed&order=date&type=video&maxResults=3&key=${API_KEY}`,
-            { 
-                next: { revalidate: 1800 },
-                signal: controller.signal
-            }
-        );
+        const params = new URLSearchParams({ part: "snippet", channelId: CHANNEL_ID,
+            eventType, order: "date", type: "video", maxResults: "50", key: API_KEY });
+        const response = await fetch(`${BASE_URL}/search?${params}`, {
+            next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000),
+        });
+        if (!response.ok) throw new Error("Stream search failed");
+        return ((await response.json()) as YouTubeSearchListResponse).items ?? [];
+    } catch {
+        console.error("YouTube API: unable to discover streams");
+        return null;
+    }
+}
 
-        clearTimeout(timeoutId);
+export async function getLatestCompletedLiveStreams(): Promise<YouTubeVideo[]> {
+    return (await searchStreams("completed") ?? []).slice(0, 3).map(toVideo);
+}
 
-        if (!res.ok) throw new Error("Failed to fetch latest videos");
+interface StreamDetailsResponse {
+    items?: {
+        id: string;
+        snippet: YouTubeSearchItem["snippet"];
+        liveStreamingDetails?: { scheduledStartTime?: string; actualStartTime?: string; actualEndTime?: string };
+    }[];
+}
 
-        const data = (await res.json()) as YouTubeSearchListResponse;
-        const items = data.items || [];
-        return items.map(toVideo);
-    } catch (error) {
-        clearTimeout(timeoutId);
-        console.error("YouTube API Error (Latest):", error);
-        return [];
+/** Discover hourly; refresh known broadcasts' status and start times every five minutes. */
+export async function getLatestLiveStreams(): Promise<LiveStream[] | null> {
+    if (!API_KEY || !CHANNEL_ID) return null;
+    const results = await Promise.all([searchStreams("upcoming"), searchStreams("live"), searchStreams("completed")]);
+    const ids = [...new Set(results.flatMap((items) => (items ?? []).map((item) => item.id.videoId)))];
+    if (!ids.length) return results.some((items) => items === null) ? null : [];
+    try {
+        const batches = [];
+        for (let i = 0; i < ids.length; i += 50) batches.push(ids.slice(i, i + 50));
+        const details = await Promise.all(batches.map(async (batch) => {
+            const params = new URLSearchParams({ part: "snippet,liveStreamingDetails", id: batch.join(","), key: API_KEY });
+            const response = await fetch(`${BASE_URL}/videos?${params}`, {
+                next: { revalidate: 300 }, signal: AbortSignal.timeout(5000),
+            });
+            if (!response.ok) throw new Error("Stream details failed");
+            return ((await response.json()) as StreamDetailsResponse).items ?? [];
+        }));
+        const streams: LiveStream[] = details.flat().flatMap((item) => {
+            const live = item.liveStreamingDetails;
+            if (!live) return [];
+            const status = live.actualEndTime ? "completed" : item.snippet.liveBroadcastContent === "live" ? "live"
+                : item.snippet.liveBroadcastContent === "upcoming" ? "upcoming" : null;
+            if (!status) return [];
+            return [{ id: item.id, title: item.snippet.title,
+                thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url || "",
+                status, startsAt: status === "upcoming" ? live.scheduledStartTime : live.actualStartTime }];
+        });
+        return selectLatestStreams(streams);
+    } catch {
+        console.error("YouTube API: unable to load stream details");
+        return null;
     }
 }
 
@@ -225,5 +258,64 @@ export async function getYouTubeChannelStats(): Promise<YouTubeChannelStats> {
         clearTimeout(timeoutId);
         console.error("YouTube API Error (Channel Stats):", error);
         return {};
+    }
+}
+
+export interface YouTubePlaylist {
+    id: string;
+    title: string;
+    description: string;
+    thumbnail: string;
+    videoCount: number;
+}
+
+interface YouTubePlaylistsResponse {
+    nextPageToken?: string;
+    items?: {
+        id: string;
+        snippet: {
+            title: string;
+            description: string;
+            thumbnails?: { high?: { url: string }; medium?: { url: string }; default?: { url: string } };
+        };
+        contentDetails: { itemCount: number };
+    }[];
+}
+
+/** Public playlists owned by the channel; each page is cached for one hour. */
+export async function getChannelPlaylists(): Promise<YouTubePlaylist[] | null> {
+    if (!API_KEY || !CHANNEL_ID) return null;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    try {
+        const playlists: YouTubePlaylist[] = [];
+        let pageToken: string | undefined;
+        do {
+            const params = new URLSearchParams({
+                part: "snippet,contentDetails", channelId: CHANNEL_ID,
+                maxResults: "50", key: API_KEY,
+                ...(pageToken ? { pageToken } : {}),
+            });
+            const response = await fetch(`${BASE_URL}/playlists?${params}`, {
+                next: { revalidate: 3600 }, signal: controller.signal,
+            });
+            if (!response.ok) throw new Error("Playlist request failed");
+            const data = await response.json() as YouTubePlaylistsResponse;
+            for (const item of data.items ?? []) {
+                playlists.push({
+                    id: item.id, title: item.snippet.title, description: item.snippet.description,
+                    thumbnail: item.snippet.thumbnails?.high?.url || item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || "",
+                    videoCount: item.contentDetails.itemCount,
+                });
+            }
+            pageToken = data.nextPageToken;
+        } while (pageToken);
+        return playlists;
+    } catch {
+        // Never log the request URL: it contains the server API key.
+        console.error("YouTube API Error (Playlists): unable to load channel playlists");
+        return null;
+    } finally {
+        clearTimeout(timeoutId);
     }
 }

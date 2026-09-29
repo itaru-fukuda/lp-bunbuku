@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import content from "@/data/content.json";
 import HeroSequence, { HERO_SEQUENCE_INTERVAL, HERO_SEQUENCE_TEXT_FADE_DURATION } from "./HeroSequence";
 
 export default function Hero() {
+    const reduceMotion = useReducedMotion();
     const { hero } = content;
     const sequence = hero.greetingSequence || [];
 
@@ -22,7 +23,7 @@ export default function Hero() {
             : 0;
         const copyTimer = window.setTimeout(() => setShowHeroCopy(true), copyDelay);
         const handleScroll = () => {
-            setScrollY(window.scrollY);
+            setScrollY(reduceMotion ? 0 : window.scrollY);
         };
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => {
@@ -30,12 +31,12 @@ export default function Hero() {
             window.clearTimeout(copyTimer);
             window.removeEventListener("scroll", handleScroll);
         };
-    }, [sequence.length]);
+    }, [sequence.length, reduceMotion]);
 
     // SSR view - simple background structure to prevent layout shifts
     if (!isMounted) {
         return (
-            <section id="hero" className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-gradient-to-b from-rose-50 via-pink-50 to-white z-20" />
+            <section id="hero" className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-gradient-to-b from-rose-50 via-pink-50 to-white z-20"><h1 className="sr-only">分福ありさ 非公式ファンサイト</h1><HeroSequence items={sequence} /></section>
         );
     }
 
@@ -59,7 +60,7 @@ export default function Hero() {
             {/* Elegant Site Logo (H1 for SEO) - Parallax via standard div wrapper */}
             <div 
                 style={{ transform: `translateY(${yContent}px)` }}
-                className="absolute top-6 left-6 md:top-8 md:left-10 z-40 pointer-events-none select-none transition-transform duration-75 ease-out"
+                className="absolute top-6 left-6 md:top-24 md:left-10 z-40 pointer-events-none select-none transition-transform duration-75 ease-out"
             >
                 <motion.h1
                     initial={{ opacity: 0, y: -20, filter: "blur(5px)" }}
@@ -92,7 +93,7 @@ export default function Hero() {
             <div className="absolute right-6 md:right-20 top-[22%] bottom-[22%] z-30 pointer-events-none select-none hidden md:flex items-center">
                 <motion.div
                     initial={{ opacity: 0, x: 30 }}
-                    animate={showHeroCopy ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+                    animate={showHeroCopy || reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
                     transition={{ duration: 1.6, delay: 0.4, ease: "easeOut" }}
                     className="writing-vertical font-serif text-dark h-full flex flex-col justify-between items-start tracking-[0.2em]"
                 >
@@ -109,7 +110,7 @@ export default function Hero() {
             <div className="absolute top-[18%] left-0 right-0 z-30 pointer-events-none select-none flex md:hidden flex-col items-center text-center px-6">
                 <motion.div
                     initial={{ opacity: 0, y: -20, filter: "blur(5px)" }}
-                    animate={showHeroCopy
+                    animate={showHeroCopy || reduceMotion
                         ? { opacity: 1, y: 0, filter: "blur(0px)" }
                         : { opacity: 0, y: -20, filter: "blur(5px)" }}
                     transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
@@ -151,7 +152,7 @@ export default function Hero() {
                         href={hero.ctaLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group btn-shine-container inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary to-rose-400 text-white rounded-full text-xl font-bold shadow-[0_8px_30px_rgba(255,110,180,0.3)] border-2 border-white/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_34px_rgba(255,110,180,0.34)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:hover:translate-y-0 motion-reduce:transition-none"
+                        className="group btn-shine-container inline-flex items-center gap-3 px-5 sm:px-8 py-4 bg-gradient-to-r from-primary to-rose-400 text-white rounded-full text-base sm:text-xl font-bold shadow-[0_8px_30px_rgba(255,110,180,0.3)] border-2 border-white/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_34px_rgba(255,110,180,0.34)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:hover:translate-y-0 motion-reduce:transition-none"
                     >
                         <motion.span 
                             className="flex items-center gap-3"
