@@ -26,6 +26,12 @@
 .image { z-index: -3; object-fit: cover; transition: transform 600ms ease; }
 .card:hover .image { transform: scale(1.025); }
 
+@media (max-width: 639px) {
+    /* Override the image's inline positioning on mobile only. */
+    .card[data-tone="gallery"] .image { top: -25px !important; }
+    .card[data-tone="videos"] .image { object-position: 0% 35% !important; }
+}
+
 .blur {
     display: none;
     position: absolute;
