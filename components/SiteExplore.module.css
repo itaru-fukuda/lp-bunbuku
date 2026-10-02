@@ -27,6 +27,7 @@
 .card:hover .image { transform: scale(1.025); }
 
 .blur {
+    display: none;
     position: absolute;
     inset-block: 0;
     z-index: -2;
@@ -90,6 +91,7 @@
 .card:hover .arrow { transform: translate(2px, -2px); background: rgb(255 255 255 / 30%); }
 
 @media (min-width: 640px) {
+    .blur { display: block; }
     .card { min-height: 300px; align-items: center; border-radius: 28px; }
     .card { --wash-angle: 90deg; }
     .card[data-align="right"] { --wash-angle: 270deg; }
