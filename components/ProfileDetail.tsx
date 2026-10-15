@@ -38,7 +38,7 @@ export default function ProfileDetail() {
                     <dd>{item.label === 'ハッシュタグ' ? <ul className={styles.tags}>
                         {item.value.split('\n').map((line) => {
                             const [label, tag] = line.split('：');
-                            return <li key={tag}><span>{label}</span><a href={`https://x.com/search?q=${encodeURIComponent(tag)}&src=typed_query`} target="_blank" rel="noopener noreferrer">{tag}<ArrowUpRight size={14} aria-hidden="true" /><span className="sr-only">（Xの検索を新しいタブで開きます）</span></a></li>;
+                            return <li key={tag}><span>{label}</span><a href={`https://x.com/hashtag/${encodeURIComponent(tag.trim().replace(/^[#＃]/, ''))}?src=hashtag_click`} target="_blank" rel="noopener noreferrer">{tag}<ArrowUpRight size={14} aria-hidden="true" /><span className="sr-only">（Xの検索を新しいタブで開きます）</span></a></li>;
                         })}
                     </ul> : item.value}</dd>
                 </div>)}
